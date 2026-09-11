@@ -1,0 +1,15 @@
+{
+  "name": "The Supreme Citizens Charter",
+  "short_name": "Supreme Citizens",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003B8F",
+  "icons": [
+    {
+      "src": "assets/supreme-citizens-logo.png",
+      "sizes": "1200x1200",
+      "type": "image/png"
+    }
+  ]
+}

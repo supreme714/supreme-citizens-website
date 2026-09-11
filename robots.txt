@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://supremecitizens.org/sitemap.xml

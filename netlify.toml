@@ -1,0 +1,22 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/charter"
+  to = "/charter.html"
+  status = 301
+
+[[redirects]]
+  from = "/principles"
+  to = "/principles.html"
+  status = 301
+
+[[redirects]]
+  from = "/supreme-citizen"
+  to = "/identity.html"
+  status = 301
+
+[[redirects]]
+  from = "/participate"
+  to = "/participate.html"
+  status = 301
