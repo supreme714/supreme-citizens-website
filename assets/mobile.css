@@ -1,0 +1,151 @@
+/* Supreme Citizens Charter
+   Responsive Mobile & Tablet Styles
+   ---------------------------------- */
+
+/* Prevent horizontal overflow */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* TABLETS */
+@media (max-width: 900px) {
+
+  .wrap {
+    width: 92%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 18px;
+  }
+
+  .two-col,
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-hero {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+
+/* PHONES */
+@media (max-width: 600px) {
+
+  body {
+    font-size: 16px;
+  }
+
+  .wrap {
+    width: auto;
+    max-width: none;
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  /* Header/navigation */
+  .main-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0;
+  }
+
+  .main-nav a {
+    display: block;
+    width: 100%;
+    padding: 11px 8px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Hero sections */
+  .page-hero,
+  .page-hero.compact {
+    padding: 32px 0;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1.08;
+    overflow-wrap: break-word;
+  }
+
+  .page-lede {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* Content columns */
+  .two-col,
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature,
+  .callout,
+  .pledge,
+  .pledge-inner {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Buttons */
+  .button {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  /* Long government links / URLs */
+  a {
+    overflow-wrap: anywhere;
+  }
+
+  /* Tables, if added later */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+
+/* SMALL PHONES */
+@media (max-width: 380px) {
+
+  .wrap {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+
+  .page-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .page-lede {
+    font-size: 1rem;
+  }
+}
