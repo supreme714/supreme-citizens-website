@@ -149,3 +149,48 @@ video {
     font-size: 1rem;
   }
 }
+
+/* CHARTER MOBILE FIX */
+@media (max-width: 768px) {
+
+  /* Prevent Charter content from exceeding screen width */
+  .charter,
+  .charter-card,
+  .charter-content,
+  .charter-document,
+  .pledge,
+  .pledge-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Keep Charter images inside the phone screen */
+  .charter img,
+  .charter-card img,
+  .charter-content img,
+  .charter-document img,
+  .pledge img {
+    display: block;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Prevent long Charter text from forcing horizontal overflow */
+  .charter p,
+  .charter li,
+  .charter-content p,
+  .charter-content li,
+  .charter-document p,
+  .charter-document li {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+}
