@@ -8,3 +8,17 @@ if(btn && nav){
     btn.setAttribute('aria-expanded', String(open));
   });
 }
+
+
+const visitorCount = document.getElementById('visitor-count');
+
+if (visitorCount) {
+  fetch('/.netlify/functions/visitor-counter')
+    .then(response => response.json())
+    .then(data => {
+      visitorCount.textContent = Number(data.count).toLocaleString();
+    })
+    .catch(() => {
+      visitorCount.textContent = '—';
+    });
+}
