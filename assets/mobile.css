@@ -60,7 +60,7 @@ video {
   }
 
   /* Header/navigation */
-  .main-nav {
+  .main-nav.open {
     display: flex;
     flex-direction: column;
     align-items: stretch;
