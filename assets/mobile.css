@@ -26,7 +26,7 @@ video {
     margin-right: auto;
   }
 
-  .main-nav {
+  .main-nav.open {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
