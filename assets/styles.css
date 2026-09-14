@@ -98,3 +98,17 @@ img{max-width:100%;height:auto}
   .wrap{width:min(100% - 28px,1180px)} .principles-grid{grid-template-columns:1fr} .footer-grid{grid-template-columns:1fr}
   .section{padding:60px 0} .page-hero{padding:65px 0}
 }
+
+/* Visitor counter */
+.footer-visitors {
+  width: 100%;
+  text-align: center;
+  padding: 18px 20px;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  box-sizing: border-box;
+}
+
+.footer-visitors strong {
+  font-weight: 700;
+}
