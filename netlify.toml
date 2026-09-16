@@ -20,3 +20,7 @@ functions = "netlify/functions"
   from = "/participate"
   to = "/participate.html"
   status = 301
+[[redirects]]
+  from = "/citizens-branch"
+  to = "/citizens-branch.html"
+  status = 301
