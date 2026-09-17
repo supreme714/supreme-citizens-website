@@ -40,6 +40,13 @@ type WhiteHouseItem = {
   type: string;
   url: string;
 };
+type SupremeCourtItem = {
+  date: string;
+  title: string;
+  type: string;
+  url: string;
+};
+
 
 function stripHtml(value = "") {
   return value
@@ -101,10 +108,85 @@ async function fetchWhiteHouseCategory(
     };
   });
 }
+async function fetchSupremeCourtOrders(): Promise<SupremeCourtItem[]> {
+  const url = "https://www.supremecourt.gov/orders/ordersofthecourt";
 
+  const response = await fetch(url, {
+    headers: {
+      Accept: "text/html",
+      "User-Agent": "SupremeCitizens.org government information service",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `SupremeCourt.gov orders request failed: ${response.status}`,
+    );
+  }
+
+  const html = await response.text();
+
+  const linkPattern =
+    /<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+
+  const items: SupremeCourtItem[] = [];
+
+  for (const match of html.matchAll(linkPattern)) {
+    const href = match[1];
+    const text = stripHtml(match[2]).replace(/\s+/g, " ").trim();
+
+    if (!/Order List|Miscellaneous Order/i.test(text)) {
+      continue;
+    }
+
+    const beforeLink = html.slice(
+      Math.max(0, match.index! - 250),
+      match.index,
+    );
+
+    const dateMatch = beforeLink.match(
+      /(\d{1,2}\/\d{1,2}\/\d{2})(?![\s\S]*\d{1,2}\/\d{1,2}\/\d{2})/,
+    );
+
+    if (!dateMatch) {
+      continue;
+    }
+
+    const date = new Date(`${dateMatch[1]} 12:00:00`);
+
+    if (Number.isNaN(date.getTime())) {
+      continue;
+    }
+
+    items.push({
+      date: date.toISOString(),
+      title: text,
+      type: /Miscellaneous/i.test(text)
+        ? "Miscellaneous Order"
+        : "Order List",
+      url: href.startsWith("http")
+        ? href
+        : `https://www.supremecourt.gov${href.startsWith("/") ? "" : "/"}${href}`,
+    });
+  }
+
+  return items
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 10);
+}
 export default async (_req: Request, _context: Context) => {
 
   let whiteHouse: WhiteHouseItem[] = [];
+  let supremeCourt: SupremeCourtItem[] = [];
+
+try {
+  supremeCourt = await fetchSupremeCourtOrders();
+} catch (error) {
+  console.error(
+    "Supreme Court feed request failed:",
+    error instanceof Error ? error.message : "Unknown error",
+  );
+}
 
   try {
     const [executiveOrders, memoranda] = await Promise.all([
@@ -170,6 +252,7 @@ const congress = bills
     return Response.json(
       {
         whiteHouse,
+        supremeCourt,
         congress,
         updatedAt: new Date().toISOString(),
       },
@@ -185,19 +268,20 @@ const congress = bills
       error instanceof Error ? error.message : "Unknown error",
     );
 
-    return Response.json(
-      {
-        congress: [],
-        updatedAt: new Date().toISOString(),
-        error: "Latest information temporarily unavailable",
-      },
-      {
-        status: 503,
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      },
-    );
+   return Response.json(
+  {
+    whiteHouse,
+    supremeCourt,
+    congress: [],
+    updatedAt: new Date().toISOString(),
+    error: "Congress information temporarily unavailable",
+  },
+  {
+    headers: {
+      "Cache-Control": "no-store",
+    },
+  },
+);
   }
 };
 
