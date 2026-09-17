@@ -42,7 +42,7 @@ export default async (_req: Request, _context: Context) => {
       throw new Error("Congress API key is not configured.");
     }
 
-    const url = new URL("https://api.congress.gov/v3/bill");
+    const url = new URL("https://api.congress.gov/v3/bill/119");
     url.searchParams.set("format", "json");
     url.searchParams.set("limit", "5");
     url.searchParams.set("offset", "0");
