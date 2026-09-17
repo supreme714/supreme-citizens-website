@@ -34,7 +34,96 @@ function congressGovUrl(bill: CongressBill) {
   return `https://www.congress.gov/bill/${congress}th-congress/${type}/${number}`;
 }
 
+type WhiteHouseItem = {
+  date: string;
+  title: string;
+  type: string;
+  url: string;
+};
+
+function stripHtml(value = "") {
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&#8217;/g, "’")
+    .replace(/&#8216;/g, "‘")
+    .replace(/&#8220;/g, "“")
+    .replace(/&#8221;/g, "”")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/&#038;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+}
+
+async function fetchWhiteHouseCategory(
+  category: string,
+  type: string,
+): Promise<WhiteHouseItem[]> {
+  const url =
+    `https://www.whitehouse.gov/presidential-actions/${category}/feed/`;
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/rss+xml, application/xml, text/xml",
+      "User-Agent": "SupremeCitizens.org government information service",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `WhiteHouse.gov ${type} request failed: ${response.status}`,
+    );
+  }
+
+  const xml = await response.text();
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)];
+
+  return items.slice(0, 10).map((match) => {
+    const item = match[1];
+
+    const title =
+      item.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/i)?.[1] ??
+      item.match(/<title>([\s\S]*?)<\/title>/i)?.[1] ??
+      "";
+
+    const link =
+      item.match(/<link>([\s\S]*?)<\/link>/i)?.[1]?.trim() ?? "";
+
+    const pubDate =
+      item.match(/<pubDate>([\s\S]*?)<\/pubDate>/i)?.[1]?.trim() ?? "";
+
+    return {
+      date: pubDate ? new Date(pubDate).toISOString() : "",
+      title: stripHtml(title),
+      type,
+      url: link,
+    };
+  });
+}
+
 export default async (_req: Request, _context: Context) => {
+
+  let whiteHouse: WhiteHouseItem[] = [];
+
+  try {
+    const [executiveOrders, memoranda] = await Promise.all([
+      fetchWhiteHouseCategory("executive-orders", "Executive Order"),
+      fetchWhiteHouseCategory(
+        "presidential-memoranda",
+        "Presidential Memorandum",
+      ),
+    ]);
+
+    whiteHouse = [...executiveOrders, ...memoranda]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 5);
+  } catch (error) {
+    console.error(
+      "White House feed request failed:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+  }
   try {
     const apiKey = Netlify.env.get("CONGRESS_API_KEY");
 
@@ -80,6 +169,7 @@ const congress = bills
 
     return Response.json(
       {
+        whiteHouse,
         congress,
         updatedAt: new Date().toISOString(),
       },
