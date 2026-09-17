@@ -1,6 +1,7 @@
 (() => {
   const whiteHouseFeed = document.getElementById("white-house-feed");
   const congressFeed = document.getElementById("congress-feed");
+  const supremeCourtFeed = document.getElementById("supreme-court-feed");
   const lastUpdated = document.getElementById("government-last-updated");
 
   if (!congressFeed) return;
@@ -128,7 +129,67 @@ function renderWhiteHouse(items) {
   });
 }
   
+function createSupremeCourtItem(item) {
+  const article = document.createElement("article");
+  article.className = "government-item";
 
+  const meta = document.createElement("p");
+  meta.className = "government-item-meta";
+
+  const metaParts = [];
+
+  if (item.date) {
+    const date = new Date(item.date);
+
+    if (!Number.isNaN(date.getTime())) {
+      metaParts.push(
+        new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }).format(date),
+      );
+    }
+  }
+
+  if (item.type) {
+    metaParts.push(item.type);
+  }
+
+  meta.textContent = metaParts.join(" • ");
+
+  const heading = document.createElement("h4");
+  const link = document.createElement("a");
+
+  link.href = item.url || "https://www.supremecourt.gov/";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = item.title || "Supreme Court activity";
+
+  heading.appendChild(link);
+  article.appendChild(meta);
+  article.appendChild(heading);
+
+  return article;
+}
+
+function renderSupremeCourt(items) {
+  if (!supremeCourtFeed) return;
+
+  supremeCourtFeed.replaceChildren();
+
+  if (!Array.isArray(items) || items.length === 0) {
+    const message = document.createElement("p");
+    message.className = "government-error";
+    message.textContent = FALLBACK_TEXT;
+    supremeCourtFeed.appendChild(message);
+    return;
+  }
+
+  items.slice(0, 5).forEach((item) => {
+    supremeCourtFeed.appendChild(createSupremeCourtItem(item));
+  });
+}
   function showFallback() {
     congressFeed.replaceChildren();
 
@@ -184,11 +245,14 @@ function renderWhiteHouse(items) {
 
       const data = await response.json();
 
-      renderWhiteHouse(data.whiteHouse);
-      renderCongress(data.congress);
-      updateTimestamp(data.updatedAt);
+renderWhiteHouse(data.whiteHouse);
+renderSupremeCourt(data.supremeCourt);
+renderCongress(data.congress);
+updateTimestamp(data.updatedAt);
     } catch (error) {
       console.error("Unable to load Congress feed:", error);
+      renderWhiteHouse([]);
+      renderSupremeCourt([]);
       showFallback();
 
       if (lastUpdated) {
