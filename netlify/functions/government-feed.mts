@@ -191,26 +191,34 @@ async function fetchSupremeCourtOpinions(): Promise<SupremeCourtItem[]> {
   }
 
   const html = await response.text();
-
-  const linkPattern =
-    /<a[^>]+href=["']([^"']*\/opinions\/[^"']+\.pdf)["'][^>]*>([\s\S]*?)<\/a>/gi;
-
   const items: SupremeCourtItem[] = [];
 
-  for (const match of html.matchAll(linkPattern)) {
-    const href = match[1];
-    const linkText = stripHtml(match[2]).replace(/\s+/g, " ").trim();
+  const rowPattern = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
 
-    const beforeLink = html.slice(
-      Math.max(0, match.index! - 800),
-      match.index,
+  for (const rowMatch of html.matchAll(rowPattern)) {
+    const row = rowMatch[1];
+
+    const pdfMatch = row.match(
+      /<a[^>]+href=["']([^"']*\/opinions\/[^"']+\.pdf)["'][^>]*>([\s\S]*?)<\/a>/i,
     );
 
-    const dateMatches = [
-      ...beforeLink.matchAll(/(\d{1,2}\/\d{1,2}\/\d{2})/g),
+    if (!pdfMatch) {
+      continue;
+    }
+
+    const href = pdfMatch[1];
+
+    const cellMatches = [
+      ...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi),
     ];
 
-    const dateText = dateMatches.at(-1)?.[1];
+    const cells = cellMatches.map((cell) =>
+      stripHtml(cell[1]).replace(/\s+/g, " ").trim()
+    );
+
+    const dateText = cells.find((cell) =>
+      /^\d{1,2}\/\d{1,2}\/\d{2}$/.test(cell)
+    );
 
     if (!dateText) {
       continue;
@@ -222,19 +230,27 @@ async function fetchSupremeCourtOpinions(): Promise<SupremeCourtItem[]> {
       continue;
     }
 
-    const rowText = stripHtml(
-      html.slice(
-        Math.max(0, match.index! - 1200),
-        Math.min(html.length, match.index! + 500),
-      ),
-    )
+    const linkText = stripHtml(pdfMatch[2])
       .replace(/\s+/g, " ")
       .trim();
 
-    const title =
-      linkText && !/^\d+\s*[-–]\s*\d+$/i.test(linkText)
-        ? linkText
-        : rowText || "Supreme Court Opinion";
+    let title = linkText;
+
+    if (!title || /^\d+\s*[-–]\s*\d+$/i.test(title)) {
+      const usefulCells = cells.filter(
+        (cell) =>
+          cell &&
+          cell !== dateText &&
+          !/^\d+\s*[-–]\s*\d+$/.test(cell)
+      );
+
+      title =
+        usefulCells.find((cell) =>
+          / v\. | in re | ex rel\.|department|united states/i.test(cell)
+        ) ??
+        usefulCells[0] ??
+        "Supreme Court Opinion";
+    }
 
     items.push({
       date: date.toISOString(),
@@ -250,6 +266,7 @@ async function fetchSupremeCourtOpinions(): Promise<SupremeCourtItem[]> {
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 10);
 }
+
 export default async (_req: Request, _context: Context) => {
 
   let whiteHouse: WhiteHouseItem[] = [];
