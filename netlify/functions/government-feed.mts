@@ -44,7 +44,7 @@ export default async (_req: Request, _context: Context) => {
 
     const url = new URL("https://api.congress.gov/v3/bill/119");
     url.searchParams.set("format", "json");
-    url.searchParams.set("limit", "5");
+    url.searchParams.set("limit", "250");
     url.searchParams.set("offset", "0");
 
     const response = await fetch(url, {
@@ -60,16 +60,23 @@ export default async (_req: Request, _context: Context) => {
 
     const data = await response.json();
     const bills: CongressBill[] = Array.isArray(data?.bills)
-      ? data.bills.slice(0, 5)
-      : [];
+  ? data.bills
+  : [];
 
-    const congress = bills.map((bill) => ({
-      date: bill.latestAction?.actionDate ?? "",
-      identifier: billLabel(bill.type, bill.number),
-      title: bill.title ?? "Untitled legislative item",
-      latestAction: bill.latestAction?.text ?? "",
-      url: congressGovUrl(bill),
-    }));
+const congress = bills
+  .sort((a, b) => {
+    const dateA = a.latestAction?.actionDate ?? "";
+    const dateB = b.latestAction?.actionDate ?? "";
+    return dateB.localeCompare(dateA);
+  })
+  .slice(0, 5)
+  .map((bill) => ({
+    date: bill.latestAction?.actionDate ?? "",
+    identifier: billLabel(bill.type, bill.number),
+    title: bill.title ?? "Untitled legislative item",
+    latestAction: bill.latestAction?.text ?? "",
+    url: congressGovUrl(bill),
+  }));
 
     return Response.json(
       {
