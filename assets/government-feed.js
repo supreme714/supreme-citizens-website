@@ -1,0 +1,138 @@
+(() => {
+  const congressFeed = document.getElementById("congress-feed");
+  const lastUpdated = document.getElementById("government-last-updated");
+
+  if (!congressFeed) return;
+
+  const FALLBACK_TEXT = "Latest information temporarily unavailable.";
+
+  function formatDate(value) {
+    if (!value) return "";
+
+    const date = new Date(`${value}T12:00:00`);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }).format(date);
+  }
+
+  function createItem(item) {
+    const article = document.createElement("article");
+    article.className = "government-item";
+
+    const meta = document.createElement("p");
+    meta.className = "government-item-meta";
+
+    const metaParts = [];
+
+    if (item.date) {
+      metaParts.push(formatDate(item.date));
+    }
+
+    if (item.identifier) {
+      metaParts.push(item.identifier);
+    }
+
+    meta.textContent = metaParts.join(" • ");
+
+    const heading = document.createElement("h4");
+    const link = document.createElement("a");
+
+    link.href = item.url || "https://www.congress.gov/";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.title || "Congressional activity";
+
+    heading.appendChild(link);
+
+    article.appendChild(meta);
+    article.appendChild(heading);
+
+    if (item.latestAction) {
+      const action = document.createElement("p");
+      action.className = "government-item-action";
+      action.textContent = item.latestAction;
+      article.appendChild(action);
+    }
+
+    return article;
+  }
+
+  function showFallback() {
+    congressFeed.replaceChildren();
+
+    const message = document.createElement("p");
+    message.className = "government-error";
+    message.textContent = FALLBACK_TEXT;
+
+    congressFeed.appendChild(message);
+  }
+
+  function renderCongress(items) {
+    congressFeed.replaceChildren();
+
+    if (!Array.isArray(items) || items.length === 0) {
+      showFallback();
+      return;
+    }
+
+    items.slice(0, 5).forEach((item) => {
+      congressFeed.appendChild(createItem(item));
+    });
+  }
+
+  function updateTimestamp(value) {
+    if (!lastUpdated || !value) return;
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return;
+
+    lastUpdated.textContent =
+      `Last updated ${new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(date)}`;
+  }
+
+  async function loadCongress() {
+    try {
+      const response = await fetch("/api/government-feed", {
+        headers: {
+          Accept: "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Government feed request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      renderCongress(data.congress);
+      updateTimestamp(data.updatedAt);
+    } catch (error) {
+      console.error("Unable to load Congress feed:", error);
+      showFallback();
+
+      if (lastUpdated) {
+        lastUpdated.textContent =
+          "Latest government information temporarily unavailable";
+      }
+    }
+  }
+
+  loadCongress();
+
+  window.setInterval(loadCongress, 15 * 60 * 1000);
+})();
