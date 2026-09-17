@@ -174,20 +174,116 @@ async function fetchSupremeCourtOrders(): Promise<SupremeCourtItem[]> {
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 10);
 }
+async function fetchSupremeCourtOpinions(): Promise<SupremeCourtItem[]> {
+  const url = "https://www.supremecourt.gov/opinions/slipopinion";
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: "text/html",
+      "User-Agent": "SupremeCitizens.org government information service",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `SupremeCourt.gov opinions request failed: ${response.status}`,
+    );
+  }
+
+  const html = await response.text();
+
+  const linkPattern =
+    /<a[^>]+href=["']([^"']*\/opinions\/[^"']+\.pdf)["'][^>]*>([\s\S]*?)<\/a>/gi;
+
+  const items: SupremeCourtItem[] = [];
+
+  for (const match of html.matchAll(linkPattern)) {
+    const href = match[1];
+    const linkText = stripHtml(match[2]).replace(/\s+/g, " ").trim();
+
+    const beforeLink = html.slice(
+      Math.max(0, match.index! - 800),
+      match.index,
+    );
+
+    const dateMatches = [
+      ...beforeLink.matchAll(/(\d{1,2}\/\d{1,2}\/\d{2})/g),
+    ];
+
+    const dateText = dateMatches.at(-1)?.[1];
+
+    if (!dateText) {
+      continue;
+    }
+
+    const date = new Date(`${dateText} 12:00:00`);
+
+    if (Number.isNaN(date.getTime())) {
+      continue;
+    }
+
+    const rowText = stripHtml(
+      html.slice(
+        Math.max(0, match.index! - 1200),
+        Math.min(html.length, match.index! + 500),
+      ),
+    )
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const title =
+      linkText && !/^\d+\s*[-–]\s*\d+$/i.test(linkText)
+        ? linkText
+        : rowText || "Supreme Court Opinion";
+
+    items.push({
+      date: date.toISOString(),
+      title,
+      type: "Opinion",
+      url: href.startsWith("http")
+        ? href
+        : `https://www.supremecourt.gov${href.startsWith("/") ? "" : "/"}${href}`,
+    });
+  }
+
+  return items
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 10);
+}
 export default async (_req: Request, _context: Context) => {
 
   let whiteHouse: WhiteHouseItem[] = [];
   let supremeCourt: SupremeCourtItem[] = [];
 
-try {
-  supremeCourt = await fetchSupremeCourtOrders();
-} catch (error) {
+const [ordersResult, opinionsResult] = await Promise.allSettled([
+  fetchSupremeCourtOrders(),
+  fetchSupremeCourtOpinions(),
+]);
+
+if (ordersResult.status === "rejected") {
   console.error(
-    "Supreme Court feed request failed:",
-    error instanceof Error ? error.message : "Unknown error",
+    "Supreme Court orders request failed:",
+    ordersResult.reason instanceof Error
+      ? ordersResult.reason.message
+      : "Unknown error",
   );
 }
 
+if (opinionsResult.status === "rejected") {
+  console.error(
+    "Supreme Court opinions request failed:",
+    opinionsResult.reason instanceof Error
+      ? opinionsResult.reason.message
+      : "Unknown error",
+  );
+}
+
+supremeCourt = [
+  ...(ordersResult.status === "fulfilled" ? ordersResult.value : []),
+  ...(opinionsResult.status === "fulfilled" ? opinionsResult.value : []),
+]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 5);
   try {
     const [executiveOrders, memoranda] = await Promise.all([
       fetchWhiteHouseCategory("executive-orders", "Executive Order"),
