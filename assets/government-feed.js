@@ -1,4 +1,5 @@
 (() => {
+  const whiteHouseFeed = document.getElementById("white-house-feed");
   const congressFeed = document.getElementById("congress-feed");
   const lastUpdated = document.getElementById("government-last-updated");
 
@@ -63,6 +64,70 @@
 
     return article;
   }
+  
+  function createWhiteHouseItem(item) {
+  const article = document.createElement("article");
+  article.className = "government-item";
+
+  const meta = document.createElement("p");
+  meta.className = "government-item-meta";
+
+  const metaParts = [];
+
+  if (item.date) {
+    const date = new Date(item.date);
+
+    if (!Number.isNaN(date.getTime())) {
+      metaParts.push(
+        new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }).format(date),
+      );
+    }
+  }
+
+  if (item.type) {
+    metaParts.push(item.type);
+  }
+
+  meta.textContent = metaParts.join(" • ");
+
+  const heading = document.createElement("h4");
+  const link = document.createElement("a");
+
+  link.href =
+    item.url || "https://www.whitehouse.gov/presidential-actions/";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = item.title || "Presidential Action";
+
+  heading.appendChild(link);
+  article.appendChild(meta);
+  article.appendChild(heading);
+
+  return article;
+}
+
+function renderWhiteHouse(items) {
+  if (!whiteHouseFeed) return;
+
+  whiteHouseFeed.replaceChildren();
+
+  if (!Array.isArray(items) || items.length === 0) {
+    const message = document.createElement("p");
+    message.className = "government-error";
+    message.textContent = FALLBACK_TEXT;
+    whiteHouseFeed.appendChild(message);
+    return;
+  }
+
+  items.slice(0, 5).forEach((item) => {
+    whiteHouseFeed.appendChild(createWhiteHouseItem(item));
+  });
+}
+  
 
   function showFallback() {
     congressFeed.replaceChildren();
@@ -119,6 +184,7 @@
 
       const data = await response.json();
 
+      renderWhiteHouse(data.whiteHouse);
       renderCongress(data.congress);
       updateTimestamp(data.updatedAt);
     } catch (error) {
