@@ -31,7 +31,24 @@ function congressGovUrl(bill: CongressBill) {
   const congress = bill.congress ?? "";
   const number = bill.number ?? "";
 
-  return `https://www.congress.gov/bill/${congress}th-congress/${type}/${number}`;
+  const typePaths: Record<string, string> = {
+    hr: "house-bill",
+    s: "senate-bill",
+    hjres: "house-joint-resolution",
+    sjres: "senate-joint-resolution",
+    hconres: "house-concurrent-resolution",
+    sconres: "senate-concurrent-resolution",
+    hres: "house-resolution",
+    sres: "senate-resolution",
+  };
+
+  const typePath = typePaths[type];
+
+  if (!typePath || !congress || !number) {
+    return "https://www.congress.gov/";
+  }
+
+  return `https://www.congress.gov/bill/${congress}th-congress/${typePath}/${number}`;
 }
 
 type WhiteHouseItem = {
