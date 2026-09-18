@@ -275,3 +275,191 @@ img{max-width:100%;height:auto}
     margin-right: 18px;
   }
 }
+/* Citizens Branch — Three Pathways of Participation */
+
+.participation-pathways {
+  padding: 72px 0;
+  background: #f8fafc;
+  border-top: 1px solid var(--line);
+}
+
+.participation-heading {
+  max-width: 820px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.participation-heading .eyebrow {
+  margin-bottom: 10px;
+  color: var(--red);
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.participation-heading h2 {
+  margin: 0 0 18px;
+  color: var(--navy);
+  font-family: Georgia, serif;
+  font-size: clamp(2.25rem, 5vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.participation-heading > p:last-child {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.participation-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 36px;
+  align-items: start;
+  margin: 0 auto 34px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.participation-card-reverse {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  background: #f5f8fc;
+}
+
+.participation-visual {
+  margin: 0;
+}
+
+.participation-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #cbd6e3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.participation-visual figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.participation-content {
+  padding: 10px 0;
+}
+
+.participation-branch {
+  margin: 0 0 10px;
+  color: var(--red);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.participation-content h3 {
+  margin: 0 0 18px;
+  color: var(--navy);
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.08;
+}
+
+.participation-content > p:not(.participation-branch) {
+  margin: 0 0 22px;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.participation-content h4 {
+  margin: 0 0 10px;
+  color: var(--navy);
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+}
+
+.participation-references {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.participation-references li {
+  margin: 0 0 9px;
+  padding-left: 2px;
+}
+
+.participation-references a {
+  color: #0057b8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.participation-references a:hover,
+.participation-references a:focus {
+  text-decoration: underline;
+}
+
+/* Citizens Branch responsive layout */
+
+@media (max-width: 900px) {
+  .participation-card,
+  .participation-card-reverse {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .participation-card-reverse .participation-content {
+    order: 2;
+  }
+
+  .participation-card-reverse .participation-visual {
+    order: 1;
+  }
+
+  .participation-visual {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .participation-pathways {
+    padding: 50px 0;
+  }
+
+  .participation-heading {
+    margin-bottom: 30px;
+  }
+
+  .participation-heading h2 br {
+    display: none;
+  }
+
+  .participation-card,
+  .participation-card-reverse {
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .participation-content {
+    padding: 2px 0;
+  }
+
+  .participation-content h3 {
+    font-size: 2rem;
+  }
+
+  .participation-visual img {
+    border-radius: 8px;
+  }
+}
+
