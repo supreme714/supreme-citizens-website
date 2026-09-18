@@ -367,6 +367,10 @@ const congress = bills
         whiteHouse,
         supremeCourt,
         congress,
+supremeCourtOpinions:
+  opinionsResult.status === "fulfilled"
+    ? opinionsResult.value
+    : [],
         updatedAt: new Date().toISOString(),
       },
       {
