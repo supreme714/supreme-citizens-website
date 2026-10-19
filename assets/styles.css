@@ -474,3 +474,6 @@ img{max-width:100%;height:auto}
     border-radius: 8px;
   }
 }
+
+
+@media(min-width:901px){.nav-wrap .brand{flex-shrink:0}.main-nav{flex-wrap:wrap;justify-content:flex-end;gap:8px 16px;padding-block:14px;min-width:0}.main-nav a{white-space:nowrap}}
