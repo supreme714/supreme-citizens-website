@@ -1,0 +1,37 @@
+{
+  "title": "January 6 Citizen Analysis Record",
+  "purpose": "A structured civic-analysis layer for evaluating major January 6 questions without converting political interpretation into fact.",
+  "method": [
+    "State the question precisely.",
+    "Identify the claim or competing claims.",
+    "Review supporting and contrary evidence.",
+    "Separate court holdings from allegations and political judgments.",
+    "Separate government findings from judicial findings.",
+    "Identify material facts that remain disputed or unresolved.",
+    "Match the level of certainty to the strength of the record."
+  ],
+  "assessment_scale": [
+    "ESTABLISHED BY EVIDENCE",
+    "MORE LIKELY THAN NOT",
+    "INSUFFICIENT EVIDENCE",
+    "GENUINELY DISPUTED",
+    "NEED MORE INFORMATION"
+  ],
+  "questions": [
+    {"id":"J6-A-0001","question":"Did the 2020 election challenges establish a legal basis to change the presidential outcome?","related_evidence":["J6-E-0001","J6-E-0002","J6-E-0003","J6-E-0004"],"discipline":"Distinguish procedural dispositions from merits rulings and preserve the certified Electoral College result as the official outcome."},
+    {"id":"J6-A-0002","question":"What authority did the Vice President have on January 6?","related_evidence":["J6-E-0002"],"discipline":"Distinguish the constitutional and statutory framework in force in 2021 from later statutory reforms."},
+    {"id":"J6-A-0003","question":"What caused the breach of the U.S. Capitol?","related_evidence":["J6-E-0006","J6-E-0007","J6-E-0008"],"discipline":"Use synchronized chronology and direct evidence; sequence alone does not prove causation."},
+    {"id":"J6-A-0004","question":"What responsibility did President Donald Trump bear?","related_evidence":["J6-E-0007","J6-E-0010"],"discipline":"Keep political judgment, congressional findings, criminal allegations and judicial holdings distinct."},
+    {"id":"J6-A-0005","question":"Did federal and local agencies have sufficient warning?","related_evidence":["J6-E-0005","J6-E-0006","J6-E-0008"],"discipline":"Compare information actually available before January 6 with later oversight findings."},
+    {"id":"J6-A-0006","question":"Why was the Capitol not better protected?","related_evidence":["J6-E-0005","J6-E-0006","J6-E-0008"],"discipline":"Separate planning, intelligence, staffing, command and mutual-aid questions from hindsight."},
+    {"id":"J6-A-0007","question":"Was the National Guard response unnecessarily delayed?","related_evidence":["J6-E-0008"],"discipline":"Separate request, authorization, mission approval, mobilization, deployment and arrival times."},
+    {"id":"J6-A-0008","question":"How should congressional objections to electoral votes be understood?","related_evidence":["J6-E-0002","J6-E-0003","J6-E-0004"],"discipline":"Distinguish the lawful congressional objection process from violence or unlawful entry."},
+    {"id":"J6-A-0009","question":"How should competing elector documents be understood?","related_evidence":["J6-E-0001","J6-E-0007"],"discipline":"Compare each document, representation and participant's conduct rather than applying a single characterization without examining the facts."},
+    {"id":"J6-A-0010","question":"Were January 6 defendants treated fairly?","related_evidence":["J6-E-0009","J6-E-0010"],"discipline":"Evaluate defendants by individual conduct, charge, disposition, sentence, appeal and later legal developments."},
+    {"id":"J6-A-0011","question":"What did later Supreme Court decisions actually change?","related_evidence":["J6-E-0010"],"discipline":"Apply each holding only to the legal question the Court actually decided."},
+    {"id":"J6-A-0012","question":"How should later executive clemency be understood?","related_evidence":["J6-E-0009"],"discipline":"Preserve the historical charge, plea, verdict and sentence while separately recording later clemency."},
+    {"id":"J6-A-0013","question":"What do the pipe-bomb investigation and later developments establish?","related_evidence":[],"discipline":"Treat this as a separate evidence file and do not infer relationships unsupported by authenticated evidence."},
+    {"id":"J6-A-0014","question":"What should America learn from January 6?","related_evidence":["J6-E-0001","J6-E-0005","J6-E-0007","J6-E-0008","J6-E-0009","J6-E-0010"],"discipline":"Separate normative civic lessons from historical factual findings and identify the evidence supporting each premise."}
+  ],
+  "privacy": "Any future interactive citizen assessment should be private by default and should not be used to construct a political profile."
+}
