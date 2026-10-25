@@ -1,0 +1,79 @@
+{
+  "title": "January 6 Security, Intelligence & Response Record",
+  "version": "1.0",
+  "methodology": "Each J6-S record separates information known at the time, dissemination, operational decisions, assistance requests, authorization, mobilization, deployment, and later oversight findings. Later findings are not presented as contemporaneous knowledge.",
+  "records": [
+    {
+      "id": "J6-S-0001",
+      "stage": "PRE-EVENT WARNING",
+      "subject": "Federal agencies identified potential threats of violence before January 6",
+      "status": "GOVERNMENT FINDING",
+      "evidence": ["J6-E-0005", "J6-E-0006"],
+      "summary": "Later GAO review found that all ten federal agencies it examined identified potential threats of violence before January 6.",
+      "limitation": "The existence of threat information does not mean every agency possessed the same information or a precise prediction of the attack that occurred."
+    },
+    {
+      "id": "J6-S-0002",
+      "stage": "INTELLIGENCE PROCESSING",
+      "subject": "Processing and sharing of threat information",
+      "status": "GOVERNMENT FINDING",
+      "evidence": ["J6-E-0005", "J6-E-0006", "J6-E-0008"],
+      "summary": "Oversight reviews identified shortcomings in how some threat information was processed, disseminated, or incorporated into security planning.",
+      "limitation": "A later oversight finding should be distinguished from what a particular official actually knew at a particular time."
+    },
+    {
+      "id": "J6-S-0003",
+      "stage": "SECURITY PREPARATION",
+      "subject": "Capitol security planning underestimated the potential for an extreme attack",
+      "status": "GOVERNMENT FINDING",
+      "evidence": ["J6-E-0008"],
+      "summary": "Bipartisan Senate review identified intelligence, planning, training, equipment, and command shortcomings affecting Capitol preparedness.",
+      "limitation": "Institutional preparedness findings do not establish individual criminal responsibility."
+    },
+    {
+      "id": "J6-S-0004",
+      "stage": "EMERGENCY REQUEST",
+      "subject": "Capitol Police request for immediate National Guard assistance",
+      "status": "PRIMARY / GOVERNMENT RECORD",
+      "evidence": ["J6-E-0008"],
+      "summary": "As conditions deteriorated, Capitol Police leadership sought immediate National Guard assistance. The request is one stage in a longer response chain.",
+      "limitation": "The time of a request is not the same as authorization, mission assignment, mobilization, movement, or arrival."
+    },
+    {
+      "id": "J6-S-0005",
+      "stage": "AUTHORIZATION & COMMAND",
+      "subject": "National Guard approval and mission-definition process",
+      "status": "GOVERNMENT FINDING",
+      "evidence": ["J6-E-0008"],
+      "summary": "The District of Columbia National Guard operated through a federal command structure, and oversight reviews examined approval procedures and the time required to define and authorize the Capitol mission.",
+      "limitation": "Descriptions of delay should identify which stage of the command and deployment process is being measured."
+    },
+    {
+      "id": "J6-S-0006",
+      "stage": "MOBILIZATION",
+      "subject": "Personnel notification, equipping, briefing, and movement",
+      "status": "GOVERNMENT FINDING",
+      "evidence": ["J6-E-0008"],
+      "summary": "Because Guard personnel were not already staged for a Capitol mission, mobilization required personnel to be notified, equipped, instructed, organized, and moved after authorization.",
+      "limitation": "Mobilization is a separate operational stage from the original request for assistance."
+    },
+    {
+      "id": "J6-S-0007",
+      "stage": "MULTI-AGENCY RESPONSE",
+      "subject": "Capitol Police, Metropolitan Police, federal agencies, and National Guard response",
+      "status": "PRIMARY / GOVERNMENT RECORD",
+      "evidence": ["J6-E-0007", "J6-E-0008"],
+      "summary": "Multiple law-enforcement and military organizations participated in securing the Capitol and surrounding grounds as the emergency developed.",
+      "limitation": "Agency participation should not be treated as proof that all organizations shared a single command structure or identical situational awareness."
+    },
+    {
+      "id": "J6-S-0008",
+      "stage": "LATER OVERSIGHT",
+      "subject": "Bipartisan Senate review of security, planning, intelligence, and response failures",
+      "status": "GOVERNMENT FINDING / LATER DEVELOPMENT",
+      "evidence": ["J6-E-0008"],
+      "summary": "The bipartisan Senate review documented breakdowns involving intelligence, Capitol security planning, command procedures, equipment, training, and emergency response.",
+      "limitation": "An oversight report is an institutional finding and should not be presented as a judicial determination of individual guilt."
+    }
+  ]
+}
