@@ -1,0 +1,74 @@
+{
+  "project": "January 6: Memory, Record & Republic",
+  "version": "1.0",
+  "updated": "2026-10-24",
+  "method": "Evidence-first catalog using official and primary government sources. Each entry states what the source establishes and its limitations.",
+  "records": [
+    {
+      "id": "J6-E-0001",
+      "title": "2020 Electoral College Results",
+      "source_type": "OFFICIAL GOVERNMENT RECORD",
+      "originator": "National Archives and Records Administration",
+      "event_date": "2020-12-14",
+      "url": "https://www.archives.gov/electoral-college/2020",
+      "establishes": "The official Electoral College result recorded 306 electoral votes for Joseph R. Biden Jr. and 232 for Donald J. Trump, with 270 required for a majority.",
+      "limitations": "This record reports the official Electoral College result; by itself it does not resolve every separate allegation or legal argument raised about the election process.",
+      "status": ["PRIMARY SOURCE", "OFFICIAL GOVERNMENT RECORD"]
+    },
+    {
+      "id": "J6-E-0002",
+      "title": "Congressional Record — Joint Session and Arizona Electoral Vote Objection",
+      "source_type": "CONGRESSIONAL RECORD",
+      "originator": "U.S. Congress / Government Publishing Office",
+      "event_date": "2021-01-06",
+      "url": "https://www.govinfo.gov/content/pkg/CREC-2021-01-06/html/CREC-2021-01-06-pt1-PgH76-4.htm",
+      "establishes": "Representative Paul Gosar and Senator Ted Cruz submitted a written objection to Arizona's electoral votes. The House and Senate withdrew to consider it separately; after reconvening, the objection was not sustained.",
+      "limitations": "The Congressional Record establishes the official proceedings and statements made in Congress; statements by individual members are not automatically established facts merely because they appear in the record.",
+      "status": ["PRIMARY SOURCE", "CONGRESSIONAL RECORD"]
+    },
+    {
+      "id": "J6-E-0003",
+      "title": "Senate Vote on Arizona Electoral Vote Objection",
+      "source_type": "CONGRESSIONAL RECORD",
+      "originator": "U.S. Senate / Government Publishing Office",
+      "event_date": "2021-01-06",
+      "url": "https://www.govinfo.gov/content/pkg/CREC-2021-01-06/html/CREC-2021-01-06-pt1-PgS18-2.htm",
+      "establishes": "The Senate rejected the Arizona electoral vote objection by 93 votes to 6.",
+      "limitations": "The vote establishes the Senate's disposition of the objection; it does not by itself adjudicate every factual allegation discussed during debate.",
+      "status": ["PRIMARY SOURCE", "CONGRESSIONAL RECORD"]
+    },
+    {
+      "id": "J6-E-0004",
+      "title": "House Vote on Arizona Electoral Vote Objection",
+      "source_type": "CONGRESSIONAL RECORD",
+      "originator": "U.S. House of Representatives / Government Publishing Office",
+      "event_date": "2021-01-06",
+      "url": "https://www.govinfo.gov/content/pkg/CREC-2021-01-06/pdf/CREC-2021-01-06-pt1-PgH76-4.pdf",
+      "establishes": "The House rejected the Arizona electoral vote objection, 303 nays to 121 yeas, with 7 not voting.",
+      "limitations": "The roll call establishes how members voted on the objection, not the truth or falsity of every assertion made during debate.",
+      "status": ["PRIMARY SOURCE", "CONGRESSIONAL RECORD"]
+    },
+    {
+      "id": "J6-E-0005",
+      "title": "Federal Agencies Identified Some Threats Before January 6",
+      "source_type": "GOVERNMENT FINDING",
+      "originator": "U.S. Government Accountability Office",
+      "publication_date": "2023-02-28",
+      "url": "https://www.gao.gov/products/gao-23-106625",
+      "establishes": "GAO found that all 10 federal agencies it reviewed identified potential threats of violence before January 6; the FBI and Capitol Police identified credible threats. GAO also found shortcomings in processing or sharing some threat information.",
+      "limitations": "This is a later government investigative finding rather than a contemporaneous operational record. GAO stated that it did not review certain threat information subject to ongoing investigations or prosecutions.",
+      "status": ["GOVERNMENT FINDING", "OFFICIAL GOVERNMENT RECORD"]
+    },
+    {
+      "id": "J6-E-0006",
+      "title": "Federal Agencies' Use of Open Source Data Prior to January 6",
+      "source_type": "GOVERNMENT FINDING",
+      "originator": "U.S. Government Accountability Office",
+      "publication_date": "2022-05-02",
+      "url": "https://www.gao.gov/products/gao-22-105963",
+      "establishes": "GAO found that all 10 selected agencies were aware of open-source information about planned January 6 events and seven were aware of potential violence planned for that day. The report documents threat information agencies obtained and shared before the attack.",
+      "limitations": "Open-source threat information can establish what agencies received or observed but does not, without corroboration, establish that every online threat was genuine, operational, or carried out.",
+      "status": ["GOVERNMENT FINDING", "OFFICIAL GOVERNMENT RECORD"]
+    }
+  ]
+}
