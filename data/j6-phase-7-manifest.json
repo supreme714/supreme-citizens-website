@@ -1,0 +1,9 @@
+{
+  "phase": 7,
+  "name": "You Decide & Citizen Analysis",
+  "landing_page": "j6-you-decide.html",
+  "record_page": "j6-citizen-analysis.html",
+  "data_file": "data/j6-citizen-analysis.json",
+  "analysis_ids": "J6-A-0001 through J6-A-0014",
+  "principles": ["evidence-first","politically neutral methodology","procedural accuracy","source-status distinctions","privacy by default"]
+}
