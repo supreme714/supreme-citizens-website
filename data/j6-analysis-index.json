@@ -1,0 +1,8 @@
+{
+  "records": [
+    "J6-A-0001","J6-A-0002","J6-A-0003","J6-A-0004","J6-A-0005","J6-A-0006","J6-A-0007",
+    "J6-A-0008","J6-A-0009","J6-A-0010","J6-A-0011","J6-A-0012","J6-A-0013","J6-A-0014"
+  ],
+  "source": "data/j6-citizen-analysis.json",
+  "visible_record": "j6-citizen-analysis.html"
+}
