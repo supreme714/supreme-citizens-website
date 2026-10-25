@@ -10,12 +10,34 @@ export default async (request: Request, context: any) => {
   // Keep Citizenship & Due Process in the primary navigation immediately
   // after The Charter, while avoiding duplicate links on pages that already
   // contain the static navigation item.
-  if (html.includes('class="main-nav"') && !html.includes('href="citizenship.html"')) {
+  const primaryNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  const primaryNav = primaryNavMatch ? primaryNavMatch[0] : "";
+
+  if (primaryNav && !primaryNav.includes('href="citizenship.html"')) {
     const active = url.pathname.endsWith("/citizenship.html") ? ' aria-current="page"' : "";
     const citizenshipLink = `<a href="citizenship.html"${active}>Citizenship &amp; Due Process</a>`;
     const charterLinkPattern = /(<a\b[^>]*href=["']charter\.html["'][^>]*>\s*The Charter\s*<\/a>)/i;
     if (charterLinkPattern.test(html)) {
       html = html.replace(charterLinkPattern, `$1\n      ${citizenshipLink}`);
+      changed = true;
+    }
+  }
+
+  // Keep January 6 in the primary navigation immediately after Participate.
+  // Check only the primary navigation for an existing link. The homepage can
+  // contain January 6 links elsewhere in its content without suppressing the
+  // navigation item.
+  const refreshedNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  const refreshedNav = refreshedNavMatch ? refreshedNavMatch[0] : "";
+
+  if (refreshedNav && !refreshedNav.includes('href="january-6.html"')) {
+    const active = url.pathname.endsWith("/january-6.html") || url.pathname.includes("/j6-")
+      ? ' aria-current="page"'
+      : "";
+    const january6Link = `<a href="january-6.html"${active}>January 6</a>`;
+    const participateLinkPattern = /(<a\b[^>]*href=["']participate\.html["'][^>]*>\s*Participate\s*<\/a>)/i;
+    if (participateLinkPattern.test(html)) {
+      html = html.replace(participateLinkPattern, `$1\n      ${january6Link}`);
       changed = true;
     }
   }
