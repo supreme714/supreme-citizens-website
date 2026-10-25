@@ -1,0 +1,120 @@
+{
+  "title": "January 6 Investigations, Courts & Legal Record",
+  "version": "1.0",
+  "methodology": "Each J6-L record preserves procedural posture. Allegations, congressional findings, convictions, dismissals, appellate rulings, pardons and commutations are recorded as distinct legal events and are not treated as interchangeable.",
+  "records": [
+    {
+      "id": "J6-L-0001",
+      "stage": "Congressional investigation",
+      "title": "House Select Committee investigation and final report",
+      "classification": [
+        "CONGRESSIONAL FINDING",
+        "GOVERNMENT RECORD"
+      ],
+      "summary": "The House Select Committee gathered testimony, documents and other materials, issued findings and recommendations, and published a final report and supporting archive.",
+      "evidence_ids": [
+        "J6-E-0007"
+      ],
+      "limitation": "Committee findings and referrals are legislative findings; they are not criminal convictions or judicial findings of guilt."
+    },
+    {
+      "id": "J6-L-0002",
+      "stage": "Federal prosecutions",
+      "title": "Charges, pleas, trials and case dispositions",
+      "classification": [
+        "OFFICIAL GOVERNMENT RECORD",
+        "CASE-SPECIFIC STATUS"
+      ],
+      "summary": "Federal January 6 prosecutions produced different procedural outcomes, including charges, guilty pleas, trial convictions, acquittals, dismissals, sentences and appeals.",
+      "evidence_ids": [
+        "J6-E-0009"
+      ],
+      "limitation": "A criminal charge is an allegation. Each defendant must be described by the actual disposition of that person's case."
+    },
+    {
+      "id": "J6-L-0003",
+      "stage": "Conviction record",
+      "title": "Convictions and guilty pleas remain distinct from charging records",
+      "classification": [
+        "ADJUDICATED OUTCOME",
+        "CASE-SPECIFIC"
+      ],
+      "summary": "Where a defendant pleaded guilty or was convicted at trial, that adjudicated result should be preserved separately from the original charging document and from any later appeal or clemency.",
+      "evidence_ids": [
+        "J6-E-0009"
+      ],
+      "limitation": "A conviction in one case does not establish guilt for another defendant, another charge, or a broader political claim."
+    },
+    {
+      "id": "J6-L-0004",
+      "stage": "Supreme Court statutory interpretation",
+      "title": "Fischer v. United States narrowed 18 U.S.C. §1512(c)(2)",
+      "classification": [
+        "COURT FINDING",
+        "LATER DEVELOPMENT"
+      ],
+      "summary": "The Supreme Court narrowed the circumstances in which the obstruction provision in 18 U.S.C. §1512(c)(2) may be applied, affecting a subset of January 6 cases.",
+      "evidence_ids": [
+        "J6-E-0010"
+      ],
+      "limitation": "Fischer did not erase every January 6 prosecution or invalidate unrelated charges, convictions or conduct."
+    },
+    {
+      "id": "J6-L-0005",
+      "stage": "Supreme Court presidential-immunity framework",
+      "title": "Trump v. United States established an immunity framework",
+      "classification": [
+        "COURT FINDING",
+        "LATER DEVELOPMENT"
+      ],
+      "summary": "The Supreme Court established a framework distinguishing exclusive constitutional authority, other official acts and unofficial acts when evaluating criminal prosecution of a former president.",
+      "evidence_ids": [],
+      "official_source": "Supreme Court opinion",
+      "limitation": "The decision did not itself determine guilt or innocence on the federal election-related allegations."
+    },
+    {
+      "id": "J6-L-0006",
+      "stage": "Federal election case disposition",
+      "title": "Federal election-related prosecution ended without a trial verdict",
+      "classification": [
+        "DISMISSED",
+        "NO TRIAL VERDICT"
+      ],
+      "summary": "The federal election-related case against Donald Trump was dismissed before trial after the 2024 election under the Justice Department's position concerning prosecution of a sitting president.",
+      "evidence_ids": [],
+      "official_source": "Federal court / DOJ disposition record",
+      "limitation": "A dismissal before trial under a presidential-prosecution policy is not a trial conviction and is not an acquittal on the factual merits."
+    },
+    {
+      "id": "J6-L-0007",
+      "stage": "Executive clemency",
+      "title": "January 2025 pardons and commutations changed legal consequences",
+      "classification": [
+        "PARDON",
+        "COMMUTATION",
+        "EXECUTIVE CLEMENCY"
+      ],
+      "summary": "Presidential clemency covered federal January 6 offenses through pardons, commutations and directions concerning pending covered cases.",
+      "evidence_ids": [
+        "J6-E-0009"
+      ],
+      "official_source": "DOJ clemency record",
+      "limitation": "Clemency is a later executive action. It should not be presented as an appellate reversal of the historical charging, plea, verdict or sentencing record."
+    },
+    {
+      "id": "J6-L-0008",
+      "stage": "Procedural-history rule",
+      "title": "Preserve the complete legal sequence",
+      "classification": [
+        "RECORD STANDARD"
+      ],
+      "summary": "For significant proceedings, the record should preserve allegation or charge, adjudication, appeal, later court ruling, dismissal, clemency and current status as separate events.",
+      "evidence_ids": [
+        "J6-E-0007",
+        "J6-E-0009",
+        "J6-E-0010"
+      ],
+      "limitation": "Later developments should update the current status without silently overwriting what occurred earlier in the procedural history."
+    }
+  ]
+}
