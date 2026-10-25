@@ -20,6 +20,21 @@ export default async (request: Request, context: any) => {
     }
   }
 
+  // Keep January 6 in the primary navigation immediately after Participate.
+  // The January 6 project pages already contain this link statically, so the
+  // duplicate check prevents a second link from being injected there.
+  if (html.includes('class="main-nav"') && !html.includes('href="january-6.html"')) {
+    const active = url.pathname.endsWith("/january-6.html") || url.pathname.includes("/j6-")
+      ? ' aria-current="page"'
+      : "";
+    const january6Link = `<a href="january-6.html"${active}>January 6</a>`;
+    const participateLinkPattern = /(<a\b[^>]*href=["']participate\.html["'][^>]*>\s*Participate\s*<\/a>)/i;
+    if (participateLinkPattern.test(html)) {
+      html = html.replace(participateLinkPattern, `$1\n      ${january6Link}`);
+      changed = true;
+    }
+  }
+
   // Give Charter readers a prominent direct path to the companion
   // Citizenship & Due Process statement beside the existing 12 Principles
   // reading link. This is intentionally scoped to charter.html only.
