@@ -16,6 +16,53 @@ video {
   height: auto;
 }
 
+/* Compatibility for January 6 pages created with the alternate header markup. */
+.top-strip {
+  background: #003B8F;
+  color: #fff;
+  font-size: .73rem;
+  font-weight: 800;
+  letter-spacing: .11em;
+  display: flex;
+  justify-content: center;
+  gap: 34px;
+  padding: 8px 20px;
+}
+
+.header-inner,
+.site-header > .nav-wrap {
+  width: min(1180px, calc(100% - 40px));
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  min-height: 88px;
+}
+
+.header-inner .brand span {
+  display: block;
+}
+
+.header-inner .brand small {
+  display: block;
+  color: #5f6c7d;
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.footer-inner {
+  width: min(1180px, calc(100% - 40px));
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 40px;
+}
+
 /* TABLETS */
 @media (max-width: 900px) {
 
@@ -31,6 +78,38 @@ video {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px 18px;
+  }
+
+  /* Alternate January 6 headers do not contain the hamburger button.
+     Keep their navigation visible and wrapped instead of hiding it. */
+  .header-inner {
+    width: 92%;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .header-inner .brand {
+    justify-content: center;
+  }
+
+  .header-inner .main-nav {
+    display: flex;
+    position: static;
+    box-shadow: none;
+    padding: 8px 0 4px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 16px;
+  }
+
+  .header-inner .main-nav a {
+    width: auto;
+    padding: 5px 2px;
   }
 
   .two-col,
@@ -57,6 +136,40 @@ video {
     max-width: none;
     margin-left: 18px;
     margin-right: 18px;
+  }
+
+  .top-strip {
+    display: none;
+  }
+
+  .header-inner {
+    width: auto;
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .header-inner .brand {
+    justify-content: flex-start;
+  }
+
+  .header-inner .main-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 0;
+  }
+
+  .header-inner .main-nav a {
+    width: 100%;
+    padding: 9px 6px;
+    text-align: center;
+  }
+
+  .footer-inner {
+    width: auto;
+    margin-left: 18px;
+    margin-right: 18px;
+    align-items: flex-start;
   }
 
   /* Header/navigation */
@@ -139,6 +252,16 @@ video {
   .wrap {
     margin-left: 14px;
     margin-right: 14px;
+  }
+
+  .header-inner,
+  .footer-inner {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+
+  .header-inner .main-nav {
+    grid-template-columns: 1fr;
   }
 
   .page-hero h1 {
