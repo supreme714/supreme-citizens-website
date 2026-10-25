@@ -1,0 +1,14 @@
+{
+  "project":"January 6: Memory, Record & Republic",
+  "phase":"Phase 13 — Comprehensive Record Review & Audit",
+  "updated":"2026-10-25",
+  "audit_scope":["Evidence identifiers and continuity","Source classification and evidentiary boundaries","Legal and procedural terminology","Master-ledger integration","Cross-reference discipline","Navigation and public discoverability","Desktop and mobile presentation","Later-development preservation"],
+  "findings":[
+    {"id":"A13-01","status":"CORRECTED","finding":"Phase 12 records J6-E-0011 through J6-E-0020 were visible on the Batch One page but were not yet integrated into the master data/j6-evidence-ledger.json.","action":"Integrated J6-E-0011 through J6-E-0020 into master ledger version 1.2."},
+    {"id":"A13-02","status":"PASS","finding":"Evidence identifiers J6-E-0001 through J6-E-0020 are continuous after integration.","action":"Retain stable identifiers."},
+    {"id":"A13-03","status":"PASS","finding":"Indictments are identified as allegations and kept distinct from jury verdicts and sentencing outcomes.","action":"Preserve this distinction throughout final publication."},
+    {"id":"A13-04","status":"PASS","finding":"Congressional and government investigative findings are distinguished from judicial outcomes.","action":"Preserve classification language."},
+    {"id":"A13-05","status":"FINAL-PHASE ITEM","finding":"Sentencing and prosecution records require explicit preservation of later appellate or executive developments where applicable.","action":"Carry this requirement into Phase 14 final-publication review."},
+    {"id":"A13-06","status":"FINAL-PHASE ITEM","finding":"Phase 11 and Phase 12 pages should remain discoverable through the research/record-maintenance pathway without overcrowding the primary January 6 subnavigation.","action":"Confirm final navigation and cross-links in Phase 14."}
+  ]
+}
