@@ -1,6 +1,6 @@
 {
   "project": "January 6: Memory, Record & Republic",
-  "version": "1.0",
+  "version": "1.1",
   "updated": "2026-10-24",
   "method": "Evidence-first catalog using official and primary government sources. Each entry states what the source establishes and its limitations.",
   "records": [
@@ -69,6 +69,50 @@
       "establishes": "GAO found that all 10 selected agencies were aware of open-source information about planned January 6 events and seven were aware of potential violence planned for that day. The report documents threat information agencies obtained and shared before the attack.",
       "limitations": "Open-source threat information can establish what agencies received or observed but does not, without corroboration, establish that every online threat was genuine, operational, or carried out.",
       "status": ["GOVERNMENT FINDING", "OFFICIAL GOVERNMENT RECORD"]
+    },
+    {
+      "id": "J6-E-0007",
+      "title": "Select Committee Final Report and Supporting Materials",
+      "source_type": "GOVERNMENT FINDING",
+      "originator": "U.S. House Select Committee to Investigate the January 6th Attack / Government Publishing Office",
+      "publication_date": "2022-12-22",
+      "url": "https://www.govinfo.gov/collection/january-6th-committee-final-report",
+      "establishes": "The official collection preserves the Select Committee's final report and supporting materials, including transcripts, court documents, hearing videos, exhibits and other documents used in its investigation. The report states the Committee's findings concerning the causes and circumstances of January 6 and related efforts concerning the 2020 election.",
+      "limitations": "The Committee's conclusions are congressional investigative findings, not criminal convictions or judicial findings. Individual supporting materials should be evaluated according to their own provenance and evidentiary context.",
+      "status": ["GOVERNMENT FINDING", "OFFICIAL GOVERNMENT RECORD"]
+    },
+    {
+      "id": "J6-E-0008",
+      "title": "Bipartisan Senate Investigation of Security, Planning and Response Failures",
+      "source_type": "GOVERNMENT FINDING",
+      "originator": "U.S. Senate Homeland Security and Governmental Affairs Committee and Senate Rules Committee",
+      "publication_date": "2021-06-08",
+      "url": "https://www.hsgac.senate.gov/media/dems/peters-portman-klobuchar-blunt-release-bipartisan-report-investigating-january-6th-capitol-attack/",
+      "establishes": "The bipartisan Senate investigation identified failures in intelligence, Capitol Police preparedness, emergency processes and the National Guard response that contributed to the Capitol's vulnerability and delayed the response on January 6.",
+      "limitations": "This is a congressional investigative finding focused substantially on security planning and response. It does not adjudicate individual criminal liability and should not be treated as a judicial determination.",
+      "status": ["GOVERNMENT FINDING", "BIPARTISAN CONGRESSIONAL REPORT"]
+    },
+    {
+      "id": "J6-E-0009",
+      "title": "DOJ Status of Federal Prosecutions Related to January 6",
+      "source_type": "OFFICIAL GOVERNMENT RECORD",
+      "originator": "U.S. Department of Justice, U.S. Attorney's Office for the District of Columbia",
+      "publication_date": "2025-01",
+      "url": "https://www.justice.gov/usao-dc/media/1382981/dl",
+      "establishes": "The Justice Department's status report provides aggregate federal prosecution information for criminal cases arising from January 6, including numbers charged and categories of alleged offenses.",
+      "limitations": "A charge is an allegation, not a conviction. Aggregate prosecution statistics do not establish the guilt of any particular defendant, and case outcomes must be checked individually. The figures are a historical snapshot and may be affected by later judicial or executive developments.",
+      "status": ["OFFICIAL GOVERNMENT RECORD", "LATER DEVELOPMENT"]
+    },
+    {
+      "id": "J6-E-0010",
+      "title": "Fischer v. United States — DOJ Case Impact Fact Sheet",
+      "source_type": "LATER DEVELOPMENT",
+      "originator": "U.S. Department of Justice, U.S. Attorney's Office for the District of Columbia",
+      "publication_date": "2024-06-28",
+      "url": "https://www.justice.gov/usao-dc/pr/fact-sheet-fischer-v-united-states",
+      "establishes": "Following the Supreme Court's Fischer decision concerning 18 U.S.C. § 1512(c)(2), DOJ reported that most January 6 defendants had not been charged with or convicted under that provision and that every potentially affected defendant also faced other charges.",
+      "limitations": "This DOJ fact sheet describes the government's assessment of the decision's immediate case impact. The Supreme Court opinion itself controls the legal interpretation, and individual case outcomes require review of their own records.",
+      "status": ["LATER DEVELOPMENT", "OFFICIAL GOVERNMENT RECORD"]
     }
   ]
 }
