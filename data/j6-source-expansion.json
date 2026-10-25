@@ -1,0 +1,49 @@
+{
+  "project": "January 6: Memory, Record & Republic",
+  "phase": "11 — Source Expansion & Record Population",
+  "updated": "2026-10-25",
+  "purpose": "Expand the documentary record while preserving the distinction between primary records, government findings, judicial holdings, allegations, testimony, later developments and unresolved questions.",
+  "population_priorities": [
+    {
+      "priority": 1,
+      "record_family": "J6-E",
+      "title": "Evidence Ledger expansion",
+      "target": "Add additional official and primary-source records with stable identifiers, provenance, what each record establishes, and explicit limitations."
+    },
+    {
+      "priority": 2,
+      "record_family": "J6-T",
+      "title": "Chronology expansion",
+      "target": "Add sourced event entries only where timestamps and institutional context can be supported by identified records."
+    },
+    {
+      "priority": 3,
+      "record_family": "J6-S",
+      "title": "Security and response expansion",
+      "target": "Separate warning, intelligence processing, request, authorization, mobilization, deployment and operational response."
+    },
+    {
+      "priority": 4,
+      "record_family": "J6-L",
+      "title": "Legal record expansion",
+      "target": "Track charges, pleas, verdicts, dismissals, appellate rulings, Supreme Court decisions and clemency without collapsing distinct procedural stages."
+    },
+    {
+      "priority": 5,
+      "record_family": "J6-V",
+      "title": "Voices and testimony expansion",
+      "target": "Catalog sworn testimony, direct observation, interviews, contemporaneous communications and conflicting accounts with corroboration notes."
+    }
+  ],
+  "admission_standard": [
+    "Prefer primary and official sources.",
+    "Identify the originator and date of the source.",
+    "State what the source establishes and what it does not establish.",
+    "Do not convert allegations into facts by repetition.",
+    "Do not treat congressional findings as judicial findings.",
+    "Do not treat charges as convictions.",
+    "Preserve later developments without silently rewriting earlier procedural history.",
+    "Cross-references indicate relevance; they do not by themselves establish causation, motive, guilt, innocence or legal responsibility."
+  ],
+  "status": "ACTIVE"
+}
