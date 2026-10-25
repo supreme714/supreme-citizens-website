@@ -42,6 +42,41 @@ export default async (request: Request, context: any) => {
     }
   }
 
+  // Standardize the January 6 project subnavigation across every J6 page.
+  // Phase 8 and Phase 9 introduced the Research Index and Record Maintenance;
+  // older static pages may not yet contain those links. Scope duplicate checks
+  // to the J6 subnav so links elsewhere on a page do not suppress navigation.
+  const j6NavMatch = html.match(/<nav\b[^>]*class=["'][^"']*j6-subnav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  if (j6NavMatch) {
+    let j6Nav = j6NavMatch[0];
+    let navChanged = false;
+
+    if (!j6Nav.includes('href="j6-research-index.html"')) {
+      const active = url.pathname.endsWith("/j6-research-index.html") ? ' aria-current="page"' : "";
+      const link = `<a href="j6-research-index.html"${active}>Research Index</a>`;
+      const youDecidePattern = /(<a\b[^>]*href=["']j6-you-decide\.html["'][^>]*>\s*You Decide\s*<\/a>)/i;
+      if (youDecidePattern.test(j6Nav)) {
+        j6Nav = j6Nav.replace(youDecidePattern, `$1${link}`);
+        navChanged = true;
+      }
+    }
+
+    if (!j6Nav.includes('href="j6-record-maintenance.html"')) {
+      const active = url.pathname.endsWith("/j6-record-maintenance.html") ? ' aria-current="page"' : "";
+      const link = `<a href="j6-record-maintenance.html"${active}>Record Maintenance</a>`;
+      const researchPattern = /(<a\b[^>]*href=["']j6-research-index\.html["'][^>]*>\s*Research Index\s*<\/a>)/i;
+      if (researchPattern.test(j6Nav)) {
+        j6Nav = j6Nav.replace(researchPattern, `$1${link}`);
+        navChanged = true;
+      }
+    }
+
+    if (navChanged) {
+      html = html.replace(j6NavMatch[0], j6Nav);
+      changed = true;
+    }
+  }
+
   // Give Charter readers a prominent direct path to the companion
   // Citizenship & Due Process statement beside the existing 12 Principles
   // reading link. This is intentionally scoped to charter.html only.
