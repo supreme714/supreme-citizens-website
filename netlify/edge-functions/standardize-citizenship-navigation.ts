@@ -10,7 +10,10 @@ export default async (request: Request, context: any) => {
   // Keep Citizenship & Due Process in the primary navigation immediately
   // after The Charter, while avoiding duplicate links on pages that already
   // contain the static navigation item.
-  if (html.includes('class="main-nav"') && !html.includes('href="citizenship.html"')) {
+  const primaryNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  const primaryNav = primaryNavMatch ? primaryNavMatch[0] : "";
+
+  if (primaryNav && !primaryNav.includes('href="citizenship.html"')) {
     const active = url.pathname.endsWith("/citizenship.html") ? ' aria-current="page"' : "";
     const citizenshipLink = `<a href="citizenship.html"${active}>Citizenship &amp; Due Process</a>`;
     const charterLinkPattern = /(<a\b[^>]*href=["']charter\.html["'][^>]*>\s*The Charter\s*<\/a>)/i;
@@ -21,9 +24,13 @@ export default async (request: Request, context: any) => {
   }
 
   // Keep January 6 in the primary navigation immediately after Participate.
-  // The January 6 project pages already contain this link statically, so the
-  // duplicate check prevents a second link from being injected there.
-  if (html.includes('class="main-nav"') && !html.includes('href="january-6.html"')) {
+  // Check only the primary navigation for an existing link. The homepage can
+  // contain January 6 links elsewhere in its content without suppressing the
+  // navigation item.
+  const refreshedNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  const refreshedNav = refreshedNavMatch ? refreshedNavMatch[0] : "";
+
+  if (refreshedNav && !refreshedNav.includes('href="january-6.html"')) {
     const active = url.pathname.endsWith("/january-6.html") || url.pathname.includes("/j6-")
       ? ' aria-current="page"'
       : "";
