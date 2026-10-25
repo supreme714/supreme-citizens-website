@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "interface": "j6-source-vault.html",
   "collections": [
     {
       "collection_id": "J6-SV-01",
