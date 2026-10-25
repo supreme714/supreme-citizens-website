@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "collection_id": "J6-SV-01",
+      "title": "Constitutional Framework & Electoral Count",
+      "description": "Official Electoral College and congressional records documenting certification and the January 6–7 joint session.",
+      "evidence_ids": ["J6-E-0001", "J6-E-0002", "J6-E-0003", "J6-E-0004"]
+    },
+    {
+      "collection_id": "J6-SV-02",
+      "title": "Intelligence, Security & Preparedness",
+      "description": "Federal oversight material concerning pre-event threat information, intelligence handling, preparedness and response.",
+      "evidence_ids": ["J6-E-0005", "J6-E-0006", "J6-E-0008"]
+    },
+    {
+      "collection_id": "J6-SV-03",
+      "title": "Select Committee Archive",
+      "description": "House Report 117-663 and the GovInfo collection of supporting transcripts, court documents, hearing videos, exhibits and other committee materials.",
+      "evidence_ids": ["J6-E-0007"],
+      "official_url": "https://www.govinfo.gov/collection/january-6th-committee-final-report"
+    },
+    {
+      "collection_id": "J6-SV-04",
+      "title": "Federal Prosecutions & Case Outcomes",
+      "description": "Justice Department materials concerning charges and resolved federal cases, with outcomes described on a case-specific basis.",
+      "evidence_ids": ["J6-E-0009"],
+      "official_url": "https://www.justice.gov/usao-dc/media/1382981/dl"
+    },
+    {
+      "collection_id": "J6-SV-05",
+      "title": "Judicial Interpretation & Later Developments",
+      "description": "Court decisions and later legal developments that alter, narrow or clarify how earlier records should be understood.",
+      "evidence_ids": ["J6-E-0010"],
+      "official_url": "https://www.supremecourt.gov/opinions/23pdf/23-5572_l6hn.pdf"
+    }
+  ]
+}
