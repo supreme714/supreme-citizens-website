@@ -41,8 +41,19 @@ video {
   min-height: 88px;
 }
 
-.header-inner .brand span {
+.header-inner .brand {
+  flex: 0 0 auto;
+  min-width: max-content;
+}
+
+.header-inner .brand > span {
   display: block;
+  min-width: max-content;
+}
+
+.header-inner .brand strong,
+.header-inner .brand small {
+  white-space: nowrap;
 }
 
 .header-inner .brand small {
@@ -51,6 +62,12 @@ video {
   font-size: .72rem;
   letter-spacing: .06em;
   text-transform: uppercase;
+}
+
+.header-inner .main-nav {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px 18px;
 }
 
 .footer-inner {
@@ -93,6 +110,11 @@ video {
 
   .header-inner .brand {
     justify-content: center;
+    min-width: 0;
+  }
+
+  .header-inner .brand > span {
+    min-width: 0;
   }
 
   .header-inner .main-nav {
@@ -150,6 +172,11 @@ video {
 
   .header-inner .brand {
     justify-content: flex-start;
+  }
+
+  .header-inner .brand strong,
+  .header-inner .brand small {
+    white-space: normal;
   }
 
   .header-inner .main-nav {
