@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "methodology": "Claims are separated from evidence and classified according to the procedural and evidentiary status of the cited record. Congressional findings, allegations, official records and judicial rulings are not interchangeable.",
+  "claims": [
+    {
+      "claim_id": "J6-C-0001",
+      "claim": "The official 2020 Electoral College result recorded 306 electoral votes for Joseph R. Biden Jr. and 232 for Donald J. Trump.",
+      "status": "SUPPORTED BY OFFICIAL RECORD",
+      "evidence_ids": ["J6-E-0001"],
+      "qualification": "This describes the official certified Electoral College result; it does not by itself adjudicate every allegation concerning election administration."
+    },
+    {
+      "claim_id": "J6-C-0002",
+      "claim": "Congress considered objections to electoral votes during the January 6–7 joint-session proceedings and rejected the Arizona objection.",
+      "status": "SUPPORTED BY PRIMARY RECORD",
+      "evidence_ids": ["J6-E-0002", "J6-E-0003", "J6-E-0004"],
+      "qualification": "The congressional votes establish Congress's disposition of the objection; they are not judicial findings on every underlying allegation."
+    },
+    {
+      "claim_id": "J6-C-0003",
+      "claim": "Federal agencies possessed warning information about potential threats before January 6, while later oversight identified shortcomings in processing or sharing some information.",
+      "status": "SUPPORTED BY GOVERNMENT FINDING",
+      "evidence_ids": ["J6-E-0005", "J6-E-0006"],
+      "qualification": "The oversight record does not establish that every agency had identical information or predicted the precise events that occurred."
+    },
+    {
+      "claim_id": "J6-C-0004",
+      "claim": "The House Select Committee issued findings and recommendations after investigating January 6 and released supporting materials for public review.",
+      "status": "SUPPORTED BY CONGRESSIONAL RECORD",
+      "evidence_ids": ["J6-E-0007"],
+      "qualification": "The Committee's conclusions and referrals are congressional investigative findings, not criminal convictions."
+    },
+    {
+      "claim_id": "J6-C-0005",
+      "claim": "The bipartisan Senate review identified breakdowns in intelligence handling, security preparation, coordination and response surrounding January 6.",
+      "status": "SUPPORTED BY GOVERNMENT FINDING",
+      "evidence_ids": ["J6-E-0008"],
+      "qualification": "The Senate report is an oversight finding and does not adjudicate individual criminal guilt."
+    },
+    {
+      "claim_id": "J6-C-0006",
+      "claim": "Federal January 6 cases included arrests, charges, pleas, trials, convictions, dismissals and sentences, and a criminal charge alone is not a finding of guilt.",
+      "status": "SUPPORTED / REQUIRES CASE-SPECIFIC OUTCOME",
+      "evidence_ids": ["J6-E-0009"],
+      "qualification": "Individual defendants must be described according to their actual case disposition rather than grouped together as convicted."
+    },
+    {
+      "claim_id": "J6-C-0007",
+      "claim": "The Supreme Court's Fischer decision narrowed the interpretation of 18 U.S.C. § 1512(c)(2), affecting a subset of January 6 prosecutions rather than all January 6 cases.",
+      "status": "SUPPORTED BY COURT FINDING / LATER DEVELOPMENT",
+      "evidence_ids": ["J6-E-0010"],
+      "qualification": "The decision concerns the statutory scope of § 1512(c)(2) and does not erase unrelated charges, convictions or conduct in other cases."
+    }
+  ]
+}
