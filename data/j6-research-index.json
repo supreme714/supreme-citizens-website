@@ -1,0 +1,22 @@
+{
+  "project": "January 6: Memory, Record & Republic",
+  "phase": 8,
+  "title": "Research Index & Cross-Reference System",
+  "purpose": "Provide a unified map of the structured January 6 records without treating cross-reference as proof of causation, motive, guilt, or legal responsibility.",
+  "record_families": [
+    {"prefix":"J6-E","name":"Evidence Ledger","page":"j6-evidence.html","description":"Primary sources, official records, government findings, court findings and later developments."},
+    {"prefix":"J6-C","name":"Claim Tracker","page":"j6-source-vault.html","description":"Major claims separated from the evidence used to assess them."},
+    {"prefix":"J6-T","name":"Timeline & Event Record","page":"j6-event-record.html","description":"Chronology with stable event identifiers and linked evidence."},
+    {"prefix":"J6-S","name":"Security, Intelligence & Response","page":"j6-security-record.html","description":"Warnings, intelligence processing, requests, authorization, mobilization and operational response."},
+    {"prefix":"J6-L","name":"Investigations, Courts & Legal Record","page":"j6-legal-record.html","description":"Congressional proceedings, prosecutions, judicial rulings, dispositions and clemency."},
+    {"prefix":"J6-V","name":"Voices & Testimony Record","page":"j6-voices-record.html","description":"Sworn testimony, direct observations, interviews, communications and conflicting accounts."},
+    {"prefix":"J6-A","name":"Citizen Analysis Record","page":"j6-citizen-analysis.html","description":"Structured civic questions that connect claims to supporting, contrary and unresolved evidence."}
+  ],
+  "cross_reference_rules": [
+    "A shared identifier or link shows relevance, not automatic corroboration.",
+    "Chronological sequence does not by itself establish causation or intent.",
+    "Congressional findings, judicial holdings, allegations and executive clemency remain distinct categories.",
+    "Witness recollection should be compared with contemporaneous records and independently established facts.",
+    "Later developments should update current legal or factual understanding without erasing procedural history."
+  ]
+}
