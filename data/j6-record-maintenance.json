@@ -1,0 +1,38 @@
+{
+  "phase": 9,
+  "title": "Source Verification, Corrections & Record Maintenance",
+  "purpose": "Maintain a transparent, auditable historical record as reliable new evidence, judicial decisions, official records and corrections become available.",
+  "status_fields": [
+    "record_current_through",
+    "last_verified",
+    "verification_status",
+    "source_status",
+    "correction_status",
+    "supersedes",
+    "superseded_by"
+  ],
+  "verification_statuses": [
+    "VERIFIED",
+    "VERIFICATION PENDING",
+    "SOURCE UPDATED",
+    "CORRECTION ISSUED",
+    "SUPERSEDED",
+    "ARCHIVED"
+  ],
+  "principles": [
+    "Preserve the original record when a correction is made.",
+    "Identify what changed, why it changed, and the source supporting the change.",
+    "Do not silently rewrite a historical classification or conclusion.",
+    "Later legal or factual developments should be labeled as later developments rather than projected backward in time.",
+    "A broken or unavailable source link does not by itself invalidate the underlying record; the source should be re-verified or replaced with an authoritative equivalent where possible.",
+    "Corrections should distinguish factual error, source replacement, classification refinement, clarification and later development."
+  ],
+  "correction_types": [
+    "FACTUAL CORRECTION",
+    "SOURCE CORRECTION",
+    "CLASSIFICATION REFINEMENT",
+    "CLARIFICATION",
+    "LATER DEVELOPMENT",
+    "LINK MAINTENANCE"
+  ]
+}
