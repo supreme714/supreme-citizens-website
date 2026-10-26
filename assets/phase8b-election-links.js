@@ -1,0 +1,26 @@
+(() => {
+  const path = window.location.pathname;
+  const style = document.createElement('style');
+  style.textContent = `.election-pathway-bridge{padding:58px 0;background:#f7f5ef;border-top:5px solid #c79a26}.election-pathway-bridge h2{font:clamp(1.9rem,3.5vw,2.8rem)/1.12 Georgia,serif;color:#003b8f;margin:.2em 0 .4em}.election-pathway-bridge p{max-width:880px;line-height:1.7}.election-pathway-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0}.election-pathway-flow article{background:#fff;border:1px solid #d8e0e9;border-top:5px solid #003b8f;border-radius:12px;padding:20px}.election-pathway-flow article:nth-child(2){border-top-color:#d71920}.election-pathway-flow article:nth-child(3){border-top-color:#c79a26}.election-pathway-flow h3{color:#003b8f;font-family:Georgia,serif;margin:0 0 8px}.election-pathway-actions{display:flex;gap:10px;flex-wrap:wrap}.election-pathway-actions a{display:inline-block;padding:11px 15px;border-radius:8px;background:#003b8f;color:#fff;text-decoration:none;font-weight:800}.election-pathway-actions a.secondary{background:#fff;color:#003b8f;border:1px solid #003b8f}.consensus-election-bridge{padding:62px 0;background:#002f73;color:#fff;border-top:5px solid #c79a26}.consensus-election-bridge h2{font:clamp(2rem,4vw,3rem)/1.1 Georgia,serif;color:#fff}.consensus-election-bridge p{max-width:900px;line-height:1.7}.consensus-election-bridge .election-pathway-flow article{color:#34445a}.consensus-election-bridge .election-pathway-actions a{background:#fff;color:#003b8f}.consensus-election-bridge .election-pathway-actions a.secondary{background:transparent;color:#fff;border-color:#fff}@media(max-width:850px){.election-pathway-flow{grid-template-columns:1fr 1fr}}@media(max-width:560px){.election-pathway-flow{grid-template-columns:1fr}}`;
+  document.head.appendChild(style);
+
+  if (/(^|\/)voting\.html$/.test(path)) {
+    const hero = document.querySelector('main .page-hero');
+    if (hero && !document.querySelector('#voting-pathway-bridge')) {
+      const section = document.createElement('section');
+      section.id = 'voting-pathway-bridge'; section.className = 'election-pathway-bridge';
+      section.innerHTML = `<div class="wrap"><p class="eyebrow">Your place in the election pathway</p><h2>Prepare to Vote — Then Follow the Process.</h2><p>Official voting information is the preparation stage of a larger civic cycle. Confirm the rules that apply to you, participate lawfully, follow certification and representation, then remain engaged between elections.</p><div class="election-pathway-flow"><article><h3>1 · Prepare</h3><p>Verify registration, deadlines, voting methods, place, time, and accessibility through official sources.</p></article><article><h3>2 · Participate</h3><p>Cast your ballot using the lawful method available to you and respect every citizen’s independent choice.</p></article><article><h3>3 · Follow the Process</h3><p>Understand counting, canvassing, recounts, certification, lawful challenges, and the transition to office.</p></article><article><h3>4 · Stay Engaged</h3><p>Communicate with representatives, deliberate with fellow citizens, evaluate government, and participate again.</p></article></div><div class="election-pathway-actions"><a href="election-participation-pathway.html">Follow the Full Election Pathway</a><a class="secondary" href="election-day.html">Election Day Initiative</a><a class="secondary" href="community-consensus.html">Community of Consensus</a></div></div>`;
+      hero.insertAdjacentElement('afterend', section);
+    }
+  }
+
+  if (/(^|\/)community-consensus\.html$/.test(path)) {
+    const pilot = document.querySelector('#pilot');
+    if (pilot && !document.querySelector('#consensus-election-bridge')) {
+      const section = document.createElement('section');
+      section.id = 'consensus-election-bridge'; section.className = 'consensus-election-bridge';
+      section.innerHTML = `<div class="wrap"><p class="eyebrow light">Election participation pathway</p><h2>From Participation to Deliberation to Accountability.</h2><p>The election pilot is one part of a continuous civic process. Citizens prepare and participate, follow lawful election processes, deliberate across differences, communicate with representatives, evaluate public action, and return to the next civic decision better informed.</p><div class="election-pathway-flow"><article><h3>Participate</h3><p>Use official information, make an informed choice, and participate according to applicable law.</p></article><article><h3>Deliberate</h3><p>Test propositions individually, seek genuine common ground, and preserve significant dissent.</p></article><article><h3>Engage</h3><p>Translate legitimate agreement into peaceful civic action and communication with representatives.</p></article><article><h3>Hold Accountable</h3><p>Track government responses, evaluate outcomes, and carry the civic record into future participation.</p></article></div><div class="election-pathway-actions"><a href="election-participation-pathway.html">Follow the Election Participation Pathway</a><a class="secondary" href="community-consensus-election-pilot.html">Open the Election Pilot</a><a class="secondary" href="congress.html">Connect With Congress</a></div></div>`;
+      pilot.insertAdjacentElement('afterend', section);
+    }
+  }
+})();
