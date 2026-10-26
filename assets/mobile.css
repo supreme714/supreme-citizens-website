@@ -380,3 +380,42 @@ video {
     margin-right: auto;
   }
 }
+
+/* Phase 6: shared primary-navigation hierarchy.
+   This visually normalizes the navigation on pages that use the shared
+   .main-nav component, including alternate January 6 headers. */
+.main-nav {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 16px;
+}
+.main-nav a[href="index.html"]{order:10}
+.main-nav a[href="charter.html"]{order:20}
+.main-nav a[href="principles.html"]{order:30}
+.main-nav a[href="identity.html"]{order:40}
+.main-nav a[href="citizens-branch.html"]{order:50}
+.main-nav a[href="community-consensus.html"]{order:60}
+.main-nav a[href="participate.html"]{order:70}
+.main-nav a[href="citizenship.html"]{order:80}
+.main-nav a[href="election-day.html"]{order:90}
+.main-nav a[href="voting.html"]{order:100}
+.main-nav a[href="january-6.html"]{order:110}
+.main-nav a[href="congressional-certification.html"]{order:120}
+.main-nav a[href="congress.html"]{order:130}
+.main-nav a[href="founding-documents.html"]{order:140}
+.main-nav a[href="about.html"]{order:150}
+.main-nav a[href="contact.html"]{order:160}
+
+@media (min-width:901px) {
+  .site-header .main-nav,
+  .header-inner .main-nav {
+    row-gap: 8px;
+  }
+}
+
+@media (max-width:900px) {
+  .main-nav.open,
+  .header-inner .main-nav {
+    justify-content: flex-start;
+  }
+}
