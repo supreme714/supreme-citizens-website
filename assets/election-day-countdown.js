@@ -1,0 +1,2 @@
+/* Supreme Citizens Election Day countdown helper. Homepage currently contains the same logic inline so it renders without an additional network dependency. */
+window.SupremeCitizensElectionDay={target:'2026-11-03T00:00:00-05:00',postElection:'2026-11-04T00:00:00-05:00'};
