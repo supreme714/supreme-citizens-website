@@ -1,0 +1,60 @@
+name: Phase 10C shared navigation integration v2
+
+on:
+  push:
+    branches: [community-consensus-phase-10c-production-nav]
+    paths: [.github/workflows/phase10c-production-nav-v2.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: community-consensus-phase-10c-production-nav
+          fetch-depth: 0
+      - name: Install unified production navigation
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('assets/site.js')
+          text=p.read_text(encoding='utf-8')
+          marker='/* Phase 10C unified navigation active */'
+          if marker in text: raise SystemExit(0)
+          code=r'''
+
+/* Phase 10C unified navigation active */
+(function(){
+ function init(){
+  const menus=document.querySelectorAll('.main-nav'); if(!menus.length)return;
+  if(!document.getElementById('phase10c-active-css')){
+   const s=document.createElement('style');s.id='phase10c-active-css';s.textContent=`
+   .main-nav.unified-nav{display:flex;align-items:center;justify-content:flex-end;gap:7px 12px;flex-wrap:wrap}
+   .unified-nav>a,.unav-drop>button{font:inherit;font-weight:700;color:inherit;text-decoration:none;background:transparent;border:0;padding:8px 2px;cursor:pointer;white-space:nowrap}
+   .unav-drop{position:relative}.unav-drop>button::after{content:' ▾';font-size:.78em}
+   .unav-menu{display:none;position:absolute;z-index:1200;top:100%;right:0;min-width:270px;padding:9px;background:#fff;border:1px solid #d7dfe8;border-radius:10px;box-shadow:0 14px 32px rgba(0,35,82,.16)}
+   .unav-menu a{display:block;padding:10px 12px;border-radius:7px;color:#10233f;text-decoration:none;font-weight:700;white-space:nowrap}.unav-menu a:hover,.unav-menu a:focus{background:#f1f5fa;color:#003B8F}
+   .unav-drop:hover .unav-menu,.unav-drop:focus-within .unav-menu,.unav-drop.open .unav-menu{display:block}
+   @media(max-width:1180px){.main-nav.unified-nav{gap:5px 9px}.unified-nav>a,.unav-drop>button{font-size:.9rem}}
+   @media(max-width:900px){.main-nav.unified-nav:not(.open){display:none}.main-nav.unified-nav.open{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:0}.unified-nav>a,.unav-drop>button{display:block;width:100%;box-sizing:border-box;text-align:center;padding:11px 8px}.unav-drop{width:100%}.unav-menu{position:static;min-width:0;width:100%;box-sizing:border-box;box-shadow:none;border:0;border-radius:0;background:#f5f7fa;padding:4px 12px 9px}.unav-menu a{text-align:center;white-space:normal;padding:9px}.unav-drop:hover .unav-menu{display:none}.unav-drop.open .unav-menu{display:block}}
+   `;document.head.appendChild(s);
+  }
+  const html=`<a href="index.html">Home</a><a href="charter.html">Charter</a><a href="principles.html">12 Principles</a><a href="identity.html">Supreme Citizen</a><a href="citizens-branch.html">Citizens Branch</a><a href="community-consensus.html">Community of Consensus</a><a href="participate.html">Participate</a><span class="unav-drop"><button type="button" aria-expanded="false">Elections &amp; Government</button><span class="unav-menu"><a href="election-day.html">Election Day</a><a href="voting.html">Voting</a><a href="election-participation-pathway.html">Election Participation Pathway</a><a href="congressional-certification.html">Congressional Certification</a><a href="january-6.html">January 6</a><a href="congress.html">Connect With Congress</a></span></span><span class="unav-drop"><button type="button" aria-expanded="false">Resources</button><span class="unav-menu"><a href="citizenship.html">Citizenship &amp; Due Process</a><a href="continuous-civic-participation.html">Continuous Civic Participation</a><a href="founding-documents.html">Founding Documents</a><a href="about.html">About</a><a href="contact.html">Info &amp; Contact</a></span></span>`;
+  menus.forEach(menu=>{menu.classList.add('unified-nav');menu.innerHTML=html;menu.querySelectorAll('.unav-drop>button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const d=b.parentElement,w=d.classList.contains('open');menu.querySelectorAll('.unav-drop.open').forEach(x=>{x.classList.remove('open');x.querySelector('button').setAttribute('aria-expanded','false')});if(!w){d.classList.add('open');b.setAttribute('aria-expanded','true')}}))});
+  document.addEventListener('click',()=>document.querySelectorAll('.unav-drop.open').forEach(d=>{d.classList.remove('open');d.querySelector('button').setAttribute('aria-expanded','false')}));
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+'''
+          p.write_text(text+code,encoding='utf-8')
+      - name: Commit integration
+        run: |
+          git config user.name "supreme714"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/site.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Activate Phase 10C unified navigation sitewide"
+          git push origin HEAD:community-consensus-phase-10c-production-nav
