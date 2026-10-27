@@ -1,0 +1,108 @@
+name: Phase 10B unified navigation integration
+
+on:
+  push:
+    branches:
+      - community-consensus-phase-10b-sitewide-nav
+    paths:
+      - .github/workflows/phase10b-unified-nav.yml
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: community-consensus-phase-10b-sitewide-nav
+          fetch-depth: 0
+      - name: Append unified sitewide navigation
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('assets/site.js')
+          text = p.read_text(encoding='utf-8')
+          marker = '/* Phase 10B unified sitewide navigation */'
+          if marker in text:
+              raise SystemExit(0)
+          code = r'''
+
+/* Phase 10B unified sitewide navigation */
+(function(){
+ const initUnifiedNav=()=>{
+  const menus=document.querySelectorAll('.main-nav');
+  if(!menus.length)return;
+  const css=document.createElement('style');
+  css.id='phase10b-nav-styles';
+  css.textContent=`
+   .main-nav.phase10b-nav{display:flex;align-items:center;justify-content:flex-end;gap:8px 14px;flex-wrap:wrap}
+   .phase10b-nav>a,.phase10b-drop>button{font:inherit;font-weight:700;color:inherit;text-decoration:none;background:transparent;border:0;padding:8px 2px;cursor:pointer;white-space:nowrap}
+   .phase10b-drop{position:relative}
+   .phase10b-drop>button::after{content:' ▾';font-size:.78em}
+   .phase10b-menu{display:none;position:absolute;z-index:1000;top:100%;right:0;min-width:265px;padding:9px;background:#fff;border:1px solid #d7dfe8;border-radius:10px;box-shadow:0 14px 32px rgba(0,35,82,.16)}
+   .phase10b-menu a{display:block;padding:10px 12px;border-radius:7px;color:#10233f;text-decoration:none;font-weight:700;white-space:nowrap}
+   .phase10b-menu a:hover,.phase10b-menu a:focus{background:#f1f5fa;color:#003B8F}
+   .phase10b-drop:hover .phase10b-menu,.phase10b-drop:focus-within .phase10b-menu,.phase10b-drop.open .phase10b-menu{display:block}
+   @media(max-width:1100px){.main-nav.phase10b-nav{gap:6px 10px}.phase10b-nav>a,.phase10b-drop>button{font-size:.92rem}}
+   @media(max-width:900px){
+    .main-nav.phase10b-nav:not(.open){display:none}
+    .main-nav.phase10b-nav.open{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:0}
+    .phase10b-nav>a,.phase10b-drop>button{display:block;width:100%;box-sizing:border-box;text-align:center;padding:11px 8px}
+    .phase10b-drop{width:100%}
+    .phase10b-menu{position:static;min-width:0;width:100%;box-sizing:border-box;box-shadow:none;border:0;border-radius:0;background:#f5f7fa;padding:4px 12px 9px}
+    .phase10b-menu a{text-align:center;white-space:normal;padding:9px}
+    .phase10b-drop:hover .phase10b-menu:not([data-mobile-open='true']){display:none}
+    .phase10b-drop.open .phase10b-menu{display:block}
+   }
+  `;
+  if(!document.getElementById(css.id))document.head.appendChild(css);
+  const html=`
+   <a href="index.html">Home</a>
+   <a href="charter.html">Charter</a>
+   <a href="principles.html">12 Principles</a>
+   <a href="identity.html">Supreme Citizen</a>
+   <a href="citizens-branch.html">Citizens Branch</a>
+   <a href="community-consensus.html">Community of Consensus</a>
+   <a href="participate.html">Participate</a>
+   <span class="phase10b-drop"><button type="button" aria-expanded="false">Elections &amp; Government</button><span class="phase10b-menu">
+    <a href="election-day.html">Election Day</a>
+    <a href="voting.html">Voting</a>
+    <a href="election-participation-pathway.html">Election Participation Pathway</a>
+    <a href="congressional-certification.html">Congressional Certification</a>
+    <a href="january-6.html">January 6</a>
+    <a href="congress.html">Connect With Congress</a>
+   </span></span>
+   <span class="phase10b-drop"><button type="button" aria-expanded="false">Resources</button><span class="phase10b-menu">
+    <a href="citizenship.html">Citizenship &amp; Due Process</a>
+    <a href="continuous-civic-participation.html">Continuous Civic Participation</a>
+    <a href="founding-documents.html">Founding Documents</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Info &amp; Contact</a>
+   </span></span>`;
+  menus.forEach(menu=>{
+   menu.classList.add('phase10b-nav');
+   menu.innerHTML=html;
+   menu.querySelectorAll('.phase10b-drop>button').forEach(button=>button.addEventListener('click',e=>{
+    e.stopPropagation();
+    const drop=button.parentElement;
+    const wasOpen=drop.classList.contains('open');
+    menu.querySelectorAll('.phase10b-drop.open').forEach(d=>{d.classList.remove('open');d.querySelector('button')?.setAttribute('aria-expanded','false')});
+    if(!wasOpen){drop.classList.add('open');button.setAttribute('aria-expanded','true');}
+   }));
+  });
+  document.addEventListener('click',()=>document.querySelectorAll('.phase10b-drop.open').forEach(d=>{d.classList.remove('open');d.querySelector('button')?.setAttribute('aria-expanded','false')}));
+ };
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initUnifiedNav);else initUnifiedNav();
+})();
+'''
+          p.write_text(text + code, encoding='utf-8')
+      - name: Commit generated integration
+        run: |
+          git config user.name "supreme714"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/site.js
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Apply Phase 10B unified navigation sitewide [phase10b-generated]"
+          git push origin HEAD:community-consensus-phase-10b-sitewide-nav
