@@ -1,0 +1,50 @@
+name: Phase 10D production navigation activation
+
+on:
+  push:
+    branches:
+      - community-consensus-phase-10d-production-activation
+    paths:
+      - .github/workflows/phase10d-activate-navigation.yml
+      - assets/phase10d-production-nav-loader.js
+
+permissions:
+  contents: write
+
+jobs:
+  activate-navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: community-consensus-phase-10d-production-activation
+          fetch-depth: 0
+      - name: Wire unified navigation into shared site script
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('assets/site.js')
+          text=p.read_text(encoding='utf-8')
+          marker='/* Phase 10D production unified navigation activation */'
+          if marker in text:
+              raise SystemExit(0)
+          code=r'''
+
+/* Phase 10D production unified navigation activation */
+(function(){
+ const script=document.createElement('script');
+ script.src='assets/phase10c-unified-nav.js';
+ script.defer=true;
+ script.dataset.phase10dNav='true';
+ document.head.appendChild(script);
+})();
+'''
+          p.write_text(text+code,encoding='utf-8')
+      - name: Commit production activation
+        run: |
+          git config user.name "supreme714"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/site.js
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Activate unified navigation sitewide [phase10d-generated]"
+          git push origin HEAD:community-consensus-phase-10d-production-activation
