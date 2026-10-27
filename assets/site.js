@@ -50,3 +50,13 @@ if(document.body&&/(^|\/)charter\.html$/.test(window.location.pathname)){
   const connections=document.createElement('section');connections.className='charter-connections';connections.innerHTML=`<div class="wrap"><header class="charter-guide-head"><p class="eyebrow">Continue from the Charter</p><h2>From Foundational Text to Civic Practice</h2><p>The Charter provides the foundation. These companion pages explain its principles, civic identity, continuing citizen role, and practical application.</p></header><div class="charter-connections-grid"><article><h3>12 Principles</h3><p>See each foundational principle through its constitutional connection and the responsibilities it places on citizens and government.</p><a href="principles.html">Explore the 12 Principles →</a></article><article><h3>Supreme Citizen & Citizens Branch</h3><p>Understand the civic identity of a Supreme Citizen and the continuing role of We the People within—not outside—the constitutional system.</p><a href="identity.html">Explore Supreme Citizen →</a><br><a href="citizens-branch.html">Explore Citizens Branch →</a></article><article><h3>Citizen Action Guide</h3><p>Translate the Charter's principles into informed, peaceful, lawful participation in public life.</p><a href="participate.html">Put the Charter Into Practice →</a></article></div></div>`;const parent=charter.closest('.section');if(parent)parent.insertAdjacentElement('afterend',connections);
  }
 }
+
+
+/* Phase 10D production unified navigation activation */
+(function(){
+ const script=document.createElement('script');
+ script.src='assets/phase10c-unified-nav.js';
+ script.defer=true;
+ script.dataset.phase10dNav='true';
+ document.head.appendChild(script);
+})();
