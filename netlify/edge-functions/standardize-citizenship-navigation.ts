@@ -23,6 +23,21 @@ export default async (request: Request, context: any) => {
     }
   }
 
+  // Keep Congressional Activity in the primary navigation immediately after
+  // Supreme Citizen and before Citizens Branch on every HTML page.
+  const activityNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  const activityNav = activityNavMatch ? activityNavMatch[0] : "";
+
+  if (activityNav && !activityNav.includes('href="congressional-activity.html"')) {
+    const active = url.pathname.endsWith("/congressional-activity.html") ? ' aria-current="page"' : "";
+    const activityLink = `<a href="congressional-activity.html"${active}>Congressional Activity</a>`;
+    const supremeCitizenPattern = /(<a\b[^>]*href=["']identity\.html["'][^>]*>\s*Supreme Citizen\s*<\/a>)/i;
+    if (supremeCitizenPattern.test(html)) {
+      html = html.replace(supremeCitizenPattern, `$1\n      ${activityLink}`);
+      changed = true;
+    }
+  }
+
   // Keep January 6 in the primary navigation immediately after Participate.
   // Check only the primary navigation for an existing link. The homepage can
   // contain January 6 links elsewhere in its content without suppressing the
@@ -43,9 +58,6 @@ export default async (request: Request, context: any) => {
   }
 
   // Standardize the January 6 project subnavigation across every J6 page.
-  // Phase 8 and Phase 9 introduced the Research Index and Record Maintenance;
-  // older static pages may not yet contain those links. Scope duplicate checks
-  // to the J6 subnav so links elsewhere on a page do not suppress navigation.
   const j6NavMatch = html.match(/<nav\b[^>]*class=["'][^"']*j6-subnav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
   if (j6NavMatch) {
     let j6Nav = j6NavMatch[0];
