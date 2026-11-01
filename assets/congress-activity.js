@@ -2,6 +2,10 @@
   const house = document.getElementById("house-intro-days");
   const senate = document.getElementById("senate-intro-days");
   const law = document.getElementById("law-enacted-days");
+  const houseSession = document.getElementById("house-session-days");
+  const senateSession = document.getElementById("senate-session-days");
+  const houseSessionSince = document.getElementById("house-session-since");
+  const senateSessionSince = document.getElementById("senate-session-since");
   const recordDays = document.getElementById("congress-record-days");
   const recordNote = document.getElementById("congress-record-note");
   const status = document.getElementById("congress-activity-status");
@@ -23,48 +27,35 @@
     if (!value) return "";
     const date = new Date(`${String(value).slice(0, 10)}T12:00:00Z`);
     if (Number.isNaN(date.getTime())) return "";
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(date);
+    return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(date);
   }
 
   async function refresh() {
     try {
-      const response = await fetch("/api/congress-activity", {
-        headers: { Accept: "application/json" },
-        cache: "no-store",
-      });
+      const response = await fetch("/api/congress-activity", { headers: { Accept: "application/json" }, cache: "no-store" });
       if (!response.ok) throw new Error(`Tracker request failed: ${response.status}`);
       const data = await response.json();
 
       setValue(house, daysSince(data.houseLastIntroduced));
       setValue(senate, daysSince(data.senateLastIntroduced));
       setValue(law, daysSince(data.lastBecameLaw));
+      setValue(houseSession, Number(data.houseSessionDays));
+      setValue(senateSession, Number(data.senateSessionDays));
       setValue(recordDays, Number(data.congressionalRecordDays));
 
-      if (recordNote && data.latestCongressionalRecordDate) {
-        recordNote.textContent =
-          `Daily Congressional Record through ${formatDate(data.latestCongressionalRecordDate)}; at least one chamber met on each counted day.`;
-      }
+      if (houseSessionSince) houseSessionSince.textContent = `${Number(data.houseSessionDaysSinceIntroduced) || 0} session days since last House introduction`;
+      if (senateSessionSince) senateSessionSince.textContent = `${Number(data.senateSessionDaysSinceIntroduced) || 0} session days since last Senate introduction`;
+      if (recordNote && data.latestCongressionalRecordDate) recordNote.textContent = `Official record through ${formatDate(data.latestCongressionalRecordDate)} · includes pro forma sessions`;
 
       if (status) {
         const updated = new Date(data.updatedAt);
-        status.textContent =
-          `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", {
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-          }).format(updated)}`;
+        status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(updated)}`;
       }
     } catch (error) {
       console.error("Unable to load congressional activity tracker:", error);
-      setValue(house, null);
-      setValue(senate, null);
-      setValue(law, null);
-      setValue(recordDays, null);
+      [house, senate, law, houseSession, senateSession, recordDays].forEach((element) => setValue(element, null));
+      if (houseSessionSince) houseSessionSince.textContent = "Session-day data temporarily unavailable";
+      if (senateSessionSince) senateSessionSince.textContent = "Session-day data temporarily unavailable";
       if (status) status.textContent = "Official congressional activity is temporarily unavailable.";
     }
   }
