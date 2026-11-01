@@ -62,19 +62,24 @@
         <div class="congress-activity-mini-source">119th Congress · 2nd Session<br>Official source: Congress.gov</div>\
       </div>\
       <div class="congress-activity-mini-grid" aria-live="polite">\
-        <div class="congress-activity-stat"><span class="congress-activity-label">HOUSE</span><strong class="congress-activity-number" id="house-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since legislation was last introduced</span></div>\
-        <div class="congress-activity-stat"><span class="congress-activity-label">SENATE</span><strong class="congress-activity-number" id="senate-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since legislation was last introduced</span></div>\
+        <div class="congress-activity-stat"><span class="congress-activity-label">HOUSE</span><strong class="congress-activity-number" id="house-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since a House bill was last introduced</span></div>\
+        <div class="congress-activity-stat"><span class="congress-activity-label">SENATE</span><strong class="congress-activity-number" id="senate-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since a Senate bill was last introduced</span></div>\
         <div class="congress-activity-stat"><span class="congress-activity-label">BECAME LAW</span><strong class="congress-activity-number" id="law-enacted-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since federal legislation last became law</span></div>\
       </div>\
-      <div class="congress-activity-mini-foot"><span id="congress-activity-status">Live counter data is being connected to official congressional records.</span><a href="congress.html">Explore Congress →</a></div>';
+      <div class="congress-activity-mini-foot"><span id="congress-activity-status">Loading official congressional activity…</span><a href="congress.html">Explore Congress →</a></div>';
     governmentGrid.parentNode.insertBefore(tracker,governmentGrid);
   }
 })();
 
-/* Preserve the original government feed implementation unchanged. */
+/* Load the original three-branch government feed and the live congressional tracker. */
 (function(){
-  var script=document.createElement('script');
-  script.src='assets/government-feed-original.js';
-  script.defer=true;
-  document.head.appendChild(script);
+  var feedScript=document.createElement('script');
+  feedScript.src='assets/government-feed-original.js';
+  feedScript.defer=true;
+  document.head.appendChild(feedScript);
+
+  var trackerScript=document.createElement('script');
+  trackerScript.src='assets/congress-activity.js';
+  trackerScript.defer=true;
+  document.head.appendChild(trackerScript);
 })();
