@@ -14,17 +14,8 @@ type RecordIssue = {
   congress?: number | string;
   sessionNumber?: number | string;
 };
-type RecordResponse = {
-  dailyCongressionalRecord?: RecordIssue[] | { issues?: RecordIssue[]; items?: RecordIssue[]; issue?: RecordIssue[] };
-  issues?: RecordIssue[];
-};
-type RecordDetailResponse = {
-  issue?: {
-    fullIssue?: {
-      sections?: { item?: Array<{ name?: string }> } | Array<{ name?: string }>;
-    };
-  };
-};
+
+type UnknownRecord = Record<string, unknown>;
 
 const API_ROOT = "https://api.congress.gov/v3";
 const CONGRESS = "119";
@@ -72,44 +63,73 @@ async function latestLawDate(): Promise<string> {
   return items[0]?.latestAction?.actionDate ?? "";
 }
 
-function recordIssues(data: RecordResponse): RecordIssue[] {
-  if (Array.isArray(data.dailyCongressionalRecord)) return data.dailyCongressionalRecord;
-  if (data.dailyCongressionalRecord && typeof data.dailyCongressionalRecord === "object") {
-    const container = data.dailyCongressionalRecord;
-    if (Array.isArray(container.issues)) return container.issues;
-    if (Array.isArray(container.items)) return container.items;
-    if (Array.isArray(container.issue)) return container.issue;
-  }
-  return Array.isArray(data.issues) ? data.issues : [];
+function isObject(value: unknown): value is UnknownRecord {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function sectionNames(data: RecordDetailResponse): string[] {
-  const sections = data.issue?.fullIssue?.sections;
-  if (Array.isArray(sections)) return sections.map((item) => item.name ?? "");
-  if (sections && Array.isArray(sections.item)) return sections.item.map((item) => item.name ?? "");
-  return [];
+function recordIssues(data: unknown): RecordIssue[] {
+  const found: RecordIssue[] = [];
+
+  function walk(value: unknown, depth = 0) {
+    if (depth > 5 || value == null) return;
+    if (Array.isArray(value)) {
+      value.forEach((item) => walk(item, depth + 1));
+      return;
+    }
+    if (!isObject(value)) return;
+
+    if (value.issueDate && value.issueNumber && value.volumeNumber) {
+      found.push(value as RecordIssue);
+      return;
+    }
+
+    for (const child of Object.values(value)) walk(child, depth + 1);
+  }
+
+  walk(data);
+  return found;
+}
+
+function sectionNames(data: unknown): string[] {
+  const names: string[] = [];
+
+  function walk(value: unknown, depth = 0, inSections = false) {
+    if (depth > 7 || value == null) return;
+    if (Array.isArray(value)) {
+      value.forEach((item) => walk(item, depth + 1, inSections));
+      return;
+    }
+    if (!isObject(value)) return;
+
+    if (inSections && typeof value.name === "string") names.push(value.name);
+
+    for (const [key, child] of Object.entries(value)) {
+      walk(child, depth + 1, inSections || key === "sections");
+    }
+  }
+
+  walk(data);
+  return names;
 }
 
 async function chamberSessionDays(houseLastIntroduced: string, senateLastIntroduced: string) {
-  const data = await congressJson<RecordResponse>("/daily-congressional-record", { limit: "250", offset: "0" });
-  const issues = recordIssues(data)
+  const data = await congressJson<unknown>("/daily-congressional-record", { limit: "250", offset: "0" });
+  const allIssues = recordIssues(data);
+  const issues = allIssues
     .filter((issue) => String(issue.congress ?? "") === CONGRESS)
     .filter((issue) => String(issue.sessionNumber ?? "") === SESSION)
     .filter((issue) => Boolean(issue.issueDate && issue.volumeNumber && issue.issueNumber));
 
-  // The issue-detail endpoint identifies sections such as House and Senate.
-  // That lets us count each chamber independently, including pro forma days,
-  // rather than treating every Congressional Record issue as a day for both.
   const details = await Promise.all(
     issues.map(async (issue) => {
-      const detail = await congressJson<RecordDetailResponse>(
+      const detail = await congressJson<unknown>(
         `/daily-congressional-record/${issue.volumeNumber}/${issue.issueNumber}`,
       );
-      const names = sectionNames(detail).map((name) => name.toLowerCase());
+      const names = sectionNames(detail).map((name) => name.trim().toLowerCase());
       return {
         date: String(issue.issueDate).slice(0, 10),
         house: names.some((name) => name === "house" || name.includes("house of representatives")),
-        senate: names.some((name) => name === "senate"),
+        senate: names.some((name) => name === "senate" || name.includes("senate")),
       };
     }),
   );
@@ -127,6 +147,7 @@ async function chamberSessionDays(houseLastIntroduced: string, senateLastIntrodu
     senateSessionDaysSinceIntroduced: senateDates.filter((date) => date > senateLastIntroduced).length,
     latestHouseSessionDate: houseDates.at(-1) ?? "",
     latestSenateSessionDate: senateDates.at(-1) ?? "",
+    recordIssuesExamined: issues.length,
   };
 }
 
