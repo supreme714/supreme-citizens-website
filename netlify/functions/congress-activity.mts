@@ -112,6 +112,23 @@ function sectionNames(data: unknown): string[] {
   return names;
 }
 
+function isHouseSection(name: string): boolean {
+  const normalized = name.trim().toLowerCase();
+  return (
+    normalized === "house" ||
+    normalized === "house section" ||
+    normalized.includes("house of representatives") ||
+    normalized.includes("house proceedings") ||
+    normalized.startsWith("house ") ||
+    normalized.endsWith(" house")
+  );
+}
+
+function isSenateSection(name: string): boolean {
+  const normalized = name.trim().toLowerCase();
+  return normalized === "senate" || normalized === "senate section" || normalized.includes("senate proceedings") || normalized.startsWith("senate ") || normalized.endsWith(" senate");
+}
+
 async function chamberSessionDays(houseLastIntroduced: string, senateLastIntroduced: string) {
   const data = await congressJson<unknown>("/daily-congressional-record", { limit: "250", offset: "0" });
   const allIssues = recordIssues(data);
@@ -125,11 +142,11 @@ async function chamberSessionDays(houseLastIntroduced: string, senateLastIntrodu
       const detail = await congressJson<unknown>(
         `/daily-congressional-record/${issue.volumeNumber}/${issue.issueNumber}`,
       );
-      const names = sectionNames(detail).map((name) => name.trim().toLowerCase());
+      const names = sectionNames(detail);
       return {
         date: String(issue.issueDate).slice(0, 10),
-        house: names.some((name) => name === "house" || name.includes("house of representatives")),
-        senate: names.some((name) => name === "senate" || name.includes("senate")),
+        house: names.some(isHouseSection),
+        senate: names.some(isSenateSection),
       };
     }),
   );
