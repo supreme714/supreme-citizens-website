@@ -7,9 +7,21 @@ type Bill = {
 
 type BillResponse = { bills?: Bill[] };
 type LawResponse = { bills?: Bill[]; laws?: Bill[] };
+type RecordIssue = {
+  issueNumber?: string | number;
+  volumeNumber?: string | number;
+  issueDate?: string;
+  congress?: number | string;
+  sessionNumber?: number | string;
+};
+type RecordResponse = {
+  dailyCongressionalRecord?: RecordIssue[] | { issues?: RecordIssue[]; items?: RecordIssue[]; issue?: RecordIssue[] };
+  issues?: RecordIssue[];
+};
 
 const API_ROOT = "https://api.congress.gov/v3";
 const CONGRESS = "119";
+const SESSION = "2";
 
 async function congressJson<T>(path: string, params: Record<string, string> = {}): Promise<T> {
   const apiKey = Netlify.env.get("CONGRESS_API_KEY");
@@ -33,18 +45,21 @@ async function congressJson<T>(path: string, params: Record<string, string> = {}
   }
 }
 
-async function latestIntroduced(type: "hr" | "s"): Promise<string> {
-  // Congress.gov's bill-list endpoint is sorted by latest action, not by
-  // introducedDate. The API does not document a `sort=introducedDate`
-  // parameter for this endpoint. Fetch a recent window and select the newest
-  // actual introducedDate ourselves so an older bill with a recent action
-  // cannot make the counter show hundreds of days.
-  const data = await congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-    limit: "250",
-    offset: "0",
-  });
+async function latestIntroduced(types: string[]): Promise<string> {
+  // Congress.gov's bill-list endpoints are sorted by latest action rather than
+  // introduced date. Pull a recent window for every measure type in the
+  // chamber and compute the newest actual introducedDate ourselves.
+  const results = await Promise.all(
+    types.map((type) =>
+      congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
+        limit: "250",
+        offset: "0",
+      }),
+    ),
+  );
 
-  const dates = (data.bills ?? [])
+  const dates = results
+    .flatMap((data) => data.bills ?? [])
     .map((bill) => bill.introducedDate ?? "")
     .filter(Boolean)
     .sort((a, b) => b.localeCompare(a));
@@ -61,12 +76,45 @@ async function latestLawDate(): Promise<string> {
   return items[0]?.latestAction?.actionDate ?? "";
 }
 
+function recordIssues(data: RecordResponse): RecordIssue[] {
+  if (Array.isArray(data.dailyCongressionalRecord)) return data.dailyCongressionalRecord;
+  if (data.dailyCongressionalRecord && typeof data.dailyCongressionalRecord === "object") {
+    const container = data.dailyCongressionalRecord;
+    if (Array.isArray(container.issues)) return container.issues;
+    if (Array.isArray(container.items)) return container.items;
+    if (Array.isArray(container.issue)) return container.issue;
+  }
+  return Array.isArray(data.issues) ? data.issues : [];
+}
+
+async function congressionalRecordDays() {
+  const data = await congressJson<RecordResponse>("/daily-congressional-record", {
+    limit: "250",
+    offset: "0",
+  });
+
+  const issues = recordIssues(data)
+    .filter((issue) => String(issue.congress ?? "") === CONGRESS)
+    .filter((issue) => String(issue.sessionNumber ?? "") === SESSION)
+    .filter((issue) => Boolean(issue.issueDate));
+
+  const dates = [...new Set(issues.map((issue) => String(issue.issueDate).slice(0, 10)))].sort((a, b) =>
+    b.localeCompare(a),
+  );
+
+  return {
+    congressionalRecordDays: dates.length,
+    latestCongressionalRecordDate: dates[0] ?? "",
+  };
+}
+
 export default async (_req: Request, _context: Context) => {
   try {
-    const [houseLastIntroduced, senateLastIntroduced, lastBecameLaw] = await Promise.all([
-      latestIntroduced("hr"),
-      latestIntroduced("s"),
+    const [houseLastIntroduced, senateLastIntroduced, lastBecameLaw, recordDays] = await Promise.all([
+      latestIntroduced(["hr", "hjres", "hconres", "hres"]),
+      latestIntroduced(["s", "sjres", "sconres", "sres"]),
       latestLawDate(),
+      congressionalRecordDays(),
     ]);
 
     if (!houseLastIntroduced || !senateLastIntroduced || !lastBecameLaw) {
@@ -74,8 +122,23 @@ export default async (_req: Request, _context: Context) => {
     }
 
     return Response.json(
-      { congress: 119, houseLastIntroduced, senateLastIntroduced, lastBecameLaw, updatedAt: new Date().toISOString(), source: "Congress.gov" },
-      { headers: { "Cache-Control": "public, max-age=0, s-maxage=900, stale-while-revalidate=300", "Content-Type": "application/json; charset=utf-8" } },
+      {
+        congress: 119,
+        session: 2,
+        houseLastIntroduced,
+        senateLastIntroduced,
+        lastBecameLaw,
+        congressionalRecordDays: recordDays.congressionalRecordDays,
+        latestCongressionalRecordDate: recordDays.latestCongressionalRecordDate,
+        updatedAt: new Date().toISOString(),
+        source: "Congress.gov",
+      },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=0, s-maxage=900, stale-while-revalidate=300",
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      },
     );
   } catch (error) {
     console.error("Congressional activity tracker failed", error);
