@@ -8,7 +8,7 @@
   const senateSessionSince = document.getElementById("senate-session-since");
   const recordDays = document.getElementById("congress-record-days");
   const recordNote = document.getElementById("congress-record-note");
-  const status = document.getElementById("congress-activity-status");
+  const status = document.getElementById("congress-activity-status");\n  const houseIntroSession = document.getElementById("house-introduced-session");\n  const houseIntroCongress = document.getElementById("house-introduced-congress");\n  const senateIntroSession = document.getElementById("senate-introduced-session");\n  const senateIntroCongress = document.getElementById("senate-introduced-congress");\n  const combinedIntroSession = document.getElementById("combined-introduced-session");\n  const combinedIntroCongress = document.getElementById("combined-introduced-congress");\n  const enactedSession = document.getElementById("enacted-session");\n  const enactedCongress = document.getElementById("enacted-congress");
   if (!house || !senate || !law) return;
 
   function daysSince(value) {
@@ -47,13 +47,13 @@
       if (senateSessionSince) senateSessionSince.textContent = `${Number(data.senateSessionDaysSinceIntroduced) || 0} session days since last Senate introduction`;
       if (recordNote && data.latestCongressionalRecordDate) recordNote.textContent = `Official record through ${formatDate(data.latestCongressionalRecordDate)} · includes pro forma sessions`;
 
-      if (status) {
+      setValue(houseIntroSession, Number(data.totals?.introduced?.house?.sessionTotal));\n      setValue(houseIntroCongress, Number(data.totals?.introduced?.house?.congressTotal));\n      setValue(senateIntroSession, Number(data.totals?.introduced?.senate?.sessionTotal));\n      setValue(senateIntroCongress, Number(data.totals?.introduced?.senate?.congressTotal));\n      setValue(combinedIntroSession, Number(data.totals?.introduced?.combined?.sessionTotal));\n      setValue(combinedIntroCongress, Number(data.totals?.introduced?.combined?.congressTotal));\n      setValue(enactedSession, Number(data.totals?.enacted?.sessionTotal));\n      setValue(enactedCongress, Number(data.totals?.enacted?.congressTotal));\n\n      if (status) {
         const updated = new Date(data.updatedAt);
         status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(updated)}`;
       }
     } catch (error) {
       console.error("Unable to load congressional activity tracker:", error);
-      [house, senate, law, houseSession, senateSession, recordDays].forEach((element) => setValue(element, null));
+      [house, senate, law, houseSession, senateSession, recordDays, houseIntroSession, houseIntroCongress, senateIntroSession, senateIntroCongress, combinedIntroSession, combinedIntroCongress, enactedSession, enactedCongress].forEach((element) => setValue(element, null));
       if (houseSessionSince) houseSessionSince.textContent = "Session-day data temporarily unavailable";
       if (senateSessionSince) senateSessionSince.textContent = "Session-day data temporarily unavailable";
       if (status) status.textContent = "Official congressional activity is temporarily unavailable.";
