@@ -34,18 +34,25 @@ async function congressJson<T>(path: string, params: Record<string, string> = {}
 }
 
 async function latestIntroduced(type: "hr" | "s"): Promise<string> {
+  // Congress.gov's bill-list endpoint is sorted by latest action, not by
+  // introducedDate. The API does not document a `sort=introducedDate`
+  // parameter for this endpoint. Fetch a recent window and select the newest
+  // actual introducedDate ourselves so an older bill with a recent action
+  // cannot make the counter show hundreds of days.
   const data = await congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-    limit: "1",
+    limit: "250",
     offset: "0",
-    sort: "introducedDate+desc",
   });
-  return data.bills?.[0]?.introducedDate ?? "";
+
+  const dates = (data.bills ?? [])
+    .map((bill) => bill.introducedDate ?? "")
+    .filter(Boolean)
+    .sort((a, b) => b.localeCompare(a));
+
+  return dates[0] ?? "";
 }
 
 async function latestLawDate(): Promise<string> {
-  // Use the documented all-laws endpoint. This avoids relying on a law-type
-  // route that can return 404 while still answering the tracker question:
-  // when did federal legislation most recently become law?
   const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, {
     limit: "1",
     offset: "0",
