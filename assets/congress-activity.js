@@ -18,6 +18,19 @@
   const combinedIntroCongress = byId("combined-introduced-congress");
   const enactedSession = byId("enacted-session");
   const enactedCongress = byId("enacted-congress");
+  const committeeSession = byId("committee-session");
+  const committeeCongress = byId("committee-congress");
+  const passedHouseSession = byId("passed-house-session");
+  const passedHouseCongress = byId("passed-house-congress");
+  const passedSenateSession = byId("passed-senate-session");
+  const passedSenateCongress = byId("passed-senate-congress");
+  const passedEitherSession = byId("passed-either-session");
+  const passedEitherCongress = byId("passed-either-congress");
+  const bothChambersSession = byId("both-chambers-session");
+  const bothChambersCongress = byId("both-chambers-congress");
+  const presentedSession = byId("presented-session");
+  const presentedCongress = byId("presented-congress");
+  const stageIndexStatus = byId("stage-index-status");
   if (!house || !senate || !law) return;
 
   function daysSince(value) {
@@ -67,6 +80,29 @@
       setValue(enactedSession, Number(data.totals?.enacted?.sessionTotal));
       setValue(enactedCongress, Number(data.totals?.enacted?.congressTotal));
 
+      const stageCounts = data.stages?.counts;
+      if (stageCounts) {
+        setValue(committeeSession, Number(stageCounts.committeeAction?.sessionTotal));
+        setValue(committeeCongress, Number(stageCounts.committeeAction?.congressTotal));
+        setValue(passedHouseSession, Number(stageCounts.passedHouse?.sessionTotal));
+        setValue(passedHouseCongress, Number(stageCounts.passedHouse?.congressTotal));
+        setValue(passedSenateSession, Number(stageCounts.passedSenate?.sessionTotal));
+        setValue(passedSenateCongress, Number(stageCounts.passedSenate?.congressTotal));
+        setValue(passedEitherSession, Number(stageCounts.passedEither?.sessionTotal));
+        setValue(passedEitherCongress, Number(stageCounts.passedEither?.congressTotal));
+        setValue(bothChambersSession, Number(stageCounts.bothChambers?.sessionTotal));
+        setValue(bothChambersCongress, Number(stageCounts.bothChambers?.congressTotal));
+        setValue(presentedSession, Number(stageCounts.presented?.sessionTotal));
+        setValue(presentedCongress, Number(stageCounts.presented?.congressTotal));
+        if (stageIndexStatus) stageIndexStatus.textContent = `Verified action-history index completed ${formatDate(data.stages.completedAt)} · ${Number(data.stages.processed || 0).toLocaleString()} measures examined.`;
+      } else if (stageIndexStatus) {
+        const done = Number(data.stageIndex?.processed || 0);
+        const total = Number(data.stageIndex?.totalExpected || 0);
+        stageIndexStatus.textContent = total > 0
+          ? `Indexing official Congress.gov action histories: ${done.toLocaleString()} of ${total.toLocaleString()} measures examined. Stage totals will appear after the complete verification cycle.`
+          : "Official action histories are being indexed. Stage totals will appear after the complete verification cycle.";
+      }
+
       if (status) {
         const updated = new Date(data.updatedAt);
         status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", {
@@ -77,7 +113,10 @@
       console.error("Unable to load congressional activity tracker:", error);
       [house, senate, law, houseSession, senateSession, recordDays, houseIntroSession,
         houseIntroCongress, senateIntroSession, senateIntroCongress, combinedIntroSession,
-        combinedIntroCongress, enactedSession, enactedCongress]
+        combinedIntroCongress, enactedSession, enactedCongress, committeeSession, committeeCongress,
+        passedHouseSession, passedHouseCongress, passedSenateSession, passedSenateCongress,
+        passedEitherSession, passedEitherCongress, bothChambersSession, bothChambersCongress,
+        presentedSession, presentedCongress]
         .forEach((element) => setValue(element, null));
       if (houseSessionSince) houseSessionSince.textContent = "Session-day data temporarily unavailable";
       if (senateSessionSince) senateSessionSince.textContent = "Session-day data temporarily unavailable";
