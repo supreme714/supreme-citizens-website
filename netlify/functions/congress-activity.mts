@@ -18,6 +18,13 @@ type RecordResponse = {
   dailyCongressionalRecord?: RecordIssue[] | { issues?: RecordIssue[]; items?: RecordIssue[]; issue?: RecordIssue[] };
   issues?: RecordIssue[];
 };
+type RecordDetailResponse = {
+  issue?: {
+    fullIssue?: {
+      sections?: { item?: Array<{ name?: string }> } | Array<{ name?: string }>;
+    };
+  };
+};
 
 const API_ROOT = "https://api.congress.gov/v3";
 const CONGRESS = "119";
@@ -46,16 +53,8 @@ async function congressJson<T>(path: string, params: Record<string, string> = {}
 }
 
 async function latestIntroduced(types: string[]): Promise<string> {
-  // Congress.gov's bill-list endpoints are sorted by latest action rather than
-  // introduced date. Pull a recent window for every measure type in the
-  // chamber and compute the newest actual introducedDate ourselves.
   const results = await Promise.all(
-    types.map((type) =>
-      congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-        limit: "250",
-        offset: "0",
-      }),
-    ),
+    types.map((type) => congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, { limit: "250", offset: "0" })),
   );
 
   const dates = results
@@ -68,10 +67,7 @@ async function latestIntroduced(types: string[]): Promise<string> {
 }
 
 async function latestLawDate(): Promise<string> {
-  const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, {
-    limit: "1",
-    offset: "0",
-  });
+  const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, { limit: "1", offset: "0" });
   const items = Array.isArray(data.bills) ? data.bills : Array.isArray(data.laws) ? data.laws : [];
   return items[0]?.latestAction?.actionDate ?? "";
 }
@@ -87,39 +83,66 @@ function recordIssues(data: RecordResponse): RecordIssue[] {
   return Array.isArray(data.issues) ? data.issues : [];
 }
 
-async function congressionalRecordDays() {
-  const data = await congressJson<RecordResponse>("/daily-congressional-record", {
-    limit: "250",
-    offset: "0",
-  });
+function sectionNames(data: RecordDetailResponse): string[] {
+  const sections = data.issue?.fullIssue?.sections;
+  if (Array.isArray(sections)) return sections.map((item) => item.name ?? "");
+  if (sections && Array.isArray(sections.item)) return sections.item.map((item) => item.name ?? "");
+  return [];
+}
 
+async function chamberSessionDays(houseLastIntroduced: string, senateLastIntroduced: string) {
+  const data = await congressJson<RecordResponse>("/daily-congressional-record", { limit: "250", offset: "0" });
   const issues = recordIssues(data)
     .filter((issue) => String(issue.congress ?? "") === CONGRESS)
     .filter((issue) => String(issue.sessionNumber ?? "") === SESSION)
-    .filter((issue) => Boolean(issue.issueDate));
+    .filter((issue) => Boolean(issue.issueDate && issue.volumeNumber && issue.issueNumber));
 
-  const dates = [...new Set(issues.map((issue) => String(issue.issueDate).slice(0, 10)))].sort((a, b) =>
-    b.localeCompare(a),
+  // The issue-detail endpoint identifies sections such as House and Senate.
+  // That lets us count each chamber independently, including pro forma days,
+  // rather than treating every Congressional Record issue as a day for both.
+  const details = await Promise.all(
+    issues.map(async (issue) => {
+      const detail = await congressJson<RecordDetailResponse>(
+        `/daily-congressional-record/${issue.volumeNumber}/${issue.issueNumber}`,
+      );
+      const names = sectionNames(detail).map((name) => name.toLowerCase());
+      return {
+        date: String(issue.issueDate).slice(0, 10),
+        house: names.some((name) => name === "house" || name.includes("house of representatives")),
+        senate: names.some((name) => name === "senate"),
+      };
+    }),
   );
 
+  const houseDates = [...new Set(details.filter((item) => item.house).map((item) => item.date))].sort();
+  const senateDates = [...new Set(details.filter((item) => item.senate).map((item) => item.date))].sort();
+  const combinedDates = [...new Set(details.filter((item) => item.house || item.senate).map((item) => item.date))].sort();
+
   return {
-    congressionalRecordDays: dates.length,
-    latestCongressionalRecordDate: dates[0] ?? "",
+    congressionalRecordDays: combinedDates.length,
+    latestCongressionalRecordDate: combinedDates.at(-1) ?? "",
+    houseSessionDays: houseDates.length,
+    senateSessionDays: senateDates.length,
+    houseSessionDaysSinceIntroduced: houseDates.filter((date) => date > houseLastIntroduced).length,
+    senateSessionDaysSinceIntroduced: senateDates.filter((date) => date > senateLastIntroduced).length,
+    latestHouseSessionDate: houseDates.at(-1) ?? "",
+    latestSenateSessionDate: senateDates.at(-1) ?? "",
   };
 }
 
 export default async (_req: Request, _context: Context) => {
   try {
-    const [houseLastIntroduced, senateLastIntroduced, lastBecameLaw, recordDays] = await Promise.all([
+    const [houseLastIntroduced, senateLastIntroduced, lastBecameLaw] = await Promise.all([
       latestIntroduced(["hr", "hjres", "hconres", "hres"]),
       latestIntroduced(["s", "sjres", "sconres", "sres"]),
       latestLawDate(),
-      congressionalRecordDays(),
     ]);
 
     if (!houseLastIntroduced || !senateLastIntroduced || !lastBecameLaw) {
       throw new Error("Congress.gov did not return all tracker dates");
     }
+
+    const sessionDays = await chamberSessionDays(houseLastIntroduced, senateLastIntroduced);
 
     return Response.json(
       {
@@ -128,10 +151,9 @@ export default async (_req: Request, _context: Context) => {
         houseLastIntroduced,
         senateLastIntroduced,
         lastBecameLaw,
-        congressionalRecordDays: recordDays.congressionalRecordDays,
-        latestCongressionalRecordDate: recordDays.latestCongressionalRecordDate,
+        ...sessionDays,
         updatedAt: new Date().toISOString(),
-        source: "Congress.gov",
+        source: "Congress.gov Daily Congressional Record",
       },
       {
         headers: {
