@@ -26,7 +26,7 @@ async function congressJson<T>(path: string, params: Record<string, string> = {}
       signal: controller.signal,
       headers: { "X-Api-Key": apiKey, Accept: "application/json" },
     });
-    if (!response.ok) throw new Error(`Congress.gov returned ${response.status}`);
+    if (!response.ok) throw new Error(`Congress.gov returned ${response.status} for ${url.pathname}`);
     return (await response.json()) as T;
   } finally {
     clearTimeout(timeout);
@@ -43,7 +43,10 @@ async function latestIntroduced(type: "hr" | "s"): Promise<string> {
 }
 
 async function latestLawDate(): Promise<string> {
-  const data = await congressJson<LawResponse>(`/law/${CONGRESS}/public`, {
+  // Use the documented all-laws endpoint. This avoids relying on a law-type
+  // route that can return 404 while still answering the tracker question:
+  // when did federal legislation most recently become law?
+  const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, {
     limit: "1",
     offset: "0",
   });
