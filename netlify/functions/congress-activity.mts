@@ -1,3 +1,4 @@
+import { getStore } from "@netlify/blobs";
 import type { Config, Context } from "@netlify/functions";
 
 type Bill = {
@@ -184,6 +185,28 @@ export default async (_req: Request, _context: Context) => {
       chamberSessionDays(houseLastIntroduced, senateLastIntroduced),
       introducedCounts(HOUSE_TYPES), introducedCounts(SENATE_TYPES), lawCounts(),
     ]);
+    let stageSnapshot: unknown = null;
+    let stageProgress: unknown = null;
+    try {
+      const stageStore = getStore("congress-stage-index");
+      const [published, working] = await Promise.all([
+        stageStore.get("119-published", { type: "json" }),
+        stageStore.get("119-working", { type: "json" }),
+      ]);
+      stageSnapshot = published;
+      if (working && typeof working === "object") {
+        const w = working as Record<string, unknown>;
+        stageProgress = {
+          processed: Number(w.processed ?? 0),
+          totalExpected: Number(w.totalExpected ?? 0),
+          startedAt: w.startedAt ?? null,
+          updatedAt: w.updatedAt ?? null,
+        };
+      }
+    } catch (stageError) {
+      console.error("Unable to read congressional stage index", stageError);
+    }
+
     return Response.json({
       congress: 119,
       session: 2,
@@ -202,6 +225,8 @@ export default async (_req: Request, _context: Context) => {
         },
         enacted,
       },
+      stages: stageSnapshot,
+      stageIndex: stageProgress,
       updatedAt: new Date().toISOString(),
       source: "Congress.gov Daily Congressional Record",
     }, { headers: {
