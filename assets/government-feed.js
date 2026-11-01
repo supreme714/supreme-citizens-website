@@ -46,10 +46,12 @@
       .congress-activity-number{display:block;font-size:clamp(2rem,4.2vw,3.2rem);font-weight:900;line-height:1;margin:8px 0 5px}\
       .congress-activity-unit{display:block;font-size:.7rem;font-weight:900;letter-spacing:.08em}\
       .congress-activity-desc{display:block;margin-top:5px;font-size:.78rem;color:#dbe8ff}\
+      .congress-session-strip{display:flex;justify-content:center;align-items:center;gap:10px;padding:10px 18px;background:#173f77;border-top:1px solid rgba(255,255,255,.14);font-size:.76rem;text-align:center;color:#e9f1ff}\
+      .congress-session-strip strong{color:#f1cf6a}\
       .congress-activity-mini-foot{display:flex;justify-content:center;align-items:center;gap:16px;padding:12px 18px;background:rgba(255,255,255,.07);font-size:.76rem;text-align:center}\
       .congress-activity-mini-foot a{color:#f1cf6a;font-weight:900;text-decoration:none}\
       .congress-activity-mini-foot a:hover{text-decoration:underline}\
-      @media(max-width:680px){.congress-activity-mini-head{display:block;text-align:center}.congress-activity-mini-source{text-align:center;margin-top:7px}.congress-activity-mini-grid{grid-template-columns:1fr}.congress-activity-stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.18);padding:16px 12px}.congress-activity-stat:last-child{border-bottom:0}.congress-activity-mini-foot{display:block}.congress-activity-mini-foot a{display:block;margin-top:6px}}';
+      @media(max-width:680px){.congress-activity-mini-head{display:block;text-align:center}.congress-activity-mini-source{text-align:center;margin-top:7px}.congress-activity-mini-grid{grid-template-columns:1fr}.congress-activity-stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.18);padding:16px 12px}.congress-activity-stat:last-child{border-bottom:0}.congress-session-strip{display:block}.congress-activity-mini-foot{display:block}.congress-activity-mini-foot a{display:block;margin-top:6px}}';
     document.head.appendChild(style);
 
     var tracker=document.createElement('section');
@@ -62,10 +64,11 @@
         <div class="congress-activity-mini-source">119th Congress · 2nd Session<br>Official source: Congress.gov</div>\
       </div>\
       <div class="congress-activity-mini-grid" aria-live="polite">\
-        <div class="congress-activity-stat"><span class="congress-activity-label">HOUSE</span><strong class="congress-activity-number" id="house-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since a House bill was last introduced</span></div>\
-        <div class="congress-activity-stat"><span class="congress-activity-label">SENATE</span><strong class="congress-activity-number" id="senate-intro-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since a Senate bill was last introduced</span></div>\
-        <div class="congress-activity-stat"><span class="congress-activity-label">BECAME LAW</span><strong class="congress-activity-number" id="law-enacted-days">—</strong><span class="congress-activity-unit">DAYS</span><span class="congress-activity-desc">Since federal legislation last became law</span></div>\
+        <div class="congress-activity-stat"><span class="congress-activity-label">HOUSE</span><strong class="congress-activity-number" id="house-intro-days">—</strong><span class="congress-activity-unit">CALENDAR DAYS</span><span class="congress-activity-desc">Since House legislation was last introduced</span></div>\
+        <div class="congress-activity-stat"><span class="congress-activity-label">SENATE</span><strong class="congress-activity-number" id="senate-intro-days">—</strong><span class="congress-activity-unit">CALENDAR DAYS</span><span class="congress-activity-desc">Since Senate legislation was last introduced</span></div>\
+        <div class="congress-activity-stat"><span class="congress-activity-label">BECAME LAW</span><strong class="congress-activity-number" id="law-enacted-days">—</strong><span class="congress-activity-unit">CALENDAR DAYS</span><span class="congress-activity-desc">Since federal legislation last became law</span></div>\
       </div>\
+      <div class="congress-session-strip"><span><strong id="congress-record-days">—</strong> CONGRESSIONAL RECORD DAYS IN THE 2ND SESSION</span><span id="congress-record-note">Counts days with an official Daily Congressional Record issue; at least one chamber met.</span></div>\
       <div class="congress-activity-mini-foot"><span id="congress-activity-status">Loading official congressional activity…</span><a href="congress.html">Explore Congress →</a></div>';
     governmentGrid.parentNode.insertBefore(tracker,governmentGrid);
   }
