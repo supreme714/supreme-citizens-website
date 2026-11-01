@@ -30,7 +30,11 @@
   const bothChambersCongress = byId("both-chambers-congress");
   const presentedSession = byId("presented-session");
   const presentedCongress = byId("presented-congress");
+  const stageIndexProgress = byId("stage-index-progress");
+  const stageIndexPercent = byId("stage-index-percent");
+  const stageIndexFill = byId("stage-index-fill");
   const stageIndexStatus = byId("stage-index-status");
+  const stageProgressbar = stageIndexProgress?.querySelector('[role="progressbar"]');
   if (!house || !senate || !law) return;
 
   function daysSince(value) {
@@ -50,6 +54,16 @@
     const date = new Date(`${String(value).slice(0, 10)}T12:00:00Z`);
     if (Number.isNaN(date.getTime())) return "";
     return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(date);
+  }
+
+  function updateProgress(done, total, complete = false) {
+    const safeDone = Number.isFinite(done) ? Math.max(0, done) : 0;
+    const safeTotal = Number.isFinite(total) ? Math.max(0, total) : 0;
+    const percent = complete ? 100 : (safeTotal > 0 ? Math.min(100, (safeDone / safeTotal) * 100) : 0);
+    if (stageIndexFill) stageIndexFill.style.width = `${percent}%`;
+    if (stageIndexPercent) stageIndexPercent.textContent = `${percent.toFixed(1)}%`;
+    if (stageProgressbar) stageProgressbar.setAttribute("aria-valuenow", percent.toFixed(1));
+    if (stageIndexProgress) stageIndexProgress.classList.toggle("complete", complete);
   }
 
   async function refresh() {
@@ -94,12 +108,14 @@
         setValue(bothChambersCongress, Number(stageCounts.bothChambers?.congressTotal));
         setValue(presentedSession, Number(stageCounts.presented?.sessionTotal));
         setValue(presentedCongress, Number(stageCounts.presented?.congressTotal));
-        if (stageIndexStatus) stageIndexStatus.textContent = `Verified action-history index completed ${formatDate(data.stages.completedAt)} · ${Number(data.stages.processed || 0).toLocaleString()} measures examined.`;
+        updateProgress(Number(data.stages.processed || data.stages.totalExpected || 0), Number(data.stages.totalExpected || data.stages.processed || 0), true);
+        if (stageIndexStatus) stageIndexStatus.textContent = `Verification complete · ${Number(data.stages.processed || 0).toLocaleString()} measures examined · completed ${formatDate(data.stages.completedAt)}.`;
       } else if (stageIndexStatus) {
         const done = Number(data.stageIndex?.processed || 0);
         const total = Number(data.stageIndex?.totalExpected || 0);
+        updateProgress(done, total, false);
         stageIndexStatus.textContent = total > 0
-          ? `Indexing official Congress.gov action histories: ${done.toLocaleString()} of ${total.toLocaleString()} measures examined. Stage totals will appear after the complete verification cycle.`
+          ? `${done.toLocaleString()} / ${total.toLocaleString()} measures verified · stage totals will appear after the complete verification cycle.`
           : "Official action histories are being indexed. Stage totals will appear after the complete verification cycle.";
       }
 
@@ -120,6 +136,7 @@
         .forEach((element) => setValue(element, null));
       if (houseSessionSince) houseSessionSince.textContent = "Session-day data temporarily unavailable";
       if (senateSessionSince) senateSessionSince.textContent = "Session-day data temporarily unavailable";
+      if (stageIndexStatus) stageIndexStatus.textContent = "Verification progress is temporarily unavailable.";
       if (status) status.textContent = "Official congressional activity is temporarily unavailable.";
     }
   }
