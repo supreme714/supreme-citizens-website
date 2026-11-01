@@ -1,14 +1,23 @@
 (() => {
-  const house = document.getElementById("house-intro-days");
-  const senate = document.getElementById("senate-intro-days");
-  const law = document.getElementById("law-enacted-days");
-  const houseSession = document.getElementById("house-session-days");
-  const senateSession = document.getElementById("senate-session-days");
-  const houseSessionSince = document.getElementById("house-session-since");
-  const senateSessionSince = document.getElementById("senate-session-since");
-  const recordDays = document.getElementById("congress-record-days");
-  const recordNote = document.getElementById("congress-record-note");
-  const status = document.getElementById("congress-activity-status");\n  const houseIntroSession = document.getElementById("house-introduced-session");\n  const houseIntroCongress = document.getElementById("house-introduced-congress");\n  const senateIntroSession = document.getElementById("senate-introduced-session");\n  const senateIntroCongress = document.getElementById("senate-introduced-congress");\n  const combinedIntroSession = document.getElementById("combined-introduced-session");\n  const combinedIntroCongress = document.getElementById("combined-introduced-congress");\n  const enactedSession = document.getElementById("enacted-session");\n  const enactedCongress = document.getElementById("enacted-congress");
+  const byId = (id) => document.getElementById(id);
+  const house = byId("house-intro-days");
+  const senate = byId("senate-intro-days");
+  const law = byId("law-enacted-days");
+  const houseSession = byId("house-session-days");
+  const senateSession = byId("senate-session-days");
+  const houseSessionSince = byId("house-session-since");
+  const senateSessionSince = byId("senate-session-since");
+  const recordDays = byId("congress-record-days");
+  const recordNote = byId("congress-record-note");
+  const status = byId("congress-activity-status");
+  const houseIntroSession = byId("house-introduced-session");
+  const houseIntroCongress = byId("house-introduced-congress");
+  const senateIntroSession = byId("senate-introduced-session");
+  const senateIntroCongress = byId("senate-introduced-congress");
+  const combinedIntroSession = byId("combined-introduced-session");
+  const combinedIntroCongress = byId("combined-introduced-congress");
+  const enactedSession = byId("enacted-session");
+  const enactedCongress = byId("enacted-congress");
   if (!house || !senate || !law) return;
 
   function daysSince(value) {
@@ -32,7 +41,9 @@
 
   async function refresh() {
     try {
-      const response = await fetch("/api/congress-activity", { headers: { Accept: "application/json" }, cache: "no-store" });
+      const response = await fetch("/api/congress-activity", {
+        headers: { Accept: "application/json" }, cache: "no-store",
+      });
       if (!response.ok) throw new Error(`Tracker request failed: ${response.status}`);
       const data = await response.json();
 
@@ -47,13 +58,27 @@
       if (senateSessionSince) senateSessionSince.textContent = `${Number(data.senateSessionDaysSinceIntroduced) || 0} session days since last Senate introduction`;
       if (recordNote && data.latestCongressionalRecordDate) recordNote.textContent = `Official record through ${formatDate(data.latestCongressionalRecordDate)} · includes pro forma sessions`;
 
-      setValue(houseIntroSession, Number(data.totals?.introduced?.house?.sessionTotal));\n      setValue(houseIntroCongress, Number(data.totals?.introduced?.house?.congressTotal));\n      setValue(senateIntroSession, Number(data.totals?.introduced?.senate?.sessionTotal));\n      setValue(senateIntroCongress, Number(data.totals?.introduced?.senate?.congressTotal));\n      setValue(combinedIntroSession, Number(data.totals?.introduced?.combined?.sessionTotal));\n      setValue(combinedIntroCongress, Number(data.totals?.introduced?.combined?.congressTotal));\n      setValue(enactedSession, Number(data.totals?.enacted?.sessionTotal));\n      setValue(enactedCongress, Number(data.totals?.enacted?.congressTotal));\n\n      if (status) {
+      setValue(houseIntroSession, Number(data.totals?.introduced?.house?.sessionTotal));
+      setValue(houseIntroCongress, Number(data.totals?.introduced?.house?.congressTotal));
+      setValue(senateIntroSession, Number(data.totals?.introduced?.senate?.sessionTotal));
+      setValue(senateIntroCongress, Number(data.totals?.introduced?.senate?.congressTotal));
+      setValue(combinedIntroSession, Number(data.totals?.introduced?.combined?.sessionTotal));
+      setValue(combinedIntroCongress, Number(data.totals?.introduced?.combined?.congressTotal));
+      setValue(enactedSession, Number(data.totals?.enacted?.sessionTotal));
+      setValue(enactedCongress, Number(data.totals?.enacted?.congressTotal));
+
+      if (status) {
         const updated = new Date(data.updatedAt);
-        status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(updated)}`;
+        status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", {
+          month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+        }).format(updated)}`;
       }
     } catch (error) {
       console.error("Unable to load congressional activity tracker:", error);
-      [house, senate, law, houseSession, senateSession, recordDays, houseIntroSession, houseIntroCongress, senateIntroSession, senateIntroCongress, combinedIntroSession, combinedIntroCongress, enactedSession, enactedCongress].forEach((element) => setValue(element, null));
+      [house, senate, law, houseSession, senateSession, recordDays, houseIntroSession,
+        houseIntroCongress, senateIntroSession, senateIntroCongress, combinedIntroSession,
+        combinedIntroCongress, enactedSession, enactedCongress]
+        .forEach((element) => setValue(element, null));
       if (houseSessionSince) houseSessionSince.textContent = "Session-day data temporarily unavailable";
       if (senateSessionSince) senateSessionSince.textContent = "Session-day data temporarily unavailable";
       if (status) status.textContent = "Official congressional activity is temporarily unavailable.";
