@@ -19,7 +19,7 @@ type UnknownRecord = Record<string, unknown>;
 
 const API_ROOT = "https://api.congress.gov/v3";
 const CONGRESS = "119";
-const SESSION = "2";
+const SESSION = "2";\nconst SESSION_START = "2026-01-03";\nconst HOUSE_TYPES = ["hr", "hjres", "hconres", "hres"];\nconst SENATE_TYPES = ["s", "sjres", "sconres", "sres"];
 
 async function congressJson<T>(path: string, params: Record<string, string> = {}): Promise<T> {
   const apiKey = Netlify.env.get("CONGRESS_API_KEY");
@@ -55,6 +55,68 @@ async function latestIntroduced(types: string[]): Promise<string> {
     .sort((a, b) => b.localeCompare(a));
 
   return dates[0] ?? "";
+}
+
+async function introducedCounts(types: string[]) {
+  const congressResponses = await Promise.all(
+    types.map((type) =>
+      congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
+        limit: "1",
+        offset: "0",
+        sort: "introducedDate+desc",
+      }),
+    ),
+  );
+
+  const congressTotal = congressResponses.reduce(
+    (sum, data) => sum + Number(data.pagination?.count ?? data.bills?.length ?? 0),
+    0,
+  );
+
+  let sessionTotal = 0;
+  for (const type of types) {
+    let offset = 0;
+    while (true) {
+      const data = await congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
+        limit: "250",
+        offset: String(offset),
+        sort: "introducedDate+desc",
+      });
+      const bills = data.bills ?? [];
+      if (!bills.length) break;
+
+      const dates = bills.map((bill) => bill.introducedDate ?? "").filter(Boolean);
+      sessionTotal += dates.filter((date) => date >= SESSION_START).length;
+
+      if (dates.some((date) => date < SESSION_START) || bills.length < 250) break;
+      offset += bills.length;
+      if (offset >= Number(data.pagination?.count ?? offset)) break;
+    }
+  }
+
+  return { congressTotal, sessionTotal };
+}
+
+async function lawCounts() {
+  let offset = 0;
+  let congressTotal = 0;
+  let sessionTotal = 0;
+
+  while (true) {
+    const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, {
+      limit: "250",
+      offset: String(offset),
+    });
+    const items = Array.isArray(data.bills) ? data.bills : Array.isArray(data.laws) ? data.laws : [];
+    if (offset === 0) congressTotal = Number(data.pagination?.count ?? items.length);
+    sessionTotal += items.filter((item) => (item.latestAction?.actionDate ?? "") >= SESSION_START).length;
+
+    if (!items.length || items.length < 250) break;
+    offset += items.length;
+    if (offset >= congressTotal) break;
+  }
+
+  return { congressTotal, sessionTotal };
 }
 
 async function latestLawDate(): Promise<string> {
@@ -180,7 +242,7 @@ export default async (_req: Request, _context: Context) => {
       throw new Error("Congress.gov did not return all tracker dates");
     }
 
-    const sessionDays = await chamberSessionDays(houseLastIntroduced, senateLastIntroduced);
+    const [sessionDays, houseIntroduced, senateIntroduced, enacted] = await Promise.all([\n      chamberSessionDays(houseLastIntroduced, senateLastIntroduced),\n      introducedCounts(HOUSE_TYPES),\n      introducedCounts(SENATE_TYPES),\n      lawCounts(),\n    ]);
 
     return Response.json(
       {
