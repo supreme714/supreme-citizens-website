@@ -47,5 +47,14 @@
     section.querySelector('.early-vote-message').innerHTML='Election Day has passed. <span>Citizenship continues every day.</span>';
     section.querySelector('.early-vote-disclaimer').textContent='Historical early-voting snapshot from Nov. 1, not a final 2026 nationwide vote count. Election Day and later-counted ballots are not included; state reporting and certification continue.';
   }
+  if(electionOver){
+    section.querySelector('.early-vote-total').textContent='124.33 MILLION';
+    section.querySelector('.early-vote-total-label').textContent='ESTIMATED BALLOTS CAST NATIONWIDE';
+    var stats=section.querySelectorAll('.early-vote-stat');
+    stats[0].innerHTML='<strong>49.42%</strong><span>ESTIMATED ELIGIBLE-VOTER TURNOUT</span>';
+    stats[1].innerHTML='<strong>PRELIMINARY</strong><span>NOT YET CERTIFIED</span>';
+    stats[2].innerHTML='<strong>2026</strong><span>GENERAL ELECTION</span>';
+    section.querySelector('.early-vote-meta').innerHTML='Source: <a href="https://election.lab.ufl.edu/2026-general-election-turnout/" target="_blank" rel="noopener noreferrer">University of Florida Election Lab — 2026 General Election Turnout</a> · Source updated Nov. 4, 2026 at 9:50 p.m. ET.<span class="early-vote-disclaimer">Estimated total ballots counted and voting-eligible population turnout. Not final or certified; totals may change as remaining ballots are counted and states certify results.</span>';
+  }
   countdown.insertAdjacentElement('afterend',section);
 })();
