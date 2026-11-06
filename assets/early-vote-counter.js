@@ -64,5 +64,23 @@
   congress.style.cssText='background:#f4f7fc;padding:32px 0;border-bottom:1px solid #d9dee5';
   congress.innerHTML='<div class="wrap"><div style="max-width:980px;margin:auto;text-align:center"><p class="eyebrow">2026 CONGRESSIONAL ELECTIONS</p><h2 id="congress-election-results-title" style="color:#003b8f;font-family:Georgia,serif">House &amp; Senate Election Results</h2><p>Seats won by party, majority thresholds, and outstanding races. Live race calls are unofficial until certified by the states.</p><iframe src="https://polling-desk.com/embed/control" title="Live 2026 U.S. House and Senate seat results from Polling Desk" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;max-width:520px;height:250px;border:0;margin:18px auto" ></iframe><p style="font-size:.8rem;color:#526174">Source: <a href="https://polling-desk.com/results" target="_blank" rel="noopener noreferrer">Polling Desk / civicAPI</a>. The display refreshes as the provider updates its race calls. A race call is not official certification.</p></div></div>';
   section.insertAdjacentElement('afterend',congress);
+  // Certification is a separate legal process from media projections.
+  // Do not infer certification from a live results widget.
+  var certification=document.createElement('section');
+  certification.id='congress-certification-2026';
+  certification.setAttribute('aria-labelledby','congress-certification-title');
+  certification.style.cssText='background:#fff;padding:26px 0 38px;border-bottom:1px solid #d9dee5';
+  certification.innerHTML=`<div class="wrap"><div style="max-width:980px;margin:auto;border:1px solid #d7dfe8;border-top:5px solid #c79a26;border-radius:12px;padding:22px">
+    <p class="eyebrow">OFFICIAL RESULTS &amp; CERTIFICATION</p>
+    <h2 id="congress-certification-title" style="color:#003b8f;font:700 clamp(1.35rem,2.7vw,2rem) Georgia,serif;margin:8px 0">2026 Congressional Certification Status</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:18px 0">
+      <article style="background:#f4f7fc;border-radius:9px;padding:16px"><strong style="color:#003b8f">U.S. House</strong><p style="margin:8px 0;font-weight:700">Certification: Not yet independently verified</p><small>Each state's official congressional election returns must be checked.</small></article>
+      <article style="background:#f4f7fc;border-radius:9px;padding:16px"><strong style="color:#003b8f">U.S. Senate</strong><p style="margin:8px 0;font-weight:700">Certification: Not yet independently verified</p><small>Certification applies to Senate contests held in 2026, not holdover seats.</small></article>
+    </div>
+    <p style="font-size:.9rem;line-height:1.6">Race calls and party seat projections are unofficial. States certify election results on different schedules; recounts, contests, and outstanding ballots may affect final totals. This panel does not automatically determine certification and will remain unverified until official records are checked.</p>
+    <p style="font-size:.85rem"><a href="https://www.nass.org/can-I-vote" target="_blank" rel="noopener noreferrer">Find state election officials</a> · <a href="https://www.house.gov/" target="_blank" rel="noopener noreferrer">U.S. House</a> · <a href="https://www.senate.gov/" target="_blank" rel="noopener noreferrer">U.S. Senate</a></p>
+    </div></div>`;
+  congress.insertAdjacentElement('afterend',certification);
+
 
 })();
