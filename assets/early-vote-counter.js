@@ -1,5 +1,5 @@
 /* Supreme Citizens 2026 early-voting participation counter.
-   Snapshot: UF Election Lab, Nov. 1, 2026 at 12:33 p.m. ET.
+   Historical snapshot: UF Election Lab, Nov. 1, 2026 at 12:33 p.m. ET.
    The counter is intentionally framed as participation data, not election results. */
 (function(){
   if(!(location.pathname==='/'||/(^|\/)index\.html$/.test(location.pathname))) return;
@@ -37,5 +37,15 @@
     <div class="early-vote-meta">Source: <a href="https://election.lab.ufl.edu/early-vote/2026-early-voting/" target="_blank" rel="noopener noreferrer">University of Florida Election Lab — 2026 Early Voting Tracker</a> · Snapshot updated Nov. 1, 2026 at 12:33 p.m. ET.
       <span class="early-vote-disclaimer">Preliminary participation totals. States report on different schedules. These figures show ballots cast/returned, not candidate selections or election results.</span></div>
   </div></div>`;
+  // After Election Day, keep the verified early-vote snapshot but never imply it is a final national tally.
+  var electionOver=Date.now()>=new Date('2026-11-04T00:00:00-05:00').getTime();
+  if(electionOver){
+    section.querySelector('.early-vote-kicker').textContent='ELECTION 2026 · THE PEOPLE PARTICIPATED';
+    section.querySelector('#early-vote-title').textContent='2026 Election Participation';
+    section.querySelector('.early-vote-total-label').textContent='REPORTED EARLY BALLOTS · NOV. 1 SNAPSHOT';
+    section.querySelector('.early-vote-grid').lastElementChild.innerHTML='<strong>ONGOING</strong><span>CIVIC PARTICIPATION</span>';
+    section.querySelector('.early-vote-message').innerHTML='Election Day has passed. <span>Citizenship continues every day.</span>';
+    section.querySelector('.early-vote-disclaimer').textContent='Historical early-voting snapshot from Nov. 1, not a final 2026 nationwide vote count. Election Day and later-counted ballots are not included; state reporting and certification continue.';
+  }
   countdown.insertAdjacentElement('afterend',section);
 })();
