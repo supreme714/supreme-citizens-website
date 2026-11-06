@@ -57,4 +57,12 @@
     section.querySelector('.early-vote-meta').innerHTML='Source: <a href="https://election.lab.ufl.edu/2026-general-election-turnout/" target="_blank" rel="noopener noreferrer">University of Florida Election Lab — 2026 General Election Turnout</a> · Source updated Nov. 4, 2026 at 9:50 p.m. ET.<span class="early-vote-disclaimer">Estimated total ballots counted and voting-eligible population turnout. Not final or certified; totals may change as remaining ballots are counted and states certify results.</span>';
   }
   countdown.insertAdjacentElement('afterend',section);
+  // Third-party results widget updates independently as race calls change.
+  var congress=document.createElement('section');
+  congress.id='congress-election-results-2026';
+  congress.setAttribute('aria-labelledby','congress-election-results-title');
+  congress.style.cssText='background:#f4f7fc;padding:32px 0;border-bottom:1px solid #d9dee5';
+  congress.innerHTML='<div class="wrap"><div style="max-width:980px;margin:auto;text-align:center"><p class="eyebrow">2026 CONGRESSIONAL ELECTIONS</p><h2 id="congress-election-results-title" style="color:#003b8f;font-family:Georgia,serif">House &amp; Senate Election Results</h2><p>Seats won by party, majority thresholds, and outstanding races. Live race calls are unofficial until certified by the states.</p><iframe src="https://polling-desk.com/embed/control" title="Live 2026 U.S. House and Senate seat results from Polling Desk" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;max-width:520px;height:250px;border:0;margin:18px auto" ></iframe><p style="font-size:.8rem;color:#526174">Source: <a href="https://polling-desk.com/results" target="_blank" rel="noopener noreferrer">Polling Desk / civicAPI</a>. The display refreshes as the provider updates its race calls. A race call is not official certification.</p></div></div>';
+  section.insertAdjacentElement('afterend',congress);
+
 })();
