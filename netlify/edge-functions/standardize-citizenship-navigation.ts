@@ -7,6 +7,22 @@ export default async (request: Request, context: any) => {
   const url = new URL(request.url);
   let changed = false;
 
+  // Ensure the DEI education gallery appears in the live primary navigation,
+  // including pages whose stored HTML predates the gallery's creation.
+  const deiNavMatch = html.match(/<nav\\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\\s\\S]*?<\\/nav>/i);
+  if (deiNavMatch && !/href=["']\\/?dei-civic-education\\.html["']/i.test(deiNavMatch[0])) {
+    const active = url.pathname.endsWith("/dei-civic-education.html") ? ' aria-current="page"' : "";
+    const deiLink = `<a href="dei-civic-education.html"${active}>DEI Civic Education</a>`;
+    const updatedNav = deiNavMatch[0].replace(
+      /(<a\\b[^>]*href=["']principles\\.html["'][^>]*>[\\s\\S]*?<\\/a>)/i,
+      `$1\\n      ${deiLink}`
+    );
+    if (updatedNav !== deiNavMatch[0]) {
+      html = html.replace(deiNavMatch[0], updatedNav);
+      changed = true;
+    }
+  }
+
   // Keep Citizenship & Due Process in the primary navigation immediately
   // after The Charter, while avoiding duplicate links on pages that already
   // contain the static navigation item.
