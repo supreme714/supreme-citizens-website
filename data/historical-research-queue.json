@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "updated_on": "2026-11-10",
+  "description": "Historical research cycle queue. Entries describe coverage work only, not political findings.",
+  "cycles": [
+    {
+      "election_year": 2020,
+      "state": "queued_next",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 2016,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 2012,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 2008,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 2004,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 2000,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 1996,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    },
+    {
+      "election_year": 1992,
+      "state": "queued",
+      "verified_records_proposed": 0,
+      "last_researched_on": null,
+      "notes": "No historical commitments reviewed for this cycle yet."
+    }
+  ]
+}
