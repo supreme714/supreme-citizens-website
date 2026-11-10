@@ -77,22 +77,22 @@
       setValue(house, daysSince(data.houseLastIntroduced));
       setValue(senate, daysSince(data.senateLastIntroduced));
       setValue(law, daysSince(data.lastBecameLaw));
-      setValue(houseSession, Number(data.houseSessionDays));
-      setValue(senateSession, Number(data.senateSessionDays));
-      setValue(recordDays, Number(data.congressionalRecordDays));
+      setValue(houseSession, data.houseSessionDays == null ? null : Number(data.houseSessionDays));
+      setValue(senateSession, data.senateSessionDays == null ? null : Number(data.senateSessionDays));
+      setValue(recordDays, data.congressionalRecordDays == null ? null : Number(data.congressionalRecordDays));
 
-      if (houseSessionSince) houseSessionSince.textContent = `${Number(data.houseSessionDaysSinceIntroduced) || 0} session days since last House introduction`;
-      if (senateSessionSince) senateSessionSince.textContent = `${Number(data.senateSessionDaysSinceIntroduced) || 0} session days since last Senate introduction`;
+      if (houseSessionSince) houseSessionSince.textContent = data.houseSessionDaysSinceIntroduced == null ? "Session-day data awaiting verification" : `${Number(data.houseSessionDaysSinceIntroduced)} session days since last House introduction`;
+      if (senateSessionSince) senateSessionSince.textContent = data.senateSessionDaysSinceIntroduced == null ? "Session-day data awaiting verification" : `${Number(data.senateSessionDaysSinceIntroduced)} session days since last Senate introduction`;
       if (recordNote && data.latestCongressionalRecordDate) recordNote.textContent = `Official record through ${formatDate(data.latestCongressionalRecordDate)} · includes pro forma sessions`;
 
-      setValue(houseIntroSession, Number(data.totals?.introduced?.house?.sessionTotal));
-      setValue(houseIntroCongress, Number(data.totals?.introduced?.house?.congressTotal));
-      setValue(senateIntroSession, Number(data.totals?.introduced?.senate?.sessionTotal));
-      setValue(senateIntroCongress, Number(data.totals?.introduced?.senate?.congressTotal));
-      setValue(combinedIntroSession, Number(data.totals?.introduced?.combined?.sessionTotal));
-      setValue(combinedIntroCongress, Number(data.totals?.introduced?.combined?.congressTotal));
-      setValue(enactedSession, Number(data.totals?.enacted?.sessionTotal));
-      setValue(enactedCongress, Number(data.totals?.enacted?.congressTotal));
+      setValue(houseIntroSession, data.totals?.introduced?.house?.sessionTotal ?? null);
+      setValue(houseIntroCongress, data.totals?.introduced?.house?.congressTotal ?? null);
+      setValue(senateIntroSession, data.totals?.introduced?.senate?.sessionTotal ?? null);
+      setValue(senateIntroCongress, data.totals?.introduced?.senate?.congressTotal ?? null);
+      setValue(combinedIntroSession, data.totals?.introduced?.combined?.sessionTotal ?? null);
+      setValue(combinedIntroCongress, data.totals?.introduced?.combined?.congressTotal ?? null);
+      setValue(enactedSession, data.totals?.enacted?.sessionTotal ?? null);
+      setValue(enactedCongress, data.totals?.enacted?.congressTotal ?? null);
 
       const stageCounts = data.stages?.counts;
       if (stageCounts) {
@@ -120,10 +120,10 @@
       }
 
       if (status) {
-        const updated = new Date(data.updatedAt);
-        status.textContent = `Live from Congress.gov · Updated ${new Intl.DateTimeFormat("en-US", {
+        const updated = data.verifiedAt ? new Date(data.verifiedAt) : null;
+        status.textContent = !updated ? "Congress.gov data currently unavailable; open official source for details." : `${data.sourceStatus === "live" ? "Verified from" : "Last verified from"} Congress.gov · ${new Intl.DateTimeFormat("en-US", {
           month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
-        }).format(updated)}`;
+        }).format(updated)}${data.sourceStatus === "cached" ? " (cached)" : data.sourceStatus === "partial" ? " (partial update)" : ""}`;
       }
     } catch (error) {
       console.error("Unable to load congressional activity tracker:", error);
