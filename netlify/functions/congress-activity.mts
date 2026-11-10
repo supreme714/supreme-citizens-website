@@ -1,245 +1,65 @@
 import { getStore } from "@netlify/blobs";
 import type { Config, Context } from "@netlify/functions";
 
-type Bill = {
-  introducedDate?: string;
-  latestAction?: { actionDate?: string; text?: string };
+// Lightweight Congress.gov tracker. Historical full-session scans must not run
+// on every page view: they previously caused repeated 8-second aborts.
+type Bill = { type?: string; originChamber?: string; introducedDate?: string; latestAction?: { actionDate?: string } };
+type Bills = { bills?: Bill[]; laws?: Bill[] };
+type Dates = { houseLastIntroduced: string|null; senateLastIntroduced: string|null; lastBecameLaw: string|null };
+const KEY = "congress-dates-v2";
+const isDate=(value:unknown):value is string=>typeof value==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(value+"T12:00:00Z"));
+const maxDate=(values:unknown[]):string|null=>values.filter(isDate).sort().at(-1)||null;
+async function api(path:string,params:Record<string,string>):Promise<Bills>{
+ const key=Netlify.env.get("CONGRESS_API_KEY");
+ if(!key)throw Error("Congress.gov API key is missing");
+ const url=new URL("https://api.congress.gov/v3"+path);
+ url.searchParams.set("format","json");Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+ const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),5500);
+ try{const response=await fetch(url,{signal:controller.signal,headers:{"X-Api-Key":key,Accept:"application/json"}});
+ if(!response.ok)throw Error("Congress.gov HTTP "+response.status+" for "+url.pathname);
+ return await response.json() as Bills;
+ }finally{clearTimeout(timer);}
+}
+async function billDates():Promise<Pick<Dates,"houseLastIntroduced"|"senateLastIntroduced">>{
+ const data=await api("/bill/119",{limit:"250",offset:"0",sort:"introducedDate+desc"});
+ const bills=data.bills||[];
+ if(!bills.length)throw Error("No recent bills returned");
+ const house=bills.filter(x=>x.originChamber==="House"||/^(hr|hjres|hconres|hres)$/i.test(x.type||""));
+ const senate=bills.filter(x=>x.originChamber==="Senate"||/^(s|sjres|sconres|sres)$/i.test(x.type||""));
+ return {houseLastIntroduced:maxDate(house.map(x=>x.introducedDate)),senateLastIntroduced:maxDate(senate.map(x=>x.introducedDate))};
+}
+async function lawDate():Promise<string|null>{
+ const data=await api("/law/119",{limit:"100",offset:"0"});
+ const laws=data.bills||data.laws||[];
+ return maxDate(laws.map(x=>x.latestAction?.actionDate));
+}
+type Snapshot={dates:Dates;verifiedAt:string};
+async function cached():Promise<Snapshot|null>{
+ try{const item=await getStore("congress-activity-snapshots").get(KEY,{type:"json"}) as Snapshot|null;
+ return item&&item.dates&&isDate(item.verifiedAt.slice(0,10))?item:null;
+ }catch(e){console.warn("Congress cache read failed",e);return null;}
+}
+export default async (_request:Request,_context:Context)=>{
+ // All requests and optional cache read run concurrently, bounded by individual timeouts.
+ const [bills,laws,previous]=await Promise.all([billDates().then(value=>({value})).catch(error=>({error})),lawDate().then(value=>({value})).catch(error=>({error})),cached()]);
+ if("error" in bills)console.error("Congress latest bills request failed",bills.error);
+ if("error" in laws)console.error("Congress latest law request failed",laws.error);
+ const dates:Dates={
+  houseLastIntroduced:"value" in bills?bills.value.houseLastIntroduced:previous?.dates.houseLastIntroduced??null,
+  senateLastIntroduced:"value" in bills?bills.value.senateLastIntroduced:previous?.dates.senateLastIntroduced??null,
+  lastBecameLaw:"value" in laws?laws.value:previous?.dates.lastBecameLaw??null
+ };
+ const complete="value" in bills&&"value" in laws&&Boolean(dates.houseLastIntroduced&&dates.senateLastIntroduced&&dates.lastBecameLaw);
+ const someLive=("value" in bills&&Boolean(dates.houseLastIntroduced||dates.senateLastIntroduced))||("value" in laws&&Boolean(dates.lastBecameLaw));
+ const now=new Date().toISOString();
+ if(complete){try{await getStore("congress-activity-snapshots").setJSON(KEY,{dates,verifiedAt:now});}catch(e){console.warn("Congress cache write failed",e);}}
+ const sourceStatus=complete?"live":someLive?"partial":previous?"cached":"unavailable";
+ return Response.json({
+  congress:119,session:2,...dates,sourceStatus,verifiedAt:complete?now:previous?.verifiedAt??null,updatedAt:now,source:"Congress.gov API",
+  // Not estimated: these values require separate verified session indexing.
+  houseSessionDays:null,senateSessionDays:null,congressionalRecordDays:null,
+  houseSessionDaysSinceIntroduced:null,senateSessionDaysSinceIntroduced:null,latestCongressionalRecordDate:null,
+  totals:null,stages:null,stageIndex:null
+ },{status:someLive||previous?200:503,headers:{"Cache-Control":"public, max-age=0, s-maxage=900, stale-while-revalidate=300","Content-Type":"application/json; charset=utf-8"}});
 };
-type Pagination = { count?: number; next?: string | null };
-type BillResponse = { bills?: Bill[]; pagination?: Pagination };
-type LawResponse = { bills?: Bill[]; laws?: Bill[]; pagination?: Pagination };
-type RecordIssue = {
-  issueNumber?: string | number;
-  volumeNumber?: string | number;
-  issueDate?: string;
-  congress?: number | string;
-  sessionNumber?: number | string;
-};
-type UnknownRecord = Record<string, unknown>;
-
-const API_ROOT = "https://api.congress.gov/v3";
-const CONGRESS = "119";
-const SESSION = "2";
-const SESSION_START = "2026-01-03";
-const HOUSE_TYPES = ["hr", "hjres", "hconres", "hres"];
-const SENATE_TYPES = ["s", "sjres", "sconres", "sres"];
-
-async function congressJson<T>(path: string, params: Record<string, string> = {}): Promise<T> {
-  const apiKey = Netlify.env.get("CONGRESS_API_KEY");
-  if (!apiKey) throw new Error("Congress API key is not configured");
-  const url = new URL(`${API_ROOT}${path}`);
-  url.searchParams.set("format", "json");
-  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-  try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { "X-Api-Key": apiKey, Accept: "application/json" },
-    });
-    if (!response.ok) throw new Error(`Congress.gov returned ${response.status} for ${url.pathname}`);
-    return (await response.json()) as T;
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-async function latestIntroduced(types: string[]): Promise<string> {
-  const results = await Promise.all(
-    types.map((type) => congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-      limit: "250", offset: "0", sort: "introducedDate+desc",
-    })),
-  );
-  const dates = results.flatMap((data) => data.bills ?? [])
-    .map((bill) => bill.introducedDate ?? "").filter(Boolean).sort((a, b) => b.localeCompare(a));
-  return dates[0] ?? "";
-}
-
-async function introducedCounts(types: string[]) {
-  const firstPages = await Promise.all(types.map((type) =>
-    congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-      limit: "1", offset: "0", sort: "introducedDate+desc",
-    }),
-  ));
-  const congressTotal = firstPages.reduce(
-    (sum, data) => sum + Number(data.pagination?.count ?? data.bills?.length ?? 0), 0,
-  );
-  let sessionTotal = 0;
-  for (const type of types) {
-    let offset = 0;
-    while (true) {
-      const data = await congressJson<BillResponse>(`/bill/${CONGRESS}/${type}`, {
-        limit: "250", offset: String(offset), sort: "introducedDate+desc",
-      });
-      const bills = data.bills ?? [];
-      if (!bills.length) break;
-      const dates = bills.map((bill) => bill.introducedDate ?? "").filter(Boolean);
-      sessionTotal += dates.filter((date) => date >= SESSION_START).length;
-      if (dates.some((date) => date < SESSION_START) || bills.length < 250) break;
-      offset += bills.length;
-      if (offset >= Number(data.pagination?.count ?? offset)) break;
-    }
-  }
-  return { congressTotal, sessionTotal };
-}
-
-async function latestLawDate(): Promise<string> {
-  const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, { limit: "1", offset: "0" });
-  const items = Array.isArray(data.bills) ? data.bills : Array.isArray(data.laws) ? data.laws : [];
-  return items[0]?.latestAction?.actionDate ?? "";
-}
-
-async function lawCounts() {
-  let offset = 0;
-  let congressTotal = 0;
-  let sessionTotal = 0;
-  while (true) {
-    const data = await congressJson<LawResponse>(`/law/${CONGRESS}`, { limit: "250", offset: String(offset) });
-    const items = Array.isArray(data.bills) ? data.bills : Array.isArray(data.laws) ? data.laws : [];
-    if (offset === 0) congressTotal = Number(data.pagination?.count ?? items.length);
-    sessionTotal += items.filter((item) => (item.latestAction?.actionDate ?? "") >= SESSION_START).length;
-    if (!items.length || items.length < 250) break;
-    offset += items.length;
-    if (offset >= congressTotal) break;
-  }
-  return { congressTotal, sessionTotal };
-}
-
-function isObject(value: unknown): value is UnknownRecord {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function recordIssues(data: unknown): RecordIssue[] {
-  const found: RecordIssue[] = [];
-  function walk(value: unknown, depth = 0) {
-    if (depth > 5 || value == null) return;
-    if (Array.isArray(value)) { value.forEach((item) => walk(item, depth + 1)); return; }
-    if (!isObject(value)) return;
-    if (value.issueDate && value.issueNumber && value.volumeNumber) { found.push(value as RecordIssue); return; }
-    for (const child of Object.values(value)) walk(child, depth + 1);
-  }
-  walk(data);
-  return found;
-}
-
-function sectionNames(data: unknown): string[] {
-  const names: string[] = [];
-  function walk(value: unknown, depth = 0, inSections = false) {
-    if (depth > 7 || value == null) return;
-    if (Array.isArray(value)) { value.forEach((item) => walk(item, depth + 1, inSections)); return; }
-    if (!isObject(value)) return;
-    if (inSections && typeof value.name === "string") names.push(value.name);
-    for (const [key, child] of Object.entries(value)) walk(child, depth + 1, inSections || key === "sections");
-  }
-  walk(data);
-  return names;
-}
-
-function isHouseSection(name: string): boolean {
-  const n = name.trim().toLowerCase();
-  return n === "house" || n === "house section" || n.includes("house of representatives") ||
-    n.includes("house proceedings") || n.startsWith("house ") || n.endsWith(" house");
-}
-function isSenateSection(name: string): boolean {
-  const n = name.trim().toLowerCase();
-  return n === "senate" || n === "senate section" || n.includes("senate proceedings") ||
-    n.startsWith("senate ") || n.endsWith(" senate");
-}
-
-async function chamberSessionDays(houseLastIntroduced: string, senateLastIntroduced: string) {
-  const data = await congressJson<unknown>("/daily-congressional-record", { limit: "250", offset: "0" });
-  const issues = recordIssues(data)
-    .filter((issue) => String(issue.congress ?? "") === CONGRESS)
-    .filter((issue) => String(issue.sessionNumber ?? "") === SESSION)
-    .filter((issue) => Boolean(issue.issueDate && issue.volumeNumber && issue.issueNumber));
-  const details = await Promise.all(issues.map(async (issue) => {
-    const detail = await congressJson<unknown>(`/daily-congressional-record/${issue.volumeNumber}/${issue.issueNumber}`);
-    const names = sectionNames(detail);
-    return { date: String(issue.issueDate).slice(0, 10), house: names.some(isHouseSection), senate: names.some(isSenateSection) };
-  }));
-  const houseDates = [...new Set(details.filter((x) => x.house).map((x) => x.date))].sort();
-  const senateDates = [...new Set(details.filter((x) => x.senate).map((x) => x.date))].sort();
-  const combinedDates = [...new Set(details.filter((x) => x.house || x.senate).map((x) => x.date))].sort();
-  return {
-    congressionalRecordDays: combinedDates.length,
-    latestCongressionalRecordDate: combinedDates.at(-1) ?? "",
-    houseSessionDays: houseDates.length,
-    senateSessionDays: senateDates.length,
-    houseSessionDaysSinceIntroduced: houseDates.filter((date) => date > houseLastIntroduced).length,
-    senateSessionDaysSinceIntroduced: senateDates.filter((date) => date > senateLastIntroduced).length,
-    latestHouseSessionDate: houseDates.at(-1) ?? "",
-    latestSenateSessionDate: senateDates.at(-1) ?? "",
-    recordIssuesExamined: issues.length,
-  };
-}
-
-export default async (_req: Request, _context: Context) => {
-  try {
-    const [houseLastIntroduced, senateLastIntroduced, lastBecameLaw] = await Promise.all([
-      latestIntroduced(HOUSE_TYPES), latestIntroduced(SENATE_TYPES), latestLawDate(),
-    ]);
-    if (!houseLastIntroduced || !senateLastIntroduced || !lastBecameLaw) {
-      throw new Error("Congress.gov did not return all tracker dates");
-    }
-    const [sessionDays, houseIntroduced, senateIntroduced, enacted] = await Promise.all([
-      chamberSessionDays(houseLastIntroduced, senateLastIntroduced),
-      introducedCounts(HOUSE_TYPES), introducedCounts(SENATE_TYPES), lawCounts(),
-    ]);
-    let stageSnapshot: unknown = null;
-    let stageProgress: unknown = null;
-    try {
-      const stageStore = getStore("congress-stage-index");
-      const [published, working] = await Promise.all([
-        stageStore.get("119-published", { type: "json" }),
-        stageStore.get("119-working", { type: "json" }),
-      ]);
-      stageSnapshot = published;
-      if (working && typeof working === "object") {
-        const w = working as Record<string, unknown>;
-        stageProgress = {
-          processed: Number(w.processed ?? 0),
-          totalExpected: Number(w.totalExpected ?? 0),
-          startedAt: w.startedAt ?? null,
-          updatedAt: w.updatedAt ?? null,
-        };
-      }
-    } catch (stageError) {
-      console.error("Unable to read congressional stage index", stageError);
-    }
-
-    return Response.json({
-      congress: 119,
-      session: 2,
-      houseLastIntroduced,
-      senateLastIntroduced,
-      lastBecameLaw,
-      ...sessionDays,
-      totals: {
-        introduced: {
-          house: houseIntroduced,
-          senate: senateIntroduced,
-          combined: {
-            congressTotal: houseIntroduced.congressTotal + senateIntroduced.congressTotal,
-            sessionTotal: houseIntroduced.sessionTotal + senateIntroduced.sessionTotal,
-          },
-        },
-        enacted,
-      },
-      stages: stageSnapshot,
-      stageIndex: stageProgress,
-      updatedAt: new Date().toISOString(),
-      source: "Congress.gov Daily Congressional Record",
-    }, { headers: {
-      "Cache-Control": "public, max-age=0, s-maxage=900, stale-while-revalidate=300",
-      "Content-Type": "application/json; charset=utf-8",
-    }});
-  } catch (error) {
-    console.error("Congressional activity tracker failed", error);
-    return Response.json(
-      { error: "Congressional activity temporarily unavailable", updatedAt: new Date().toISOString() },
-      { status: 503, headers: { "Cache-Control": "no-store", "Content-Type": "application/json; charset=utf-8" } },
-    );
-  }
-};
-
-export const config: Config = { path: "/api/congress-activity", method: "GET" };
+export const config:Config={path:"/api/congress-activity",method:"GET"};
