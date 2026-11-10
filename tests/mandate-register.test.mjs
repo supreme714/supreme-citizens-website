@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { validateRegister, safeURL, validISODate } from '../scripts/validate-mandate-register.mjs';
+const actual=JSON.parse(readFileSync(new URL('../data/mandate-commitments.json',import.meta.url),'utf8'));
+const clone=()=>structuredClone(actual);
+test('current reviewed records satisfy structural validation',()=>{assert.deepEqual(validateRegister(actual),[]);});
+test('date validation rejects impossible dates',()=>{assert.equal(validISODate('2026-02-30'),false);assert.equal(validISODate('2024-02-29'),true);});
+test('official evidence disallows untrusted hosts',()=>{assert.equal(safeURL('https://example.com/fake',true),false);assert.equal(safeURL('https://www.irs.gov/newsroom/',true),true);});
+test('duplicate IDs are rejected',()=>{const d=clone();d.entries.push(structuredClone(d.entries[0]));assert.match(validateRegister(d).join('|'),/duplicate id/);});
+test('identifying an action requires an official source and dated action',()=>{const d=clone();delete d.entries[0].action_date;assert.match(validateRegister(d).join('|'),/action_date required/);});
+test('rejects unverified action websites',()=>{const d=clone();d.entries[0].action_url='https://example.com/action';assert.match(validateRegister(d).join('|'),/authoritative HTTPS/);});
+test('rejects missing campaign date',()=>{const d=clone();delete d.entries[0].commitment_date;assert.match(validateRegister(d).join('|'),/commitment_date/);});
