@@ -1,0 +1,43 @@
+name: Validate Citizens Mandate Register
+on:
+  pull_request:
+    paths:
+      - 'data/mandate-commitments.json'
+      - 'scripts/validate-mandate-register.mjs'
+      - 'tests/mandate-register.test.mjs'
+      - '.github/workflows/validate-mandate-register.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'data/mandate-commitments.json'
+      - 'scripts/validate-mandate-register.mjs'
+      - 'tests/mandate-register.test.mjs'
+      - '.github/workflows/validate-mandate-register.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '25 12 * * 1' # supplemental technical audit; ChatGPT review owns 8 AM ET/DST
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mandate-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run test suite
+        run: node --test tests/mandate-register.test.mjs
+      - name: Validate published records
+        run: node scripts/validate-mandate-register.mjs
