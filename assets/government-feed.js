@@ -59,4 +59,5 @@
 (function(){
   var feedScript=document.createElement('script');feedScript.src='assets/government-feed-original.js';feedScript.defer=true;document.head.appendChild(feedScript);
   var trackerScript=document.createElement('script');trackerScript.src='assets/congress-activity.js';trackerScript.defer=true;document.head.appendChild(trackerScript);
+  var electionScript=document.createElement('script');electionScript.src='assets/election-results-official.js';electionScript.defer=true;document.head.appendChild(electionScript);
 })();
