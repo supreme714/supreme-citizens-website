@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "last_reviewed": "2026-11-10",
   "entries": [
     {
@@ -13,7 +13,11 @@
       "context": "At an October 22, 2024 campaign rally, Trump advocated no tax on tips. Public Law 119-21 subsequently established a temporary federal income-tax deduction for qualifying tips (tax years 2025–2028), subject to eligibility conditions and a $25,000 annual limit. This is not an exemption from all taxes on tip income; applicable payroll taxes remain. The record documents a related enacted policy, not a determination of full fulfillment or voter intent.",
       "source_url": "https://www.presidency.ucsb.edu/documents/remarks-campaign-rally-greensboro-north-carolina-0",
       "action_url": "https://www.irs.gov/newsroom/one-big-beautiful-bill-how-to-take-advantage-of-no-tax-on-tips-and-overtime",
-      "reviewed_on": "2026-11-10"
+      "reviewed_on": "2026-11-10",
+      "commitment_date": "2024-10-22",
+      "action_date": "2025-07-04",
+      "action_date_description": "Related federal law enacted",
+      "election_year": 2024
     },
     {
       "id": "2024-trump-overtime",
@@ -26,7 +30,11 @@
       "context": "At an October 22, 2024 campaign rally, Trump advocated no tax on overtime. Public Law 119-21 later established a temporary federal income-tax deduction for qualifying overtime premium compensation (tax years 2025–2028), with annual limits of $12,500 ($25,000 for joint filers) and income-based phaseouts. The deduction does not eliminate all taxes on all overtime earnings. The record notes a related policy action without treating the campaign slogan as fully enacted.",
       "source_url": "https://www.presidency.ucsb.edu/documents/remarks-campaign-rally-greensboro-north-carolina-0",
       "action_url": "https://www.irs.gov/newsroom/irs-published-schedule-taxpayers-will-use-to-claim-deductions-on-no-tax-on-tips-no-tax-on-overtime-no-tax-on-car-loans-no-tax-on-seniors",
-      "reviewed_on": "2026-11-10"
+      "reviewed_on": "2026-11-10",
+      "commitment_date": "2024-10-22",
+      "action_date": "2025-07-04",
+      "action_date_description": "Related federal law enacted",
+      "election_year": 2024
     },
     {
       "id": "2024-trump-auto-loans",
@@ -39,7 +47,16 @@
       "context": "At an October 22, 2024 campaign rally, Trump proposed deductibility of auto-loan interest for qualifying U.S.-built cars. Public Law 119-21 later introduced a deduction of up to $10,000 per year for eligible interest on loans for new, U.S.-assembled personal vehicles, generally for tax years 2025–2028 and subject to eligibility and income limits. Used vehicles and leases do not qualify. This record does not imply that every auto loan qualifies.",
       "source_url": "https://www.presidency.ucsb.edu/documents/remarks-campaign-rally-greensboro-north-carolina-0",
       "action_url": "https://www.irs.gov/newsroom/purchasing-a-new-vehicle-car-loan-interest-could-be-eligible-for-a-tax-deduction",
-      "reviewed_on": "2026-11-10"
+      "reviewed_on": "2026-11-10",
+      "commitment_date": "2024-10-22",
+      "action_date": "2025-07-04",
+      "action_date_description": "Related federal law enacted",
+      "election_year": 2024
     }
-  ]
+  ],
+  "date_field_notes": {
+    "commitment_date": "Date of the cited campaign statement (not necessarily the first time the commitment was made)",
+    "action_date": "Date of the related government action identified in the entry",
+    "reviewed_on": "Last editorial review date; not a government action date"
+  }
 }
