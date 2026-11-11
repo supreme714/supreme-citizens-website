@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-10",
+  "updated_on": "2026-11-11",
   "description": "Historical research cycle queue. Entries describe coverage work only, not political findings.",
   "cycles": [
     {
       "election_year": 2020,
-      "state": "queued_next",
-      "verified_records_proposed": 0,
-      "last_researched_on": null,
-      "notes": "No historical commitments reviewed for this cycle yet."
+      "state": "research_in_progress",
+      "verified_records_proposed": 2,
+      "last_researched_on": "2026-11-11",
+      "notes": "Two 2020 Biden campaign commitments proposed for editorial review: Paris Agreement reentry and specified entry-restriction revocations. 2020 Republican and congressional commitments remain to be researched; no cross-party completion implied."
     },
     {
       "election_year": 2016,
