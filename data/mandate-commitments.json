@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-10",
+  "last_reviewed": "2026-11-11",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -52,6 +52,40 @@
       "action_date": "2025-07-04",
       "action_date_description": "Related federal law enacted",
       "election_year": 2024
+    },
+    {
+      "id": "2020-biden-paris-agreement",
+      "official": "Joseph R. Biden Jr.",
+      "office": "President",
+      "election_cycle": "2020 presidential election",
+      "topic": "Climate and foreign policy",
+      "commitment": "I will rejoin the Paris Climate Accord",
+      "status": "Specified executive action documented",
+      "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to rejoin the Paris Climate Accord. Biden won the 2020 presidential election (306 electoral votes). On January 20, 2021, he signed the United States' instrument of acceptance; the Department of State confirmed that the United States became a party again on February 19, 2021. Rejoining through the President's foreign-affairs authority is a distinct action from delivering emissions reductions or achieving broader climate goals. The source is an as-prepared speech, not independently verified verbatim delivery.",
+      "source_url": "https://www.presidency.ucsb.edu/documents/address-foreign-policy-new-york-city",
+      "action_url": "https://www.govinfo.gov/content/pkg/DCPD-202100049/html/DCPD-202100049.htm",
+      "reviewed_on": "2026-11-11",
+      "commitment_date": "2019-07-11",
+      "action_date": "2021-02-19",
+      "action_date_description": "United States formally rejoined Paris Agreement following Jan. 20 presidential acceptance",
+      "election_year": 2020
+    },
+    {
+      "id": "2020-biden-entry-restrictions",
+      "official": "Joseph R. Biden Jr.",
+      "office": "President",
+      "election_cycle": "2020 presidential election",
+      "topic": "Immigration and entry restrictions",
+      "commitment": "I will end the Muslim ban",
+      "status": "Specified executive action documented",
+      "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to end what he called the Muslim ban. Biden won the 2020 presidential election (306 electoral votes). Presidential Proclamation 10141, issued January 20, 2021, revoked specified earlier entry-restriction proclamations and directed further agency reviews. The President could revoke predecessor presidential proclamations within applicable law; the record does not establish that every visa application was granted or that all immigration restrictions ended. The source is an as-prepared speech, not independently verified verbatim delivery.",
+      "source_url": "https://www.presidency.ucsb.edu/documents/address-foreign-policy-new-york-city",
+      "action_url": "https://www.govinfo.gov/content/pkg/DCPD-202100052/html/DCPD-202100052.htm",
+      "reviewed_on": "2026-11-11",
+      "commitment_date": "2019-07-11",
+      "action_date": "2021-01-20",
+      "action_date_description": "Presidential Proclamation 10141 revoked specified entry restrictions",
+      "election_year": 2020
     }
   ],
   "date_field_notes": {
