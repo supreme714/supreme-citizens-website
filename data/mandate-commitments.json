@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-11",
+  "last_reviewed": "2026-11-12",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -60,7 +60,7 @@
       "election_cycle": "2020 presidential election",
       "topic": "Climate and foreign policy",
       "commitment": "I will rejoin the Paris Climate Accord",
-      "status": "Specified executive action documented",
+      "status": "Outcome documented",
       "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to rejoin the Paris Climate Accord. Biden won the 2020 presidential election (306 electoral votes). On January 20, 2021, he signed the United States' instrument of acceptance; the Department of State confirmed that the United States became a party again on February 19, 2021. Rejoining through the President's foreign-affairs authority is a distinct action from delivering emissions reductions or achieving broader climate goals. The source is an as-prepared speech, not independently verified verbatim delivery.",
       "source_url": "https://www.presidency.ucsb.edu/documents/address-foreign-policy-new-york-city",
       "action_url": "https://www.govinfo.gov/content/pkg/DCPD-202100049/html/DCPD-202100049.htm",
@@ -77,7 +77,7 @@
       "election_cycle": "2020 presidential election",
       "topic": "Immigration and entry restrictions",
       "commitment": "I will end the Muslim ban",
-      "status": "Specified executive action documented",
+      "status": "Outcome documented",
       "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to end what he called the Muslim ban. Biden won the 2020 presidential election (306 electoral votes). Presidential Proclamation 10141, issued January 20, 2021, revoked specified earlier entry-restriction proclamations and directed further agency reviews. The President could revoke predecessor presidential proclamations within applicable law; the record does not establish that every visa application was granted or that all immigration restrictions ended. The source is an as-prepared speech, not independently verified verbatim delivery.",
       "source_url": "https://www.presidency.ucsb.edu/documents/address-foreign-policy-new-york-city",
       "action_url": "https://www.govinfo.gov/content/pkg/DCPD-202100052/html/DCPD-202100052.htm",
@@ -85,6 +85,23 @@
       "commitment_date": "2019-07-11",
       "action_date": "2021-01-20",
       "action_date_description": "Presidential Proclamation 10141 revoked specified entry restrictions",
+      "election_year": 2020
+    },
+    {
+      "id": "2020-trump-mfn-drug-pricing",
+      "official": "Donald J. Trump",
+      "office": "President",
+      "election_cycle": "2020 presidential election",
+      "topic": "Prescription drug pricing",
+      "commitment": "Further reduce prescription drug costs through most-favored-nation pricing",
+      "status": "Related action identified",
+      "context": "At a September 25, 2020 reelection campaign rally in Newport News, Trump promised to further reduce prescription-drug costs and described a most-favored-nation approach. This was a reelection pledge by the incumbent, who lost the 2020 election. Executive Order 13948 had already been issued on September 13, before the cited campaign statement. CMS announced its Most Favored Nation Medicare Part B model on November 20 and published an interim final rule on November 27, 2020. A nationwide preliminary injunction on December 28 prevented implementation on January 1, 2021. CMS subsequently rescinded the rule, effective February 28, 2022. The president could direct agency rulemaking within statutory authority but could not guarantee judicial approval or measurable savings. A rule being issued is not proof of lower patient costs; no implemented savings from this model are established. Primary campaign transcript: Roll Call Factba.se, September 25, 2020. Official chronology and injunction/rescission: https://www.cms.gov/priorities/innovation/innovation-models/most-favored-nation-model ; original rule: https://www.govinfo.gov/content/pkg/FR-2020-11-27/html/2020-26037.htm .",
+      "source_url": "https://rollcall.com/factbase/trump/transcript/donald-trump-speech-campaign-rally-newport-news-virginia-september-25-2020",
+      "action_url": "https://www.govinfo.gov/content/pkg/FR-2020-11-27/html/2020-26037.htm",
+      "reviewed_on": "2026-11-12",
+      "commitment_date": "2020-09-25",
+      "action_date": "2020-11-27",
+      "action_date_description": "CMS interim final rule published; subsequently enjoined before implementation and rescinded",
       "election_year": 2020
     }
   ],
