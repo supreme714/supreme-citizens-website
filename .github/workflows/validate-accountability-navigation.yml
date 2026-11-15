@@ -1,0 +1,25 @@
+name: Validate Accountability navigation
+on:
+  pull_request:
+    paths:
+      - 'assets/phase10c-unified-nav.js'
+      - 'tests/accountability-navigation.test.mjs'
+      - '.github/workflows/validate-accountability-navigation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'assets/phase10c-unified-nav.js'
+      - 'tests/accountability-navigation.test.mjs'
+      - '.github/workflows/validate-accountability-navigation.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check assets/phase10c-unified-nav.js
+      - run: node --test tests/accountability-navigation.test.mjs
