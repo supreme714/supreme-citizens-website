@@ -57,7 +57,7 @@
     section.querySelector('.early-vote-meta').innerHTML='Source: <a href="https://election.lab.ufl.edu/2026-general-election-turnout/" target="_blank" rel="noopener noreferrer">University of Florida Election Lab — 2026 General Election Turnout</a> · Source updated Nov. 4, 2026 at 9:50 p.m. ET.<span class="early-vote-disclaimer">Estimated total ballots counted and voting-eligible population turnout. Not final or certified; totals may change as remaining ballots are counted and states certify results.</span>';
   }
   countdown.insertAdjacentElement('afterend',section);
-  // Third-party results widget updates independently as race calls change.
+  // Reuse the homepage results so both panels show the same snapshot.
   var congress=document.createElement('section');
   congress.id='congress-election-results-2026';
   congress.setAttribute('aria-labelledby','congress-election-results-title');
@@ -65,8 +65,40 @@
   var style2=document.createElement('style');
   style2.textContent='.sc-results-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:22px 0}.sc-result-card{background:#fff;border:1px solid #d7dfe8;border-top:5px solid #c79a26;border-radius:12px;padding:22px;box-shadow:0 6px 18px rgba(0,47,115,.07)}.sc-result-card h3{color:#003b8f;font:700 1.5rem Georgia,serif;margin:0 0 8px}.sc-result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e4e9f0}.sc-result-row strong{font-size:1.6rem;color:#003b8f}.sc-result-row .sc-dem{color:#1456ad}.sc-result-row .sc-rep{color:#bb2730}.sc-result-note{font-size:.82rem;color:#526174;line-height:1.5}@media(max-width:680px){.sc-results-grid{grid-template-columns:1fr}}';
   document.head.appendChild(style2);
-  congress.innerHTML='<div class="wrap"><div style="max-width:980px;margin:auto"><div style="text-align:center"><p class="eyebrow">2026 CONGRESSIONAL ELECTIONS</p><h2 id="congress-election-results-title" style="color:#003b8f;font-family:Georgia,serif">House &amp; Senate Election Results</h2><p>Unofficial seat projections and called races, shown separately from state certification.</p></div><div class="sc-results-grid"><article class="sc-result-card" aria-label="House results"><h3>U.S. House of Representatives</h3><p class="sc-result-note">218 seats needed for a majority · 435 total</p><div class="sc-result-row"><span>Democratic seats called</span><strong class="sc-dem" id="sc-house-d">248</strong></div><div class="sc-result-row"><span>Republican seats called</span><strong class="sc-rep" id="sc-house-r">156</strong></div><div class="sc-result-row"><span>Not yet called</span><strong id="sc-house-u">31</strong></div></article><article class="sc-result-card" aria-label="Senate results"><h3>U.S. Senate</h3><p class="sc-result-note">51 seats for an outright majority · 100 total · includes holdovers</p><div class="sc-result-row"><span>Democratic caucus seats secured</span><strong class="sc-dem" id="sc-senate-d">54</strong></div><div class="sc-result-row"><span>Republican seats secured</span><strong class="sc-rep" id="sc-senate-r">44</strong></div><div class="sc-result-row"><span>Not yet called</span><strong id="sc-senate-u">2</strong></div></article></div><p class="sc-result-note" style="text-align:center">Source: <a href="https://sitmap.live/elections/us-2026?full=1" target="_blank" rel="noopener noreferrer">sitmap.live / civicAPI</a>. Snapshot: Nov. 5, 2026, 5:01 p.m. ET. Figures are unofficial and do not update automatically on this site. Senate Democratic caucus includes two independents. <a href="https://sitmap.live/elections/us-2026?full=1" target="_blank" rel="noopener noreferrer">View the latest results</a>.</p></div></div>';
-  section.insertAdjacentElement('afterend',congress);
+  var seat=function(key){
+    return countdown.querySelector('[data-election-seat="'+key+'"]').textContent;
+  };
+  var source=countdown.querySelector('[data-election-source]');
+  var snapshot=countdown.querySelector('time');
+  if(source && snapshot && countdown.querySelector('[data-election-seat]')){
+    congress.innerHTML=`<div class="wrap"><div style="max-width:980px;margin:auto">
+      <div style="text-align:center">
+        <p class="eyebrow">2026 CONGRESSIONAL ELECTIONS</p>
+        <h2 id="congress-election-results-title" style="color:#003b8f;font-family:Georgia,serif">House &amp; Senate Election Results</h2>
+        <p>Unofficial seat projections and called races, shown separately from state certification.</p>
+      </div>
+      <div class="sc-results-grid">
+        <article class="sc-result-card" aria-label="House results">
+          <h3>U.S. House of Representatives</h3>
+          <p class="sc-result-note">218 seats needed for a majority · 435 total</p>
+          <div class="sc-result-row"><span>Democratic seats called</span><strong class="sc-dem">${seat('house-dem')}</strong></div>
+          <div class="sc-result-row"><span>Republican seats called</span><strong class="sc-rep">${seat('house-rep')}</strong></div>
+          <div class="sc-result-row"><span>Uncalled races</span><strong>${seat('house-uncalled')}</strong></div>
+        </article>
+        <article class="sc-result-card" aria-label="Senate results">
+          <h3>U.S. Senate</h3>
+          <p class="sc-result-note">51 seats for a majority · 100 total · includes seats that were off the ballot</p>
+          <div class="sc-result-row"><span>Democrats</span><strong class="sc-dem">${seat('senate-dem')}</strong></div>
+          <div class="sc-result-row"><span>Republicans</span><strong class="sc-rep">${seat('senate-rep')}</strong></div>
+          <div class="sc-result-row"><span>Independents</span><strong>${seat('senate-ind')}</strong></div>
+          <div class="sc-result-row"><span>Uncalled (Alaska)</span><strong>${seat('senate-uncalled')}</strong></div>
+          <p class="sc-result-note"><strong>${seat('senate-caucus')} in the Democratic caucus</strong>, including both independents.</p>
+        </article>
+      </div>
+      <p class="sc-result-note" style="text-align:center">Source <a href="${source.href}">Referandom</a> as of <time datetime="${snapshot.dateTime}">${snapshot.textContent}</time>.</p>
+    </div></div>`;
+    section.insertAdjacentElement('afterend',congress);
+  }
   // Certification is a separate legal process from media projections.
   // Do not infer certification from a live results widget.
   var certification=document.createElement('section');
@@ -83,7 +115,7 @@
     <p style="font-size:.9rem;line-height:1.6">Race calls and party seat projections are unofficial. States certify election results on different schedules; recounts, contests, and outstanding ballots may affect final totals. This panel does not automatically determine certification and will remain unverified until official records are checked.</p>
     <p style="font-size:.85rem"><a href="https://www.nass.org/can-I-vote" target="_blank" rel="noopener noreferrer">Find state election officials</a> · <a href="https://www.house.gov/" target="_blank" rel="noopener noreferrer">U.S. House</a> · <a href="https://www.senate.gov/" target="_blank" rel="noopener noreferrer">U.S. Senate</a></p>
     </div></div>`;
-  congress.insertAdjacentElement('afterend',certification);
+  (congress.parentNode ? congress : section).insertAdjacentElement('afterend',certification);
 
 
 })();
