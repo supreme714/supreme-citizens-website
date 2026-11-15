@@ -10,6 +10,8 @@ test('sitewide unified navigation has one Accountability dropdown with both regi
   assert.ok(js.includes('>Accountability</button>'));
   assert.equal(js.split('href="campaign-commitments.html"').length - 1, 1);
   assert.equal(js.split('href="transportation-spending.html"').length - 1, 1);
+  assert.equal(js.split('href="government-spending-accountability.html"').length - 1, 1);
+  assert.ok(js.indexOf('href="government-spending-accountability.html"') > js.indexOf('href="transportation-spending.html"'));
   assert.ok(js.includes('data-nav-order="11" class="phase10c-group"'));
   assert.ok(js.includes('[data-nav-order="11"]{order:11!important}'));
   assert.ok(js.includes('.phase10c-group.open .phase10c-submenu{display:block}'));
