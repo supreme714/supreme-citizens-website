@@ -144,7 +144,7 @@ def main() -> None:
     ]
     for label, row in result["source_checks"].items():
         evidence = row.get("sha256", row.get("error", "n/a"))
-        lines.append(f"| {label} | {row['status']} | \`{evidence}\` |")
+        lines.append(f"| {label} | {row['status']} | `{evidence}` |")
     lines += [
         "",
         "## Required human approval",
@@ -157,7 +157,7 @@ def main() -> None:
         "6. Mark missing/failed sources as pending; never infer zero or absence of a program.",
         "7. Manually update source-verified public page only after reviewer approval.",
         "",
-        f"Evidence snapshot: \`{dest.relative_to(BASE)}\`.",
+        f"Evidence snapshot: `{dest.relative_to(BASE)}`.",
     ]
     summary.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(dest.relative_to(BASE))
