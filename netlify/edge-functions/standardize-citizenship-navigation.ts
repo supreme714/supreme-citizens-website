@@ -73,6 +73,21 @@ export default async (request: Request, context: any) => {
     }
   }
 
+
+  // Expose the Government & Spending Accountability hub in primary navigation site-wide.
+  const spendingNavMatch = html.match(/<nav\\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\\s\\S]*?<\\/nav>/i);
+  if (spendingNavMatch && !/href=["']\\/?government-spending-accountability\\.html["']/i.test(spendingNavMatch[0])) {
+    const active = url.pathname.endsWith("/government-spending-accountability.html") ? ' aria-current="page"' : "";
+    const link = `<a href="government-spending-accountability.html"${active}>Government &amp; Spending Accountability</a>`;
+    let nav = spendingNavMatch[0];
+    const afterMandate = /(<a\\b[^>]*href=["']citizens-mandate\\.html["'][^>]*>[\\s\\S]*?<\\/a>)/i;
+    const afterBranch = /(<a\\b[^>]*href=["']citizens-branch\\.html["'][^>]*>[\\s\\S]*?<\\/a>)/i;
+    if (afterMandate.test(nav)) nav = nav.replace(afterMandate, `$1${link}`);
+    else if (afterBranch.test(nav)) nav = nav.replace(afterBranch, `$1${link}`);
+    else nav = nav.replace("</nav>", `${link}</nav>`);
+    if (nav !== spendingNavMatch[0]) { html = html.replace(spendingNavMatch[0], nav); changed = true; }
+  }
+
   // Standardize the January 6 project subnavigation across every J6 page.
   const j6NavMatch = html.match(/<nav\b[^>]*class=["'][^"']*j6-subnav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
   if (j6NavMatch) {
