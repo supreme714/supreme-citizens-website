@@ -52,3 +52,10 @@ test('all seven tracks, official citations, and missing-value caveats exist', ()
   assert.match(page, /FY2026 outlays: awaiting reconciled source/);
   assert.match(page, /not itself an automated monitoring service/);
 });
+
+test('page uses shared site assets and footer', () => {
+  assert.match(page, /src="assets\/site\.js"/);
+  assert.doesNotMatch(page, /assets\/main\.js/);
+  assert.match(page, /class="site-footer"/);
+  assert.match(page, /<label for="ts-year">Fiscal year<\/label>/);
+});
