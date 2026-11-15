@@ -6,6 +6,9 @@ on:
       - 'campaign-commitments.html'
       - 'sitemap.xml'
       - 'tests/transportation-register.test.mjs'
+      - 'tests/transportation_quarterly_test.py'
+      - 'scripts/transportation-quarterly-review.py'
+      - '.github/workflows/transportation-quarterly-review.yml'
       - '.github/workflows/validate-transportation-register.yml'
   push:
     branches: [main]
@@ -27,3 +30,8 @@ jobs:
           node-version: '22'
       - name: Validate source-linked page, funding totals, and navigation
         run: node --test tests/transportation-register.test.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate quarterly review safeguards without network
+        run: python -m unittest discover -s tests -p 'transportation_quarterly_test.py' -v
