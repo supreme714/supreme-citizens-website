@@ -1,9 +1,7 @@
 name: Quarterly transportation source-review draft
-
 on:
   schedule:
-    # 20 days after the end of each federal quarter, at 13:17 UTC.
-    # GitHub scheduled jobs can run later; federal data may not yet be complete.
+    # January, April, July and October 20th (UTC). Sources may be released later.
     - cron: '17 13 20 1,4,7,10 *'
   workflow_dispatch:
 
@@ -18,7 +16,7 @@ concurrency:
 jobs:
   source-review:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,11 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Unit tests (offline)
-        run: python -m unittest discover -s tests -p 'transportation_quarterly_test.py' -v
-      - name: Collect public federal source evidence
-        run: python scripts/transportation-quarterly-review.py
-      - name: Stage source review on a separate branch
+      - name: Prepare reusable quarter-specific review branch
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -39,8 +33,6 @@ jobs:
           set -euo pipefail
           fyq=$(python - <<'PY'
           import datetime as d
-          import sys
-          sys.path.insert(0, "scripts")
           from importlib.machinery import SourceFileLoader
           mod = SourceFileLoader("quarterly", "scripts/transportation-quarterly-review.py").load_module()
           y,q,_ = mod.quarter_for(d.datetime.now(d.timezone.utc).date())
@@ -48,27 +40,36 @@ jobs:
           PY
           )
           branch="automation/transportation-${fyq}"
+          echo "REVIEW_BRANCH=$branch" >> "$GITHUB_ENV"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          # Avoid overwriting an existing reviewer branch, while allowing reruns.
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
             git fetch origin "$branch"
             git switch -C "$branch" "origin/$branch"
-            git checkout "$GITHUB_SHA" -- scripts/transportation-quarterly-review.py
           else
             git switch -c "$branch"
           fi
+      - name: Run offline safety tests
+        run: python -m unittest discover -s tests -p 'transportation_quarterly_test.py' -v
+      - name: Fetch government-source evidence
+        run: python scripts/transportation-quarterly-review.py
+      - name: Open or update draft PR (not public website)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
           git add data/transportation/quarterly-reviews/ TRANSPORTATION_QUARTERLY_REVIEW.md
           if git diff --cached --quiet; then
-            echo "No source-review changes to submit"
+            echo "No review changes"
             exit 0
           fi
-          git commit -m "Draft DOT quarterly evidence review ${fyq}"
-          git push origin "$branch"
-          if [ "$(gh pr list --head "$branch" --state open --json number --jq 'length')" -eq 0 ]; then
-            gh pr create --draft --base main --head "$branch" \
-              --title "Verify DOT source evidence: ${fyq}" \
-              --body "Source retrieval and checksums only; no spending totals are approved or published. Review TRANSPORTATION_QUARTERLY_REVIEW.md, reconcile official budgets, obligations, outlays and outcomes, then approve any public-page edits separately. Failed/changed sources require investigation."
+          git commit -m "Draft quarterly DOT evidence: ${REVIEW_BRANCH##*/}"
+          git push origin "$REVIEW_BRANCH"
+          if [ "$(gh pr list --head "$REVIEW_BRANCH" --state open --json number --jq 'length')" -eq 0 ]; then
+            gh pr create --draft --base main --head "$REVIEW_BRANCH" \
+              --title "Verify DOT sources: ${REVIEW_BRANCH##*/}" \
+              --body "Government-source metadata, checksums, and review flags only. This is NOT verified public spending data. Reconcile budget authority, obligations, net outlays, program changes, FAA milestones, and safety outcomes. After human approval, any public-page updates must be a separate change."
           else
-            echo "An open source-review PR already exists; updated its evidence branch"
+            echo "Draft review branch updated; existing PR retained"
           fi
