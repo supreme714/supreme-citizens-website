@@ -4,8 +4,6 @@ on:
     # January, April, July and October 20th (UTC). Sources may be released later.
     - cron: '17 13 20 1,4,7,10 *'
   workflow_dispatch:
-  push:
-    branches: [test/transportation-quarterly-smoke]
 
 permissions:
   contents: write
