@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: transportation-quarterly-source-review
@@ -66,10 +67,20 @@ jobs:
           fi
           git commit -m "Draft quarterly DOT evidence: ${REVIEW_BRANCH##*/}"
           git push origin "$REVIEW_BRANCH"
-          if [ "$(gh pr list --head "$REVIEW_BRANCH" --state open --json number --jq 'length')" -eq 0 ]; then
-            gh pr create --draft --base main --head "$REVIEW_BRANCH" \
+          if [ "$(gh pr list --head "$REVIEW_BRANCH" --state open --json number --jq 'length')" -gt 0 ]; then
+            echo "Existing reviewer pull request updated via evidence branch"
+          elif gh pr create --draft --base main --head "$REVIEW_BRANCH" \
               --title "Verify DOT sources: ${REVIEW_BRANCH##*/}" \
-              --body "Government-source metadata, checksums, and review flags only. This is NOT verified public spending data. Reconcile budget authority, obligations, net outlays, program changes, FAA milestones, and safety outcomes. After human approval, any public-page updates must be a separate change."
+              --body "Government-source metadata, checksums and review flags only. NOT verified public spending data. Human reconciliation and approval required."; then
+            echo "Draft reviewer pull request created"
           else
-            echo "Draft review branch updated; existing PR retained"
+            echo "::warning::GitHub Actions may not create pull requests in this repository; the evidence branch was pushed."
+            review_url="https://github.com/${GITHUB_REPOSITORY}/compare/main...${REVIEW_BRANCH}?expand=1"
+            title="Manual DOT source review: ${REVIEW_BRANCH##*/}"
+            printf '### Manual review required\n\nEvidence branch: %s\n\n[Open a draft PR](%s)\n' "$REVIEW_BRANCH" "$review_url" >> "$GITHUB_STEP_SUMMARY"
+            # GitHub Actions PR creation can be disabled by repository policy.
+            # If issue creation is also prohibited, retain the review URL in job summary.
+            if [ "$(gh issue list --state open --search "$title in:title" --json number --jq 'length' 2>/dev/null || echo 0)" -eq 0 ]; then
+              gh issue create --title "$title" --body "Quarterly evidence is staged on \`$REVIEW_BRANCH\`. GitHub Actions could not open a PR under repository policy. [Create a draft PR]($review_url). Review official sources and reconcile amounts before any website edits." || echo "::warning::Issue creation blocked; review link remains in job summary."
+            fi
           fi
