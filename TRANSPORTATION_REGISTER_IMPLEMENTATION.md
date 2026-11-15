@@ -71,3 +71,22 @@ Fields must be source-specific and uniquely identified by FY + agency + federal 
 - GAO air traffic modernization: https://files.gao.gov/reports/GAO-26-107992/index.html
 - FAA fact sheet: https://www.faa.gov/newsroom/brand-new-air-traffic-control-system-bnatcs-fact-sheet
 - NHTSA latest half-year estimates: https://www.nhtsa.gov/press-releases/decline-traffic-fatalities-first-half-2026
+
+
+## Activated quarterly source-review workflow (November 2026)
+Workflow: `.github/workflows/transportation-quarterly-review.yml`
+Collector: `scripts/transportation-quarterly-review.py`
+Offline validation: `tests/transportation_quarterly_test.py`
+
+The workflow is scheduled for **January 20, April 20, July 20, and October 20** at 13:17 UTC, with optional manual dispatch. It reviews the most recently ended *federal* fiscal quarter, not the most recent calendar quarter. The first scheduled period is FY2027 Q1 (Oct–Dec 2026), reviewed January 20, 2027. GitHub Actions scheduled runs may be delayed or skipped under provider constraints; they are not a guaranteed source-publication SLA.
+
+The collector checks official DOT, FAA, GAO, NHTSA and Treasury document locations; USAspending DOT agency budgetary-resource and reporting endpoints; and the Treasury MTS outlay-table endpoint. It records the **URL, retrieved checksum, retrieval status, optional source metadata, UTC review date, and fiscal period** in a quarterly JSON snapshot and a markdown draft for editorial review. It does not extract, add, or automatically publish any budget dollars. Retrieval failures are marked `needs_review`, never silently converted into zero. A successful retrieval is NOT validation of scope, reporting lag, accounting treatment or political attribution.
+
+The GitHub workflow uses its repository-scoped token to create or reuse a quarter-specific branch and open a **draft** pull request; a reviewer must reconcile figures and approve any later public-site updates separately. It does not merge its own PR, alter the published HTML, or directly change the live site. Repo settings must permit workflows to create PRs and write contents; if not, the execution fails visibly rather than bypassing controls.
+
+Quarterly review acceptance criteria:
+- Correct fiscal-year and quarter interpretation.
+- Identify source-publication lag and the latest actual available data period.
+- Reconcile budget requests, laws, CRS accounts, obligations, outlays, FAA project phases and outcome metrics as *different* series.
+- Record cancellations, rescissions and deobligations with distinct legal/accounting bases.
+- Require citation, as-of dates, revision notes and human reviewer approval before any public data changes.
