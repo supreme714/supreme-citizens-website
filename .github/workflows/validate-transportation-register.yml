@@ -1,0 +1,29 @@
+name: Validate transportation spending register
+on:
+  pull_request:
+    paths:
+      - 'transportation-spending.html'
+      - 'campaign-commitments.html'
+      - 'sitemap.xml'
+      - 'tests/transportation-register.test.mjs'
+      - '.github/workflows/validate-transportation-register.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'transportation-spending.html'
+      - 'campaign-commitments.html'
+      - 'sitemap.xml'
+      - 'tests/transportation-register.test.mjs'
+      - '.github/workflows/validate-transportation-register.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source-linked page, funding totals, and navigation
+        run: node --test tests/transportation-register.test.mjs
