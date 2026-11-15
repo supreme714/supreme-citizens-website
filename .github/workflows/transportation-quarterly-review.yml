@@ -1,0 +1,74 @@
+name: Quarterly transportation source-review draft
+
+on:
+  schedule:
+    # 20 days after the end of each federal quarter, at 13:17 UTC.
+    # GitHub scheduled jobs can run later; federal data may not yet be complete.
+    - cron: '17 13 20 1,4,7,10 *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: transportation-quarterly-source-review
+  cancel-in-progress: false
+
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests (offline)
+        run: python -m unittest discover -s tests -p 'transportation_quarterly_test.py' -v
+      - name: Collect public federal source evidence
+        run: python scripts/transportation-quarterly-review.py
+      - name: Stage source review on a separate branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          fyq=$(python - <<'PY'
+          import datetime as d
+          import sys
+          sys.path.insert(0, "scripts")
+          from importlib.machinery import SourceFileLoader
+          mod = SourceFileLoader("quarterly", "scripts/transportation-quarterly-review.py").load_module()
+          y,q,_ = mod.quarter_for(d.datetime.now(d.timezone.utc).date())
+          print(f"fy{y}-q{q}")
+          PY
+          )
+          branch="automation/transportation-${fyq}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Avoid overwriting an existing reviewer branch, while allowing reruns.
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            git fetch origin "$branch"
+            git switch -C "$branch" "origin/$branch"
+            git checkout "$GITHUB_SHA" -- scripts/transportation-quarterly-review.py
+          else
+            git switch -c "$branch"
+          fi
+          git add data/transportation/quarterly-reviews/ TRANSPORTATION_QUARTERLY_REVIEW.md
+          if git diff --cached --quiet; then
+            echo "No source-review changes to submit"
+            exit 0
+          fi
+          git commit -m "Draft DOT quarterly evidence review ${fyq}"
+          git push origin "$branch"
+          if [ "$(gh pr list --head "$branch" --state open --json number --jq 'length')" -eq 0 ]; then
+            gh pr create --draft --base main --head "$branch" \
+              --title "Verify DOT source evidence: ${fyq}" \
+              --body "Source retrieval and checksums only; no spending totals are approved or published. Review TRANSPORTATION_QUARTERLY_REVIEW.md, reconcile official budgets, obligations, outlays and outcomes, then approve any public-page edits separately. Failed/changed sources require investigation."
+          else
+            echo "An open source-review PR already exists; updated its evidence branch"
+          fi
