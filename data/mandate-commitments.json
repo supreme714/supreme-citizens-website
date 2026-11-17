@@ -154,6 +154,23 @@
       "action_date": "2017-01-28",
       "action_date_description": "Executive Order 13770 signed, restricting covered appointees' lobbying of former agencies for five years; later revoked January 19, 2021",
       "election_year": 2016
+    },
+    {
+      "id": "2016-duckworth-military-parental-leave",
+      "official": "Tammy Duckworth",
+      "office": "U.S. Senator",
+      "election_cycle": "2016 Illinois U.S. Senate election",
+      "topic": "Military families and parental leave",
+      "commitment": "Pass the Military Parental Leave Modernization Act to provide at least 12 weeks of paid parental leave to service members regardless of gender or sexual orientation",
+      "status": "Related action identified",
+      "context": "In a first-person August 1, 2016 public statement during her Senate campaign, then-Representative Tammy Duckworth called for passage of the Military Parental Leave Modernization Act (H.R. 4796), which she had already introduced in March 2016. Her original bill did not become law. A later, distinct bipartisan FY2022 National Defense Authorization Act, signed December 27, 2021, expanded eligible military parental leave to 12 weeks for birth, adoption, or long-term foster placement. The later provision is related policy progress, not passage of her original bill or evidence that Duckworth alone caused its enactment. Congressional Research Service comparison: https://www.congress.gov/crs_external_products/IN/PDF/IN11802/IN11802.3.pdf",
+      "source_url": "https://www.momsrising.org/blog/militarymonday-modernizing-our-military-parental-leave/?source=mamihood",
+      "action_url": "https://www.govinfo.gov/content/pkg/PLAW-117publ81/pdf/PLAW-117publ81.pdf",
+      "reviewed_on": "2026-11-16",
+      "commitment_date": "2016-08-01",
+      "action_date": "2021-12-27",
+      "action_date_description": "FY2022 National Defense Authorization Act signed into law with a related, distinct expansion of military parental leave",
+      "election_year": 2016
     }
   ],
   "date_field_notes": {
