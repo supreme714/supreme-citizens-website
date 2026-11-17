@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-12",
+  "updated_on": "2026-11-16",
   "description": "Historical research cycle queue. Entries describe coverage work only, not political findings.",
   "cycles": [
     {
       "election_year": 2020,
       "state": "research_in_progress",
-      "verified_records_proposed": 4,
-      "last_researched_on": "2026-11-12",
-      "notes": "Four 2020 candidate records in draft: Biden Paris Agreement, Biden entry restrictions, Trump most-favored-nation drug-pricing rule (enjoined and rescinded), and Ossoff 2020 blind-trust campaign pledge with 2021 office action. Earlier Mark Kelly drug-pricing item withdrawn from the register pending verified original campaign statement date. 2020 Republican Senate drug-pricing positions by Collins and Ernst located but not counted as campaign pledges without clearer election-specific provenance. 2016 and earlier cycles queued. No claim of completed cross-party congressional coverage."
+      "verified_records_proposed": 0,
+      "last_researched_on": "2026-11-16",
+      "notes": "Four source-verified 2020 records published in PR #96: Biden Paris Agreement, Biden entry restrictions, Trump most-favored-nation drug-pricing proposal (enjoined, never implemented as planned, later rescinded), and Ossoff blind-trust pledge (completed transfer announced June 2021). This is a partial sample, not completed cross-party or congressional coverage. Additional leads require original dated election-specific campaign statements."
     },
     {
       "election_year": 2016,
-      "state": "queued",
+      "state": "research_in_progress",
       "verified_records_proposed": 0,
-      "last_researched_on": null,
-      "notes": "No historical commitments reviewed for this cycle yet."
+      "last_researched_on": "2026-11-16",
+      "notes": "First verified 2016 commitment published in PR #108: Trump October 22, 2016 TPP withdrawal pledge and January 23, 2017 presidential memorandum. First-day timing promise not met by the dated memorandum; no economic outcomes inferred. Continue original-source, cross-party presidential and congressional research. No further 2016 records currently proposed."
     },
     {
       "election_year": 2012,
