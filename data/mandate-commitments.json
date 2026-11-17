@@ -137,6 +137,23 @@
       "action_date": "2017-01-23",
       "action_date_description": "Presidential memorandum directing withdrawal from TPP signatory status and negotiations; signed three days after inauguration",
       "election_year": 2016
+    },
+    {
+      "id": "2016-trump-five-year-lobbying-ban",
+      "official": "Donald J. Trump",
+      "office": "President",
+      "election_cycle": "2016 presidential election",
+      "topic": "Government ethics and lobbying",
+      "commitment": "Institute a five-year lobbying ban for former executive branch officials",
+      "status": "Related action identified",
+      "context": "At an October 18, 2016 campaign rally in Colorado Springs, Trump promised a five-year ban on executive-branch officials lobbying government after leaving office. On January 28, 2017, he signed Executive Order 13770, requiring covered executive-branch appointees to agree not to lobby their former agency for five years after service. This is narrower than a blanket ban on lobbying all of government and did not enact his separate call for a five-year congressional lobbying ban. The order provided waiver mechanisms. On January 19, 2021, Executive Order 13983 revoked EO 13770, as documented by the Congressional Research Service. The order's issuance establishes a related executive action, not universal enforcement, congressional enactment, or lasting reform. Original campaign remarks are archived as delivered by the American Presidency Project; source on revocation: https://www.congress.gov/crs_external_products/R/PDF/R44974/R44974.4.pdf .",
+      "source_url": "https://www.presidency.ucsb.edu/documents/remarks-the-norris-penrose-event-center-colorado-springs-colorado",
+      "action_url": "https://www.govinfo.gov/content/pkg/DCPD-201700079/pdf/DCPD-201700079.pdf",
+      "reviewed_on": "2026-11-16",
+      "commitment_date": "2016-10-18",
+      "action_date": "2017-01-28",
+      "action_date_description": "Executive Order 13770 signed, restricting covered appointees' lobbying of former agencies for five years; later revoked January 19, 2021",
+      "election_year": 2016
     }
   ],
   "date_field_notes": {
