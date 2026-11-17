@@ -13,3 +13,9 @@ Status: leads only; **none is approved as a campaign commitment register entry**
 ## Research decision
 
 Do not add a register entry until an original dated campaign promise is authenticated and matched with an appropriate government action or explicitly recorded as a documented commitment only. Continue searching 2016 congressional races across parties, distinguishing campaign pledges from general policy priorities and post-election legislation.
+
+## Additional contemporary evidence: college affordability (2016)
+
+- October 9, 2016, President Obama at an Illinois campaign fundraiser with Duckworth described a joint proposal for tuition-free community college and Duckworth's support for refinancing student loans and expanding Pell Grants. This is a contemporaneous **surrogate statement**, not Duckworth's own verbatim campaign pledge: https://obamawhitehouse.archives.gov/the-press-office/2016/10/09/remarks-president-event-illinois-coordinated-victory-fund-congressman
+- Official contemporaneous government transcript: https://www.govinfo.gov/content/pkg/PPP-2016-book2/pdf/PPP-2016-book2.pdf (October 9 remarks, printed p. 1298).
+- **Evidence gap:** Locate a dated direct Duckworth campaign statement and a clearly related post-election legislative action before proposing a register entry. Do not describe a broad college affordability plan as fulfilled without a precise measure and outcome.
