@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-12",
+  "last_reviewed": "2026-11-16",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -61,10 +61,10 @@
       "topic": "Climate and foreign policy",
       "commitment": "I will rejoin the Paris Climate Accord",
       "status": "Outcome documented",
-      "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to rejoin the Paris Climate Accord. Biden won the 2020 presidential election (306 electoral votes). On January 20, 2021, he signed the United States' instrument of acceptance; the Department of State confirmed that the United States became a party again on February 19, 2021. Rejoining through the President's foreign-affairs authority is a distinct action from delivering emissions reductions or achieving broader climate goals. The source is an as-prepared speech, not independently verified verbatim delivery.",
+      "context": "In a July 11, 2019 campaign foreign-policy address (archived as prepared for delivery), Biden pledged to rejoin the Paris Climate Accord. Biden won the 2020 presidential election (306 electoral votes). On January 20, 2021, he signed the United States' instrument of acceptance; the Department of State confirmed that the United States became a party again on February 19, 2021. Rejoining through the President's foreign-affairs authority is a distinct action from delivering emissions reductions or achieving broader climate goals. Later development: the United States notified the UN depositary of withdrawal on January 27, 2025, and that withdrawal became effective January 27, 2026, as recorded by the UNFCCC (https://unfccc.int/node/61231) and the UN depositary (https://treaties.un.org/doc/Publication/CN/2025/CN.71.2025-Eng.pdf). This subsequent change in party status does not negate the documented 2021 rejoining and does not establish any particular emissions outcome. The source is an as-prepared speech, not independently verified verbatim delivery.",
       "source_url": "https://www.presidency.ucsb.edu/documents/address-foreign-policy-new-york-city",
       "action_url": "https://www.govinfo.gov/content/pkg/DCPD-202100049/html/DCPD-202100049.htm",
-      "reviewed_on": "2026-11-11",
+      "reviewed_on": "2026-11-16",
       "commitment_date": "2019-07-11",
       "action_date": "2021-02-19",
       "action_date_description": "United States formally rejoined Paris Agreement following Jan. 20 presidential acceptance",
