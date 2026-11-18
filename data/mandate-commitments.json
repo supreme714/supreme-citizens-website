@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-16",
+  "last_reviewed": "2026-11-18",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -171,6 +171,37 @@
       "action_date": "2021-12-27",
       "action_date_description": "FY2022 National Defense Authorization Act signed into law with a related, distinct expansion of military parental leave",
       "election_year": 2016
+    },
+    {
+      "id": "2012-romney-aca-repeal",
+      "official": "Mitt Romney",
+      "office": "President (candidate; not elected)",
+      "election_cycle": "2012 presidential election",
+      "topic": "Health care law",
+      "commitment": "Act to repeal the Affordable Care Act on his first day if elected president",
+      "status": "Documented commitment",
+      "context": "Romney's own June 28, 2012 campaign remarks, archived by the American Presidency Project, explicitly promised to act to repeal the Affordable Care Act on his first day if elected. Romney lost the November 2012 presidential election and did not assume presidential office in January 2013. Accordingly, no Romney presidential action or fulfillment assessment is applicable. The president could advocate repeal and pursue administrative steps within law, but full statutory repeal would require Congress to enact legislation. The source states 'act to repeal,' not that a president could unilaterally repeal the statute. No action_url is supplied because there is no applicable Romney presidential government action.",
+      "source_url": "https://www.presidency.ucsb.edu/documents/remarks-following-the-supreme-courts-decision-president-obamas-healthcare-law",
+      "reviewed_on": "2026-11-18",
+      "commitment_date": "2012-06-28",
+      "election_year": 2012
+    },
+    {
+      "id": "2012-obama-minimum-wage-platform",
+      "official": "Barack Obama",
+      "office": "President",
+      "election_cycle": "2012 presidential election",
+      "topic": "Minimum wage",
+      "commitment": "Raise the federal minimum wage and index it to inflation",
+      "status": "Related action identified",
+      "context": "The 2012 Democratic Party Platform, adopted for Obama's reelection campaign, stated 'Democrats believe that we must raise the minimum wage and index it to inflation.' This is a party-platform commitment associated with the nominee, not a verified verbatim personal Obama statement. Obama won reelection. A general federal statutory minimum-wage increase required Congress; Executive Order 13658, signed February 12, 2014, used presidential federal-procurement authority to set a $10.10 minimum for workers on covered new federal contracts starting January 1, 2015, with annual adjustments thereafter. This was a narrower related executive action, NOT a nationwide increase in the Fair Labor Standards Act minimum wage. The action's coverage was limited and does not establish measured poverty or employment outcomes. The platform date should be interpreted as the party convention adoption date, rather than first public announcement.",
+      "source_url": "https://www.presidency.ucsb.edu/documents/2012-democratic-party-platform",
+      "action_url": "https://www.govinfo.gov/content/pkg/DCPD-201400087/html/DCPD-201400087.htm",
+      "reviewed_on": "2026-11-18",
+      "commitment_date": "2012-09-04",
+      "action_date": "2014-02-12",
+      "action_date_description": "Executive Order 13658 established a minimum wage for covered federal contract workers, not a nationwide statutory minimum",
+      "election_year": 2012
     }
   ],
   "date_field_notes": {
