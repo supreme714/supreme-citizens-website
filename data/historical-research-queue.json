@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-16",
+  "updated_on": "2026-11-18",
   "description": "Historical research cycle queue. Entries describe coverage work only, not political findings.",
   "cycles": [
     {
@@ -19,10 +19,10 @@
     },
     {
       "election_year": 2012,
-      "state": "queued",
-      "verified_records_proposed": 0,
-      "last_researched_on": null,
-      "notes": "No historical commitments reviewed for this cycle yet."
+      "state": "research_in_progress",
+      "verified_records_proposed": 2,
+      "last_researched_on": "2026-11-18",
+      "notes": "Two draft 2012 records: Romney June 28 ACA repeal commitment (lost election; no presidential action applicable), and Democratic Party platform minimum-wage proposal associated with reelected Obama (related 2014 federal contractor EO, not nationwide wage law). Platform wording is party text, not Obama's personal quote. Continue Senate and House campaign-source research, confirm platform adoption date, and independently review before merge."
     },
     {
       "election_year": 2008,
