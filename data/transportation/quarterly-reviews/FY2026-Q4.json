@@ -1,0 +1,95 @@
+{
+  "fiscal_quarter": 4,
+  "fiscal_year": 2026,
+  "methodology": [
+    "No numerical values automatically published.",
+    "A source HTTP success or checksum is not substantive verification.",
+    "Agency resources, budget authority, obligations, outlays and safety outcomes require distinct reconciliation.",
+    "Do not treat previous-year balances, rescissions, or expirations as cash savings.",
+    "Editor must check relevant account scope, units, source vintage and fiscal period."
+  ],
+  "period_end": "2026-09-30",
+  "publish_to_website": false,
+  "review_date_utc": "2026-11-15",
+  "review_type": "source_evidence_only",
+  "source_checks": {
+    "DOT official budget and financial documents": {
+      "error": "HTTP Error 403: Forbidden",
+      "status": "needs_review",
+      "url": "https://www.transportation.gov/mission/budget/dot-budget-and-performance-documents"
+    },
+    "FAA air traffic modernization": {
+      "error": "HTTP Error 403: Forbidden",
+      "status": "needs_review",
+      "url": "https://www.faa.gov/newsroom/brand-new-air-traffic-control-system-bnatcs-fact-sheet"
+    },
+    "GAO air traffic control audit": {
+      "bytes": 94618,
+      "content_type": "text/html; charset=utf-8",
+      "etag": "\"1794648824-gzip\"",
+      "http_status": 200,
+      "last_modified": "Sat, 14 Nov 2026 09:33:44 GMT",
+      "sha256": "c894e896a64e0e06b640b89573575c0ccf784262e97fdf1932cac6725be67ab3",
+      "status": "retrieved",
+      "url": "https://www.gao.gov/products/gao-26-107992"
+    },
+    "NHTSA safety news": {
+      "error": "HTTP Error 403: Forbidden",
+      "status": "needs_review",
+      "url": "https://www.nhtsa.gov/press-releases"
+    },
+    "Treasury MTS table 5 outlays": {
+      "bytes": 4194,
+      "content_type": "application/json",
+      "data_rows": 1,
+      "etag": null,
+      "http_status": 200,
+      "json_keys": [
+        "data",
+        "links",
+        "meta"
+      ],
+      "last_modified": null,
+      "sha256": "5f98b85e0ca88a42f9be11ea544278f2639684c2c3251b7b043410db3a4f82d5",
+      "status": "retrieved",
+      "url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_5?page%5Bsize%5D=1"
+    },
+    "Treasury monthly outlay data": {
+      "bytes": 725990,
+      "content_type": "text/html",
+      "etag": "W/\"6af8fb69-b13e6\"",
+      "http_status": 200,
+      "last_modified": "Sun, 15 Nov 2026 00:23:05 GMT",
+      "sha256": "34ab2c9a5143d640767857464a6f2a916f61b52c3895a32a3c10b724dcecef8e",
+      "status": "retrieved",
+      "url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/"
+    },
+    "USAspending DOT agency budgetary resources and obligations": {
+      "bytes": 5431,
+      "content_type": "application/json",
+      "data_rows": 0,
+      "etag": null,
+      "http_status": 200,
+      "json_keys": [
+        "agency_data_by_year",
+        "messages",
+        "toptier_code"
+      ],
+      "last_modified": null,
+      "sha256": "362c41d7f6c6feae4bf92827fd614fa33ff695e42043095b42e808b0748e497b",
+      "status": "retrieved",
+      "url": "https://api.usaspending.gov/api/v2/agency/069/budgetary_resources/?fiscal_year=2026"
+    },
+    "USAspending DOT agency submission reporting": {
+      "error": "The read operation timed out",
+      "status": "needs_review",
+      "url": "https://api.usaspending.gov/api/v2/reporting/agencies/069/overview/"
+    }
+  },
+  "source_errors": [
+    "DOT official budget and financial documents",
+    "FAA air traffic modernization",
+    "NHTSA safety news",
+    "USAspending DOT agency submission reporting"
+  ]
+}
