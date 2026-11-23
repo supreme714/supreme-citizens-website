@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-16",
+  "last_reviewed": "2026-11-23",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -51,6 +51,23 @@
       "commitment_date": "2024-10-22",
       "action_date": "2025-07-04",
       "action_date_description": "Related federal law enacted",
+      "election_year": 2024
+    },
+    {
+      "id": "2024-trump-social-security-tax",
+      "official": "Donald J. Trump",
+      "office": "President",
+      "election_cycle": "2024 presidential election",
+      "topic": "Tax policy and retirement",
+      "commitment": "Eliminate federal income taxes on Social Security benefits",
+      "status": "Related action identified",
+      "context": "At an October 22, 2024 campaign rally Trump advocated no tax on Social Security benefits. Public Law 119-21, enacted July 4, 2025, instead created a temporary additional deduction of up to $6,000 per eligible person aged 65 or older for tax years 2025–2028 (up to $12,000 for eligible married couples filing jointly), subject to income phaseouts and other requirements. This deduction is not specific to Social Security recipients and does not repeal federal taxation of Social Security benefits; some benefits remain taxable depending on income. The law therefore constitutes related tax relief, not enactment of the stated exemption. IRS guidance: https://www.irs.gov/newsroom/working-families-tax-cuts-tax-deductions-for-working-americans-and-seniors and https://www.irs.gov/faqs/social-security-income",
+      "source_url": "https://www.presidency.ucsb.edu/documents/remarks-campaign-rally-greensboro-north-carolina-0",
+      "action_url": "https://www.govinfo.gov/content/pkg/PLAW-119publ21/pdf/PLAW-119publ21.pdf",
+      "reviewed_on": "2026-11-23",
+      "commitment_date": "2024-10-22",
+      "action_date": "2025-07-04",
+      "action_date_description": "Public Law 119-21 enacted a temporary enhanced deduction for qualifying seniors, not a Social Security tax exemption",
       "election_year": 2024
     },
     {
