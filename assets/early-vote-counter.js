@@ -91,7 +91,7 @@
           <div class="sc-result-row"><span>Democrats</span><strong class="sc-dem">${seat('senate-dem')}</strong></div>
           <div class="sc-result-row"><span>Republicans</span><strong class="sc-rep">${seat('senate-rep')}</strong></div>
           <div class="sc-result-row"><span>Independents</span><strong>${seat('senate-ind')}</strong></div>
-          <div class="sc-result-row"><span>Uncalled (Alaska)</span><strong>${seat('senate-uncalled')}</strong></div>
+          <div class="sc-result-row"><span>Uncalled races</span><strong>${seat('senate-uncalled')}</strong></div>
           <p class="sc-result-note"><strong>${seat('senate-caucus')} in the Democratic caucus</strong>, including both independents.</p>
         </article>
       </div>
