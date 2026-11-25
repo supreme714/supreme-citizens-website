@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "last_reviewed": "2026-11-23",
+  "last_reviewed": "2026-11-25",
   "entries": [
     {
       "id": "2024-trump-tips",
@@ -188,6 +188,37 @@
       "action_date": "2021-12-27",
       "action_date_description": "FY2022 National Defense Authorization Act signed into law with a related, distinct expansion of military parental leave",
       "election_year": 2016
+    },
+    {
+      "id": "2008-obama-iraq-combat-withdrawal",
+      "official": "Barack Obama",
+      "office": "President",
+      "election_cycle": "2008 presidential election",
+      "topic": "Foreign policy and military operations",
+      "commitment": "Redeploy combat brigades from Iraq within 16 months, retaining limited residual forces",
+      "status": "Related action identified",
+      "context": "A July 19, 2008 campaign release quoted senior national security adviser Susan Rice confirming Obama's support for a 16-month redeployment timetable. Obama's March 19 Fayetteville speech also described a 16-month plan with residual forces for diplomatic protection and counterterrorism (https://www.presidency.ucsb.edu/documents/obama-we-must-end-the-iraq-war-address-our-national-security-priorities). Obama won 365 electoral votes to McCain's 173 (https://www.archives.gov/electoral-college/2008). As commander in chief he could direct deployments subject to statutory, funding and international constraints. On February 27, 2009 he announced a revised 18-month drawdown plan (https://obamawhitehouse.archives.gov/the-press-office/remarks-president-barack-obama-ndash-responsibly-ending-war-iraq). On August 31, 2010 he announced the end of the combat mission, with transitional forces remaining. This was later than the original 16-month timetable and did not mean all personnel had left. The announcement also identified an agreed end-2011 withdrawal deadline. Independent verification of final withdrawal and longer-term security outcomes remains outside this entry.",
+      "source_url": "https://www.presidency.ucsb.edu/documents/obama-campaign-press-release-statement-from-obama-campaigns-dr-susan-rice-response-pm",
+      "action_url": "https://obamawhitehouse.archives.gov/blog/2012/08/30/salute-troops-two-years-after-end-combat-missions-iraq",
+      "reviewed_on": "2026-11-25",
+      "commitment_date": "2008-07-19",
+      "action_date": "2010-08-31",
+      "action_date_description": "President announced end of combat mission, with transitional forces remaining",
+      "election_year": 2008
+    },
+    {
+      "id": "2008-mccain-nuclear-expansion",
+      "official": "John McCain",
+      "office": "President (candidate)",
+      "election_cycle": "2008 presidential election",
+      "topic": "Energy policy",
+      "commitment": "I propose a plan to build 45 new nuclear plants before the year 2030",
+      "status": "Documented commitment",
+      "context": "CNN's August 6, 2008 transcript preserves McCain's own remarks proposing 45 new nuclear plants and projecting employment gains. McCain lost the presidential election, receiving 173 electoral votes to Obama's 365 (https://www.archives.gov/electoral-college/2008). A president could advocate energy legislation and direct lawful executive policy, but construction would depend on financing, licensing, utilities and other actors. No McCain presidential term existed against which to evaluate implementation. The target year 2030 is beyond this review date. No jobs outcome or failure determination is inferred.",
+      "source_url": "https://transcripts.cnn.com/show/cnr/date/2008-08-06/segment/03",
+      "reviewed_on": "2026-11-25",
+      "commitment_date": "2008-08-06",
+      "election_year": 2008
     }
   ],
   "date_field_notes": {
