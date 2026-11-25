@@ -134,6 +134,16 @@ export default async (request: Request, context: any) => {
     }
   }
 
+
+  // Expose the representative balance initiative in primary navigation.
+  const balanceNav = html.match(/<nav\b[^>]*class=["'][^"']*main-nav[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  if (balanceNav && !/href=["']\/?representative-balance\.html["']/i.test(balanceNav[0])) {
+    const active = url.pathname.endsWith("/representative-balance.html") ? ' aria-current="page"' : "";
+    const link = `<a href="/representative-balance.html"${active}>Representative Balance</a>`;
+    html = html.replace(balanceNav[0], balanceNav[0].replace(/<\/nav>/i, link + "</nav>"));
+    changed = true;
+  }
+
   if (!changed) {
     return new Response(html, { status: response.status, statusText: response.statusText, headers: response.headers });
   }
